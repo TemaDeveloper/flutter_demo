@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_application_1/auth/Signup.dart';
+import 'package:flutter_application_1/main.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({super.key});
@@ -108,8 +109,7 @@ class _LoginState extends State<LoginPage> {
                                 Navigator.push(
                                     context,
                                     CupertinoPageRoute(
-                                        builder: (context) => SecondRout(
-                                            emailHolder: myController.text)));
+                                        builder: (context) => MyHomePage()));
                               },
                             )))),
                 SizedBox(height: 20),

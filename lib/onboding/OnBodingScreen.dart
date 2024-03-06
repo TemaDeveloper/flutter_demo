@@ -1,11 +1,11 @@
 import 'dart:ui';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_application_1/auth/login.dart';
 import 'package:rive/rive.dart';
 
 import 'components/animated_btn.dart';
 import 'package:flutter/cupertino.dart';
-import 'package:flutter_application_1/main.dart';
 
 class OnbodingScreen extends StatefulWidget {
   const OnbodingScreen({super.key});
@@ -95,7 +95,7 @@ class _OnbodingScreenState extends State<OnbodingScreen> {
                          Navigator.push(
                                      context,
                                      CupertinoPageRoute(
-                                         builder: (context) => const MyHomePage(title: 'Main')));
+                                         builder: (context) => LoginPage()));
 
                         Future.delayed(
                           const Duration(milliseconds: 800),

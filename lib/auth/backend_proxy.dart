@@ -1,46 +1,22 @@
 import 'package:flutter/foundation.dart';
 import 'package:pocketbase/pocketbase.dart';
 
-class BackendProxyForLosharikArtemie {
-  static final _instance = BackendProxyForLosharikArtemie()._internalConstructor();
-  // https://stackoverflow.com/questions/53886304/understanding-factory-constructor-code-example-dart
-  factory BackendProxyForLosharikArtemie() {
-    return _instance;
-  }
+PocketBase? pb;
 
-  BackendProxyForLosharikArtemie _internalConstructor() {
-    const url = kDebugMode ? 'http://127.0.0.1:8090' : 'TODO';
-      
-    final pocketBase = PocketBase(url);
+PocketBase getPb() {
+  const url = kDebugMode ? 'http://127.0.0.1:8090' : 'TODO';
+  pb ??= PocketBase(url); // SAME AS: if (pb == null) { pb = PocketBase(url); }
+  return pb!;
+}
 
-    var instance = BackendProxyForLosharikArtemie();
-    instance._pocketBase = pocketBase;
-    return instance;
-  }
+Future<bool> authEmailPass(String email, String password) async {
+  final pb = getPb();
+  final authData = await pb.collection('users').authWithPassword(
+    email,
+    password,
+  );
 
-  /* instance */
-  late PocketBase _pocketBase;
-  PocketBase get pb => _pocketBase;
+  print(authData.meta);
 
-  late bool _isVerified;
-  bool get isVerified => _isVerified;
-
-  late bool _isLogged;
-  bool get isLogged => _isLogged;
-
-  /// true <-> success
-  Future<bool> authenticate(String email, String password) async {
-    final authData = await pb.collection('users').authWithPassword(
-      email,
-      password
-    );
-
-    _isLogged = pb.authStore.isValid;
-
-    if (_isLogged) {
-      print(authData.meta['emailVerified']);
-    }
-
-    return _isLogged;
-  }
+  return pb.authStore.isValid;
 }

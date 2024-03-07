@@ -36,13 +36,12 @@ class _LoginState extends State<LoginPage> {
   }
 
   void tryLoginEmailPass() {
-    var bnd = BackendProxyForLosharikArtemie();
 
     setState(() {
       _loginStatus = LoginStatus.waiting;
     });
 
-    bnd.authenticate(myController.text, myController.text).then((value) {
+    authEmailPass(myController.text, myController.text).then((value) {
       setState(() {
         _loginStatus = value ? LoginStatus.success : LoginStatus.error;
       });
@@ -51,6 +50,21 @@ class _LoginState extends State<LoginPage> {
 
   @override
   Widget build(BuildContext context) {
+
+    // flutter does not want us to push the Navigator in the build function
+    //(callbacks do not count, since they are not triggered during build(render) phase)
+    if (_loginStatus == LoginStatus.success) {
+      WidgetsBinding.instance.addPostFrameCallback(
+        (_) {
+          Navigator.push(
+            context,
+            CupertinoPageRoute(
+              builder: (context) => const HomePage(),
+            ),
+          );
+        },
+      );
+    }
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: null,

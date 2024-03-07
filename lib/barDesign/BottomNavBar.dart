@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 
 import 'nav_bar_item.dart';
 
+
+// TODO: find a way to make constructor const
 class BottomNavBar extends StatelessWidget {
   /// A bottom bar that faithfully follows the design by Aurélien Salomon
   ///
@@ -20,23 +22,20 @@ class BottomNavBar extends StatelessWidget {
     this.itemPadding = const EdgeInsets.symmetric(vertical: 10, horizontal: 16),
     this.duration = const Duration(milliseconds: 500),
     this.curve = Curves.easeOutQuint,
-  })
-  {
-    this.items = items.map((i) => NavBarItem(
-      title: i.title,
-      icon: i.icon,
-      activeIcon: i.activeIcon ?? i.icon,
-      selectedColor: i.selectedColor ?? selectedItemColor,
-      unselectedColor: i.unselectedColor ?? unselectedItemColor,
-      itemShape: itemShape,
-      margin: margin,
-      itemPadding: itemPadding,
-      selectedColorOpacity: selectedColorOpacity ?? 0.1,
-      duration: duration,
-      curve: curve,
-      onTap: () => onTap(items.indexOf(i)),
-    )).toList();
-  }
+  }) : items = items.map((i) => NavBarItem(
+    title: i.title,
+    icon: i.icon,
+    activeIcon: i.activeIcon ?? i.icon,
+    selectedColor: i.selectedColor ?? selectedItemColor,
+    unselectedColor: i.unselectedColor ?? unselectedItemColor,
+    itemShape: itemShape,
+    margin: margin,
+    itemPadding: itemPadding,
+    selectedColorOpacity: selectedColorOpacity ?? 0.1,
+    duration: duration,
+    curve: curve,
+    onTap: () => onTap(items.indexOf(i)),
+  )).toList();
 
   /// A list of tabs to display, ie `Home`, `Likes`, etc
   late List<NavBarItem> items;

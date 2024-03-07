@@ -13,11 +13,11 @@ class NavBarItem {
   final Duration duration;
   final Curve curve;
 
-  double selectedColorOpacity;
+  final double selectedColorOpacity;
 
-  VoidCallback onTap;
+  final VoidCallback onTap;
 
-  NavBarItem({
+  const NavBarItem({
     required this.title,
     required this.icon,
     required this.activeIcon,
@@ -72,11 +72,6 @@ class NavBarItem {
                   ClipRect(
                     clipBehavior: Clip.antiAlias,
                     child: SizedBox(
-                      /// TODO: Constrain item height without a fixed value
-                      ///
-                      /// The Align property appears to make these full height, would be
-                      /// best to find a way to make it respond only to padding.
-                      height: 20,
                       child: Align(
                         alignment: const Alignment(-0.2, 0.0),
                         widthFactor: t,

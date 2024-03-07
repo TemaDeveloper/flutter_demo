@@ -10,6 +10,7 @@ PocketBase getPb() {
 }
 
 Future<bool> authEmailPass(String email, String password) async {
+  print("authenticating: $email, $password");
   final pb = getPb();
   final authData = await pb.collection('users').authWithPassword(
     email,

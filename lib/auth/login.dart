@@ -20,7 +20,8 @@ class LoginPage extends StatefulWidget {
 
 class _LoginState extends State<LoginPage> {
   final textFieldFocusNode = FocusNode();
-  final myController = TextEditingController();
+  final emailController = TextEditingController();
+  final passController = TextEditingController();
   bool _obscured = true;
   LoginStatus _loginStatus = LoginStatus.none;
 
@@ -36,12 +37,11 @@ class _LoginState extends State<LoginPage> {
   }
 
   void tryLoginEmailPass() {
-
     setState(() {
       _loginStatus = LoginStatus.waiting;
     });
 
-    authEmailPass(myController.text, myController.text).then((value) {
+    authEmailPass(emailController.text, passController.text).then((value) {
       setState(() {
         _loginStatus = value ? LoginStatus.success : LoginStatus.error;
       });
@@ -50,7 +50,6 @@ class _LoginState extends State<LoginPage> {
 
   @override
   Widget build(BuildContext context) {
-
     // flutter does not want us to push the Navigator in the build function
     //(callbacks do not count, since they are not triggered during build(render) phase)
     if (_loginStatus == LoginStatus.success) {
@@ -102,9 +101,12 @@ class _LoginState extends State<LoginPage> {
                       child: Padding(
                         padding: const EdgeInsets.all(16),
                         child: TextField(
-                            controller: myController,
-                            decoration: const InputDecoration(
-                                border: InputBorder.none, hintText: 'Email')),
+                          controller: emailController,
+                          decoration: const InputDecoration(
+                            border: InputBorder.none,
+                            hintText: 'Email',
+                          ),
+                        ),
                       ),
                     ),
                   ),
@@ -119,6 +121,7 @@ class _LoginState extends State<LoginPage> {
                       child: Padding(
                         padding: const EdgeInsets.all(16),
                         child: TextField(
+                          controller: passController,
                           decoration: InputDecoration(
                             border: InputBorder.none,
                             hintText: 'Password',
@@ -151,9 +154,10 @@ class _LoginState extends State<LoginPage> {
                           child: const Text(
                             'Login',
                             style: TextStyle(
-                                fontSize: 18,
-                                color: Colors.red,
-                                fontWeight: FontWeight.bold),
+                              fontSize: 18,
+                              color: Colors.red,
+                              fontWeight: FontWeight.bold,
+                            ),
                           ),
                         ),
                       ),

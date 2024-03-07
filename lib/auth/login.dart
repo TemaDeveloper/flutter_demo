@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
-import 'package:flutter/widgets.dart';
 import 'package:flutter_application_1/auth/signup.dart';
 import 'package:flutter_application_1/main.dart';
 
@@ -19,8 +18,9 @@ class _LoginState extends State<LoginPage> {
   void _changeObscure() {
     setState(() {
       _obscured = !_obscured;
-      if (textFieldFocusNode.hasPrimaryFocus)
+      if (textFieldFocusNode.hasPrimaryFocus) {
         return; // If focus is on text field, dont unfocus
+      }
       textFieldFocusNode.canRequestFocus =
           false; // Prevents focus if tap on eye
     });
@@ -38,7 +38,7 @@ class _LoginState extends State<LoginPage> {
             Align(
               alignment: Alignment.topLeft,
               child: Padding(
-                  padding: EdgeInsets.all(16),
+                  padding: const EdgeInsets.all(16),
                   child: IconButton(
                       icon: const Icon(Icons.arrow_back_ios_new_rounded,
                           size: 24.0, color: Colors.black),
@@ -48,17 +48,17 @@ class _LoginState extends State<LoginPage> {
             ),
             Center(
               child: Column(children: <Widget>[
-                Text('Hello Again!', style: TextStyle(fontSize: 32, fontWeight: FontWeight.bold)),
-                Text('Welcome back, we missed you tones'),
+                const Text('Hello Again!', style: TextStyle(fontSize: 32, fontWeight: FontWeight.bold)),
+                const Text('Welcome back, we missed you tones'),
                 Padding(
-                    padding: EdgeInsets.all(20),
+                    padding: const EdgeInsets.all(20),
                     child: Container(
                       height: 60,
                       decoration: BoxDecoration(
                           color: Colors.grey[200],
                           borderRadius: BorderRadius.circular(12)),
                       child: Padding(
-                        padding: EdgeInsets.all(16),
+                        padding: const EdgeInsets.all(16),
                         child: TextField(
                             controller: myController,
                             decoration: const InputDecoration(
@@ -66,14 +66,14 @@ class _LoginState extends State<LoginPage> {
                       ),
                     )),
                 Padding(
-                  padding: EdgeInsets.symmetric(horizontal: 20),
+                  padding: const EdgeInsets.symmetric(horizontal: 20),
                   child: Container(
                       height: 60,
                       decoration: BoxDecoration(
                           color: Colors.grey[200],
                           borderRadius: BorderRadius.circular(12)),
                       child: Padding(
-                        padding: EdgeInsets.all(16),
+                        padding: const EdgeInsets.all(16),
                         child: TextField(
                           decoration: InputDecoration(
                             border: InputBorder.none,
@@ -112,11 +112,11 @@ class _LoginState extends State<LoginPage> {
                                         builder: (context) => HomePage()));
                               },
                             )))),
-                SizedBox(height: 20),
-                Text('or login with', style: TextStyle(fontSize: 16.0)),
-                SizedBox(height: 10),
+                const SizedBox(height: 20),
+                const Text('or login with', style: TextStyle(fontSize: 16.0)),
+                const SizedBox(height: 10),
                 Padding(
-                  padding: EdgeInsets.symmetric(horizontal: 20),
+                  padding: const EdgeInsets.symmetric(horizontal: 20),
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.center,
                     crossAxisAlignment: CrossAxisAlignment.center,
@@ -126,13 +126,13 @@ class _LoginState extends State<LoginPage> {
                         shape: RoundedRectangleBorder(
                           borderRadius:
                               BorderRadius.circular(20), // if you need this
-                          side: BorderSide(color: Colors.transparent),
+                          side: const BorderSide(color: Colors.transparent),
                         ),
                         child: Container(
                             alignment: Alignment.center,
                             width: double.infinity,
                             height: 70,
-                            child: Padding(
+                            child: const Padding(
                               padding: EdgeInsets.symmetric(horizontal: 10),
                               child: Row(
                                 children: <Widget>[
@@ -149,13 +149,13 @@ class _LoginState extends State<LoginPage> {
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(20),
                           // if you need this
-                          side: BorderSide(color: Colors.transparent),
+                          side: const BorderSide(color: Colors.transparent),
                         ),
                         child: Container(
                             alignment: Alignment.center,
                             width: double.infinity,
                             height: 70,
-                            child: Padding(
+                            child: const Padding(
                               padding: EdgeInsets.symmetric(horizontal: 10),
                               child: Row(
                                 children: <Widget>[
@@ -170,20 +170,20 @@ class _LoginState extends State<LoginPage> {
                     ],
                   ),
                 ),
-                SizedBox(height: 20),
+                const SizedBox(height: 20),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: <Widget>[
-                    Text('Doesn`t have an account?'),
+                    const Text('Doesn`t have an account?'),
                     TextButton(
                         onPressed: () {
                           Navigator.push(
                               context,
                               CupertinoPageRoute(
-                                  builder: (context) => SignUpPage()));
+                                  builder: (context) => const SignUpPage()));
                         },
-                        child: Text('Sign up!',
+                        child: const Text('Sign up!',
                             style: TextStyle(color: Colors.red)))
                   ],
                 ),

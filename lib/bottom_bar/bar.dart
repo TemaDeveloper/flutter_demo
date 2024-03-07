@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import 'nav_bar_item.dart';
+import 'item.dart';
 
 
 // TODO: find a way to make constructor const

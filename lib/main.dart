@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_application_1/barDesign/BottomNavBar.dart';
+import 'package:flutter_application_1/bottom_bar/bar.dart';
 import 'package:flutter_application_1/listModels/cocktail_card.dart';
 
-import 'package:flutter_application_1/onboding/OnBodingScreen.dart';
+import 'package:flutter_application_1/onboding/bording_screen.dart';
 
 import 'package:flutter_application_1/listModels/recipe.dart';
 import 'package:flutter_application_1/listModels/recipe.api.dart';
@@ -30,6 +30,8 @@ class MyApp extends StatelessWidget {
 
 class HomePage extends StatefulWidget {
   static const title = 'CookeryDays';
+
+  const HomePage({super.key});
   @override
   State<HomePage> createState() => _HomePageState();
 }

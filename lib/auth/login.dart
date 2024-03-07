@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/widgets.dart';
-import 'package:flutter_application_1/auth/Signup.dart';
+import 'package:flutter_application_1/auth/signup.dart';
 import 'package:flutter_application_1/main.dart';
 
 class LoginPage extends StatefulWidget {
@@ -109,7 +109,7 @@ class _LoginState extends State<LoginPage> {
                                 Navigator.push(
                                     context,
                                     CupertinoPageRoute(
-                                        builder: (context) => MyHomePage()));
+                                        builder: (context) => HomePage()));
                               },
                             )))),
                 SizedBox(height: 20),

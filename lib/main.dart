@@ -1,6 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/cupertino.dart';
-import 'package:flutter/widgets.dart';
 import 'package:flutter_application_1/barDesign/BottomNavBar.dart';
 
 import 'package:flutter_application_1/onboding/OnBodingScreen.dart';
@@ -21,32 +19,34 @@ class MyApp extends StatelessWidget {
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
         useMaterial3: true,
       ),
-      home: OnbodingScreen(),
+      home: const OnbodingScreen(),
     );
   }
 }
 
-class MyHomePage extends StatefulWidget {
+class HomePage extends StatefulWidget {
 
-  static final title = 'CookeryDays';
+  static const title = 'CookeryDays';
+
+  const HomePage({super.key});
   @override
-  State<MyHomePage> createState() => _MyHomePageState();
+  State<HomePage> createState() => _HomePageState();
 }
 
-class _MyHomePageState extends State<MyHomePage> {
+class _HomePageState extends State<HomePage> {
   var _currentIndex = 0;
 
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: MyHomePage.title,
+      title: HomePage.title,
       theme: ThemeData(
         primarySwatch: Colors.blue,
         visualDensity: VisualDensity.adaptivePlatformDensity,
       ),
       home: Scaffold(
         appBar: AppBar(
-          title: Text(MyHomePage.title),
+          title: const Text(HomePage.title),
         ),
         bottomNavigationBar: BottomNavBar(
           currentIndex: _currentIndex,
@@ -54,29 +54,29 @@ class _MyHomePageState extends State<MyHomePage> {
           items: [
             /// Home
             BottomNavBarItem(
-              icon: Icon(Icons.home),
-              title: Text("Home"),
+              icon: const Icon(Icons.home),
+              title: const Text("Home"),
               selectedColor: Colors.purple,
             ),
 
             /// Likes
             BottomNavBarItem(
-              icon: Icon(Icons.favorite_border),
-              title: Text("Likes"),
+              icon: const Icon(Icons.favorite_border),
+              title: const Text("Likes"),
               selectedColor: Colors.pink,
             ),
 
             /// Search
             BottomNavBarItem(
-              icon: Icon(Icons.search),
-              title: Text("Search"),
+              icon: const Icon(Icons.search),
+              title: const Text("Search"),
               selectedColor: Colors.orange,
             ),
 
             /// Profile
             BottomNavBarItem(
-              icon: Icon(Icons.person),
-              title: Text("Profile"),
+              icon: const Icon(Icons.person),
+              title: const Text("Profile"),
               selectedColor: Colors.teal,
             ),
           ],

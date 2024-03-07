@@ -95,7 +95,7 @@ class _OnbodingScreenState extends State<OnbodingScreen> {
                          Navigator.push(
                                      context,
                                      CupertinoPageRoute(
-                                         builder: (context) => LoginPage()));
+                                         builder: (context) => const LoginPage()));
 
                         Future.delayed(
                           const Duration(milliseconds: 800),

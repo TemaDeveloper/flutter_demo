@@ -1,11 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_application_1/bottom_bar/bar.dart';
 import 'package:flutter_application_1/listModels/cocktail_card.dart';
-
 import 'package:flutter_application_1/onboding/bording_screen.dart';
-
 import 'package:flutter_application_1/listModels/recipe.dart';
 import 'package:flutter_application_1/listModels/recipe.api.dart';
+
 
 void main() {
   runApp(const MyApp());

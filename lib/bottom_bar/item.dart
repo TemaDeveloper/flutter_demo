@@ -72,6 +72,8 @@ class NavBarItem {
                   ClipRect(
                     clipBehavior: Clip.antiAlias,
                     child: SizedBox(
+                      /// TODO: specify in bar height and maybe as percentage
+                      height: 20,
                       child: Align(
                         alignment: const Alignment(-0.2, 0.0),
                         widthFactor: t,

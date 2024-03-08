@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_application_1/onboding/bording_screen.dart';
+import 'package:flutter_application_1/main.dart';
+
 
 class SignUpPage extends StatefulWidget {
   const SignUpPage({super.key});
@@ -50,7 +52,7 @@ class _SignUpPageState extends State<SignUpPage> {
               child: Column(children: <Widget>[
                 const Text('Welcome!',
                     style:
-                        TextStyle(fontSize: 32, fontWeight: FontWeight.bold)),
+                        TextStyle(fontSize: 50, fontWeight: FontWeight.bold)),
                 const Text('Create a new account to get a lot of recipes'),
                 Padding(
                     padding: const EdgeInsets.all(20),
@@ -115,14 +117,21 @@ class _SignUpPageState extends State<SignUpPage> {
                         padding: const EdgeInsets.symmetric(horizontal: 20),
                         child: SizedBox(
                             width: double.infinity,
-                            height: 64,
+                            height: 50,
                             child: ElevatedButton(
                               child: const Text('Signup',
                                   style: TextStyle(
-                                      fontSize: 18,
-                                      color: Colors.red,
-                                      fontWeight: FontWeight.bold)),
-                              onPressed: () {},
+                                      fontSize: 16,
+                                      color: Colors.deepPurple,
+                                      fontWeight: FontWeight.normal)),
+                              onPressed: () {
+                                Navigator.push(
+                                  context,
+                                  CupertinoPageRoute(
+                                    builder: (context) => HomePage(),
+                                  ),
+                                );
+                              },
                             )))),
                 const SizedBox(height: 20),
                 const Text('or sign up with', style: TextStyle(fontSize: 16.0)),
@@ -146,41 +155,42 @@ class _SignUpPageState extends State<SignUpPage> {
                             child: Padding(
                               padding: EdgeInsets.symmetric(horizontal: 10),
                               child: Row(
+                                mainAxisAlignment: MainAxisAlignment.center,
                                 children: <Widget>[
                                   Icon(Icons.facebook_rounded,
                                       size: 50, color: Colors.white),
                                   SizedBox(width: 10),
-                                  Text('Sign up with Facebook',
+                                  Text('Facebook',
                                       style: TextStyle(
                                           fontSize: 16,
-                                          fontWeight: FontWeight.bold,
+                                          fontWeight: FontWeight.normal,
                                           color: Colors.white))
                                 ],
                               ),
                             )),
                       ),
                       Card(
-                        color: Colors.red,
+                        color: Colors.white,
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(20),
                           // if you need this
                           side: const BorderSide(color: Colors.transparent),
                         ),
-                        child: const SizedBox(
+                        child: SizedBox(
                             width: double.infinity,
                             height: 70,
                             child: Padding(
                               padding: EdgeInsets.symmetric(horizontal: 10),
                               child: Row(
+                                mainAxisAlignment: MainAxisAlignment.center,
                                 children: <Widget>[
-                                  Icon(Icons.gamepad_rounded,
-                                      size: 50, color: Colors.white),
+                                  Image.asset('assets/images/img_google.png', width: 40, height: 40, color: Colors.red),
                                   SizedBox(width: 10),
-                                  Text('Sign up with Google',
+                                  Text('Google',
                                       style: TextStyle(
                                           fontSize: 16,
-                                          fontWeight: FontWeight.bold,
-                                          color: Colors.white))
+                                          fontWeight: FontWeight.normal,
+                                          color: Colors.black))
                                 ],
                               ),
                             )),
@@ -199,7 +209,7 @@ class _SignUpPageState extends State<SignUpPage> {
                           Navigator.pop(context);
                         },
                         child: const Text('Log in!',
-                            style: TextStyle(color: Colors.red)))
+                            style: TextStyle(color: Colors.deepPurple)))
                   ],
                 ),
               ]),

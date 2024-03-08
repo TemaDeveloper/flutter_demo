@@ -88,8 +88,10 @@ class _LoginState extends State<LoginPage> {
               child: Column(
                 children: <Widget>[
                   const Text('Hello Again!',
-                      style:
-                          TextStyle(fontSize: 32, fontWeight: FontWeight.bold)),
+                      style: TextStyle(
+                          fontSize: 50,
+                          fontWeight: FontWeight.bold,
+                          fontFamily: "Poppins")),
                   const Text('Welcome back, we missed you tones'),
                   Padding(
                     padding: const EdgeInsets.all(20),
@@ -148,15 +150,15 @@ class _LoginState extends State<LoginPage> {
                       padding: const EdgeInsets.symmetric(horizontal: 20),
                       child: SizedBox(
                         width: double.infinity,
-                        height: 64,
+                        height: 50,
                         child: ElevatedButton(
                           onPressed: tryLoginEmailPass,
                           child: const Text(
                             'Login',
                             style: TextStyle(
-                              fontSize: 18,
-                              color: Colors.red,
-                              fontWeight: FontWeight.bold,
+                              fontSize: 16,
+                              color: Colors.deepPurple,
+                              fontWeight: FontWeight.normal,
                             ),
                           ),
                         ),
@@ -183,25 +185,27 @@ class _LoginState extends State<LoginPage> {
                             alignment: Alignment.center,
                             width: double.infinity,
                             height: 70,
-                            child: const Padding(
-                              padding: EdgeInsets.symmetric(horizontal: 10),
+                            child: const Center(
                               child: Row(
+                                mainAxisAlignment: MainAxisAlignment.center,
                                 children: <Widget>[
                                   Icon(Icons.facebook_rounded,
-                                      size: 50, color: Colors.white),
+                                      size: 40, color: Colors.white),
                                   SizedBox(width: 10),
-                                  Text('Log in with Facebook',
-                                      style: TextStyle(
-                                          fontSize: 16,
-                                          fontWeight: FontWeight.bold,
-                                          color: Colors.white))
+                                  Text(
+                                    'Facebook',
+                                    style: TextStyle(
+                                        fontSize: 16,
+                                        fontWeight: FontWeight.normal,
+                                        color: Colors.white),
+                                  )
                                 ],
                               ),
                             ),
                           ),
                         ),
                         Card(
-                          color: Colors.red,
+                          color: Colors.white,
                           shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(20),
                             // if you need this
@@ -211,18 +215,18 @@ class _LoginState extends State<LoginPage> {
                             alignment: Alignment.center,
                             width: double.infinity,
                             height: 70,
-                            child: const Padding(
+                            child: Padding(
                               padding: EdgeInsets.symmetric(horizontal: 10),
                               child: Row(
+                                mainAxisAlignment: MainAxisAlignment.center,
                                 children: <Widget>[
-                                  Icon(Icons.gamepad_rounded,
-                                      size: 50, color: Colors.white),
+                                  Image.asset('assets/images/img_google.png', width: 40, height: 40, color: Colors.red),
                                   SizedBox(width: 10),
-                                  Text('Log in with Google',
+                                  Text('Google',
                                       style: TextStyle(
                                           fontSize: 16,
-                                          fontWeight: FontWeight.bold,
-                                          color: Colors.white))
+                                          fontWeight: FontWeight.normal,
+                                          color: Colors.black))
                                 ],
                               ),
                             ),
@@ -246,7 +250,9 @@ class _LoginState extends State<LoginPage> {
                         },
                         child: const Text(
                           'Sign up!',
-                          style: TextStyle(color: Colors.red),
+                          style: TextStyle(
+                              color: Colors.deepPurple,
+                              fontWeight: FontWeight.normal),
                         ),
                       ),
                     ],

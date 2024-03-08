@@ -1,7 +1,9 @@
 import 'dart:ui';
 
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 import 'package:flutter_application_1/auth/login.dart';
+import 'package:flutter_application_1/main.dart';
 import 'package:rive/rive.dart';
 
 import 'components/animated_btn.dart';
@@ -88,24 +90,36 @@ class _OnbodingScreenState extends State<OnbodingScreen> {
                       ),
                     ),
                     const Spacer(flex: 2),
-                    AnimatedBtn(
-                      btnAnimationController: _btnAnimationController,
-                      press: () {
-                        _btnAnimationController.isActive = true;
-                         Navigator.push(
-                                     context,
-                                     CupertinoPageRoute(
-                                         builder: (context) => const LoginPage()));
-
-                        Future.delayed(
-                          const Duration(milliseconds: 800),
-                          () {
-                            setState(() {
-                              isShowSignInDialog = true;
-                            });
+                    Column(
+                      children: [
+                        AnimatedBtn(
+                          btnAnimationController: _btnAnimationController,
+                          title: 'Start',
+                          press: () {
+                            _btnAnimationController.isActive = true;
+                             Navigator.push(
+                                         context,
+                                         CupertinoPageRoute(
+                                             builder: (context) => const LoginPage()));
+                        
+                            Future.delayed(
+                              const Duration(milliseconds: 800),
+                              () {
+                                setState(() {
+                                  isShowSignInDialog = true;
+                                });
+                              },
+                            );
                           },
-                        );
-                      },
+                        ),
+
+                        TextButton(onPressed: () {
+                          Navigator.push(context, CupertinoPageRoute(builder: (context) => HomePage()));
+                        }, child: Padding(
+                          padding: EdgeInsets.all(10),
+                          child: Text('Login as a guest', style: Theme.of(context).textTheme.labelLarge,))
+                      
+                        )],
                     ),
                     const Padding(
                       padding: EdgeInsets.symmetric(vertical: 24),

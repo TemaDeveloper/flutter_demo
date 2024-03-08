@@ -113,10 +113,10 @@ class _MyHomePageState extends State<HomePage> {
                   style: TextStyle(fontSize: 32, fontWeight: FontWeight.bold)),
             ),
             //User Email
-            Padding(
+            const Padding(
               padding: EdgeInsets.fromLTRB(10, 0, 10, 10),
               child: Text('Email',
-                  style: TextStyle(fontSize: 16, color: Colors.deepPurple)),
+                  style: TextStyle(fontSize: 16, color: Colors.black)),
             ),
 
             //Button Edit
@@ -132,9 +132,8 @@ class _MyHomePageState extends State<HomePage> {
                           CupertinoPageRoute(
                               builder: (context) => LoginPage()));
                     },
-                    child: const Text('Update Profile',
-                        style: TextStyle(
-                            fontSize: 16, fontWeight: FontWeight.normal))),
+                    child: Text('Update Profile',
+                        style: TextStyle(fontSize: 16, fontWeight: FontWeight.normal, color: Colors.deepPurple))),
               ),
             ),
 

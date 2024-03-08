@@ -7,10 +7,12 @@ class AnimatedBtn extends StatelessWidget {
     super.key,
     required RiveAnimationController btnAnimationController,
     required this.press,
+    required this.title,
   })  : _btnAnimationController = btnAnimationController;
 
   final RiveAnimationController _btnAnimationController;
   final VoidCallback press;
+  final String title;
 
   @override
   Widget build(BuildContext context) {
@@ -31,11 +33,11 @@ class AnimatedBtn extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.center,
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
-                  const Icon(CupertinoIcons.arrow_right),
+                  const Icon(CupertinoIcons.arrow_right, color: Colors.deepPurple),
                   const SizedBox(width: 8),
                   Text(
-                    "Start",
-                    style: Theme.of(context).textTheme.labelLarge,
+                    title,
+                    style: TextStyle(fontSize: 16, fontWeight: FontWeight.normal, color: Colors.deepPurple)
                   )
                 ],
               ),

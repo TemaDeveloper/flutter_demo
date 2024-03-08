@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
@@ -8,8 +9,15 @@ import 'package:flutter_application_1/listModels/my_card.dart';
 
 import 'package:flutter_application_1/onboding/OnBodingScreen.dart';
 
+=======
+import 'package:flutter/material.dart';
+import 'package:flutter_application_1/bottom_bar/bar.dart';
+import 'package:flutter_application_1/listModels/cocktail_card.dart';
+import 'package:flutter_application_1/onboding/bording_screen.dart';
+>>>>>>> 382d45f0bb24feb54e62082959977d96952a293f
 import 'package:flutter_application_1/listModels/recipe.dart';
 import 'package:flutter_application_1/listModels/recipe.api.dart';
+
 
 void main() {
   runApp(const MyApp());
@@ -26,18 +34,20 @@ class MyApp extends StatelessWidget {
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
         useMaterial3: true,
       ),
-      home: OnbodingScreen(),
+      home: const OnbodingScreen(),
     );
   }
 }
 
-class MyHomePage extends StatefulWidget {
+class HomePage extends StatefulWidget {
   static const title = 'CookeryDays';
+
+  const HomePage({super.key});
   @override
-  State<MyHomePage> createState() => _MyHomePageState();
+  State<HomePage> createState() => _HomePageState();
 }
 
-class _MyHomePageState extends State<MyHomePage> {
+class _HomePageState extends State<HomePage> {
   var _currentIndex = 0;
   List<Recipe>? _recipes;
   bool _isLoading = true;
@@ -77,6 +87,7 @@ class _MyHomePageState extends State<MyHomePage> {
     //home screen
     final List<Widget> bodies = [
       _isLoading
+<<<<<<< HEAD
           ? const Center(
               child: CircularProgressIndicator()) //progress bar loading
           : ListView.builder(
@@ -163,21 +174,44 @@ class _MyHomePageState extends State<MyHomePage> {
           ],
         ),
       )),
+=======
+            ? const Center(child: CircularProgressIndicator())
+            : ListView.builder(
+                itemCount: _recipes!.length,
+                itemBuilder: (context, index) {
+                  return CocktailCard(
+                      title: _recipes![index].title,
+                      cookTime: _recipes![index].totalTime,
+                      rating: _recipes![index].rating.toString(),
+                      thumbnailUrl: _recipes![index].images);
+                },
+              ),
+      const Center(child: Text('Likes')),
+      const Center(child: Text('Search')),
+      const Center(child: Text('Profile')),
+>>>>>>> 382d45f0bb24feb54e62082959977d96952a293f
     ];
 
     // Removed MaterialApp widget here
     return Scaffold(
       appBar: AppBar(
+<<<<<<< HEAD
         title: const Text(MyHomePage.title),
         automaticallyImplyLeading: false,
       ),
       body: _currentIndex < bodies.length
           ? bodies[_currentIndex]
           : const Center(child: Text('Page not found')),
+=======
+        title: const Text(HomePage.title),
+      ),
+      body: _currentIndex < bodies.length ? bodies[_currentIndex] : const Center(child: Text('Page not found')),
+>>>>>>> 382d45f0bb24feb54e62082959977d96952a293f
       bottomNavigationBar: BottomNavBar(
         currentIndex: _currentIndex,
         onTap: (i) => setState(() => _currentIndex = i),
         items: [
+<<<<<<< HEAD
           BottomNavBarItem(
               icon: const Icon(Icons.home),
               title: const Text("Home"),
@@ -194,6 +228,12 @@ class _MyHomePageState extends State<MyHomePage> {
               icon: const Icon(Icons.person),
               title: const Text("Profile"),
               selectedColor: Colors.teal),
+=======
+          BottomNavBarItem(icon: const Icon(Icons.home),            title: const Text("Home"),    selectedColor: Colors.purple),
+          BottomNavBarItem(icon: const Icon(Icons.favorite_border), title: const Text("Likes"),   selectedColor: Colors.pink),
+          BottomNavBarItem(icon: const Icon(Icons.search),          title: const Text("Search"),  selectedColor: Colors.orange),
+          BottomNavBarItem(icon: const Icon(Icons.person),          title: const Text("Profile"), selectedColor: Colors.teal),
+>>>>>>> 382d45f0bb24feb54e62082959977d96952a293f
         ],
       ),
     );

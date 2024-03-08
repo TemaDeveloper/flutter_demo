@@ -1,8 +1,10 @@
-import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
+import 'package:flutter_application_1/auth/login.dart';
 import 'package:flutter_application_1/barDesign/BottomNavBar.dart';
 import 'package:flutter_application_1/listModels/cocktail_card.dart';
+import 'package:flutter_application_1/listModels/my_card.dart';
 
 import 'package:flutter_application_1/onboding/OnBodingScreen.dart';
 
@@ -20,7 +22,6 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Flutter Demo',
       theme: ThemeData(
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
         useMaterial3: true,
@@ -40,55 +41,159 @@ class _MyHomePageState extends State<MyHomePage> {
   var _currentIndex = 0;
   List<Recipe>? _recipes;
   bool _isLoading = true;
+  late MyCard myCard1, myCard2, myCard3;
+  List<MyCard> myCards = [];
 
   @override
   void initState() {
     super.initState();
     getRecipes();
+    myCard1 = MyCard(
+        title: 'title1',
+        image:
+            'https://cdn.pixabay.com/photo/2015/04/23/22/00/tree-736885_1280.jpg');
+    myCard2 = MyCard(
+        title: 'title2',
+        image:
+            'https://i0.wp.com/picjumbo.com/wp-content/uploads/silhouette-of-an-olive-tree-after-beautiful-purple-sunset-free-photo.jpg?w=600&quality=80');
+    myCard3 = MyCard(
+        title: 'title3',
+        image:
+            'https://i0.wp.com/picjumbo.com/wp-content/uploads/silhouette-of-an-olive-tree-after-beautiful-purple-sunset-free-photo.jpg?w=600&quality=80');
+
+    myCards = [myCard1, myCard2, myCard3];
   }
 
-   Future<void> getRecipes() async {
+  //getting recipes from API
+  Future<void> getRecipes() async {
     _recipes = await RecipeApi.getRecipe();
     setState(() {
       _isLoading = false;
-      print(_recipes);
     });
   }
 
   @override
   Widget build(BuildContext context) {
+    //home screen
     final List<Widget> bodies = [
       _isLoading
-            ? Center(child: CircularProgressIndicator())
-            : ListView.builder(
-                itemCount: _recipes!.length,
-                itemBuilder: (context, index) {
-                  return CocktailCard(
-                      title: _recipes![index].title,
-                      cookTime: _recipes![index].totalTime,
-                      rating: _recipes![index].rating.toString(),
-                      thumbnailUrl: _recipes![index].images);
-                },
-              ),
+          ? const Center(
+              child: CircularProgressIndicator()) //progress bar loading
+          : ListView.builder(
+              //if success fetch data
+              itemCount: _recipes!.length,
+              itemBuilder: (context, index) {
+                return CocktailCard(
+                    title: _recipes![index].title,
+                    cookTime: _recipes![index].totalTime,
+                    rating: _recipes![index].rating.toString(),
+                    thumbnailUrl: _recipes![index].images);
+              },
+            ),
       Center(child: Text('Likes')),
       Center(child: Text('Search')),
-      Center(child: Text('Profile')),
+      SingleChildScrollView(
+          //profile screen
+          child: Container(
+        padding: EdgeInsets.all(10),
+        child: Column(
+          children: [
+            //Profile Image
+
+            const CircleAvatar(
+              radius: 70,
+              backgroundImage: NetworkImage(''),
+              backgroundColor: Colors.amber,
+            ),
+
+            //User Name
+            Padding(
+              padding: EdgeInsets.all(10),
+              child: Text('Name',
+                  style: TextStyle(fontSize: 32, fontWeight: FontWeight.bold)),
+            ),
+            //User Email
+            Padding(
+              padding: EdgeInsets.fromLTRB(10, 0, 10, 10),
+              child: Text('Email',
+                  style: TextStyle(fontSize: 16, color: Colors.deepPurple)),
+            ),
+
+            //Button Edit
+            Padding(
+              padding: EdgeInsets.fromLTRB(10, 0, 10, 10),
+              child: Container(
+                width: 200,
+                height: 50,
+                child: ElevatedButton(
+                    onPressed: () {
+                      Navigator.push(
+                          context,
+                          CupertinoPageRoute(
+                              builder: (context) => LoginPage()));
+                    },
+                    child: const Text('Update Profile',
+                        style: TextStyle(
+                            fontSize: 16, fontWeight: FontWeight.normal))),
+              ),
+            ),
+
+            //Title 'My Cards'
+            Padding(
+              padding: EdgeInsets.fromLTRB(10, 0, 10, 10),
+              child: const Text('My Recipes',
+                  style: TextStyle(fontSize: 24, color: Colors.black)),
+            ),
+
+            //List of Created Recipes
+            Padding(
+              padding: EdgeInsets.only(bottom: 10),
+              child: Container(
+                height: 300,
+                child: ListView.builder(
+                    scrollDirection: Axis.horizontal,
+                    itemCount: myCards.length,
+                    itemBuilder: (context, index) {
+                      return MyCard(
+                          title: myCards[index].title,
+                          image: myCards[index].image);
+                    }),
+              ),
+            ),
+          ],
+        ),
+      )),
     ];
 
     // Removed MaterialApp widget here
     return Scaffold(
       appBar: AppBar(
-        title: Text(MyHomePage.title),
+        title: const Text(MyHomePage.title),
+        automaticallyImplyLeading: false,
       ),
-      body: _currentIndex < bodies.length ? bodies[_currentIndex] : Center(child: Text('Page not found')),
+      body: _currentIndex < bodies.length
+          ? bodies[_currentIndex]
+          : const Center(child: Text('Page not found')),
       bottomNavigationBar: BottomNavBar(
         currentIndex: _currentIndex,
         onTap: (i) => setState(() => _currentIndex = i),
         items: [
-          BottomNavBarItem(icon: Icon(Icons.home), title: Text("Home"), selectedColor: Colors.purple),
-          BottomNavBarItem(icon: Icon(Icons.favorite_border), title: Text("Likes"), selectedColor: Colors.pink),
-          BottomNavBarItem(icon: Icon(Icons.search), title: Text("Search"), selectedColor: Colors.orange),
-          BottomNavBarItem(icon: Icon(Icons.person), title: Text("Profile"), selectedColor: Colors.teal),
+          BottomNavBarItem(
+              icon: const Icon(Icons.home),
+              title: const Text("Home"),
+              selectedColor: Colors.purple),
+          BottomNavBarItem(
+              icon: const Icon(Icons.favorite_border),
+              title: const Text("Likes"),
+              selectedColor: Colors.pink),
+          BottomNavBarItem(
+              icon: const Icon(Icons.search),
+              title: const Text("Search"),
+              selectedColor: Colors.orange),
+          BottomNavBarItem(
+              icon: const Icon(Icons.person),
+              title: const Text("Profile"),
+              selectedColor: Colors.teal),
         ],
       ),
     );

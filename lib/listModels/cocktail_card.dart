@@ -49,6 +49,7 @@ class CocktailCard extends StatelessWidget {
                 title,
                 style: TextStyle(
                   fontSize: 19,
+                  color: Colors.white,
                 ),
                 overflow: TextOverflow.ellipsis,
                 maxLines: 2,
@@ -76,7 +77,7 @@ class CocktailCard extends StatelessWidget {
                         size: 18,
                       ),
                       SizedBox(width: 7),
-                      Text(rating),
+                      Text(rating, style: TextStyle(color: Colors.white),),
                     ],
                   ),
                 ),
@@ -95,7 +96,7 @@ class CocktailCard extends StatelessWidget {
                         size: 18,
                       ),
                       SizedBox(width: 7),
-                      Text(cookTime),
+                      Text(cookTime, style: TextStyle(color: Colors.white)),
                     ],
                   ),
                 )

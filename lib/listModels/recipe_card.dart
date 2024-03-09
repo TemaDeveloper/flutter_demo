@@ -1,11 +1,12 @@
 import 'package:flutter/material.dart';
 
-class CocktailCard extends StatelessWidget {
+class RecipeCard extends StatelessWidget {
   final String title;
   final String rating;
   final String cookTime;
   final String thumbnailUrl;
-  CocktailCard({
+
+  RecipeCard({
     required this.title,
     required this.cookTime,
     required this.rating,

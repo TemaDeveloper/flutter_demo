@@ -220,7 +220,7 @@ class _LoginState extends State<LoginPage> {
                               child: Row(
                                 mainAxisAlignment: MainAxisAlignment.center,
                                 children: <Widget>[
-                                  Image.asset('assets/images/img_google.png', width: 40, height: 40, color: Colors.red),
+                                  Image.asset('assets/images/img_google.png', width: 30, height: 30),
                                   SizedBox(width: 10),
                                   Text('Google',
                                       style: TextStyle(

@@ -3,13 +3,14 @@ import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_application_1/auth/login.dart';
 import 'package:flutter_application_1/bottom_bar/bar.dart';
-import 'package:flutter_application_1/listModels/cocktail_card.dart';
+import 'package:flutter_application_1/listModels/recipe_card.dart';
 import 'package:flutter_application_1/listModels/my_card.dart';
 
 import 'package:flutter_application_1/onboding/bording_screen.dart';
 
 import 'package:flutter_application_1/listModels/recipe.dart';
 import 'package:flutter_application_1/listModels/recipe.api.dart';
+import 'package:flutter_application_1/recipe_detail.dart';
 
 void main() {
   runApp(const MyApp());
@@ -83,11 +84,19 @@ class _MyHomePageState extends State<HomePage> {
               //if success fetch data
               itemCount: _recipes!.length,
               itemBuilder: (context, index) {
-                return CocktailCard(
+                return GestureDetector(
+                  onTap: () {
+                    Navigator.push(context, CupertinoPageRoute(builder: (context) => RecipeDetailPage(
+                    imageUrl:  _recipes![index].images,
+                    title: _recipes![index].title, 
+                    rating: _recipes![index].rating, 
+                    cookTime: _recipes![index].totalTime,)));
+                  },
+                  child: RecipeCard(
                     title: _recipes![index].title,
                     cookTime: _recipes![index].totalTime,
                     rating: _recipes![index].rating.toString(),
-                    thumbnailUrl: _recipes![index].images);
+                    thumbnailUrl: _recipes![index].images));
               },
             ),
       Center(child: Text('Likes')),

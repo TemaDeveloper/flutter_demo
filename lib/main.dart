@@ -86,12 +86,14 @@ class _MyHomePageState extends State<HomePage> {
                 return GestureDetector(
                   onTap: () {
                     Navigator.push(context, CupertinoPageRoute(builder: (context) => RecipeDetailPage(
+                    recipeId: _listRecipes![index].recipeId,
                     imageUrl:  _listRecipes![index].image,
                     title: _listRecipes![index].title, 
                     rating: _listRecipes![index].rating, 
                     cookTime: _listRecipes![index].totalTime,)));
                   },
                   child: RecipeCard(
+                    recipeId: _listRecipes![index].recipeId,
                     title: _listRecipes![index].title,
                     cookTime: _listRecipes![index].totalTime,
                     rating: _listRecipes![index].rating.toString(),

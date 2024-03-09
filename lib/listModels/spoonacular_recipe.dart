@@ -3,15 +3,18 @@ class SpoonacularRecipe {
   final double rating;
   final String totalTime;
   final String image;
+  final int recipeId;
 
   SpoonacularRecipe(
-      {required this.title,
+      {required this.recipeId,
+      required this.title,
       required this.image,
       required this.rating,
       required this.totalTime});
 
   factory SpoonacularRecipe.fromJson(dynamic json) {
     return SpoonacularRecipe(
+        recipeId: json['id'],
         title: json['title'] as String, // Adjusted to Spoonacular's field name
         image: json['image'] as String, // Adjusted to Spoonacular's field name
         rating:
@@ -28,6 +31,6 @@ class SpoonacularRecipe {
 
   @override
   String toString() {
-    return 'Recipe {name: $title, image: $image, rating: $rating, totalTime: $totalTime}';
+    return 'Recipe {recipeId: $recipeId, name: $title, image: $image, rating: $rating, totalTime: $totalTime}';
   }
 }

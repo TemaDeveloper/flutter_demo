@@ -1,16 +1,19 @@
 import 'dart:ui';
 
 import 'package:flutter/material.dart';
+import 'package:http/http.dart' as http;
+import 'dart:convert';
 
 class RecipeDetailPage extends StatefulWidget {
+  final int recipeId;
   final String imageUrl;
   final String title;
   final double rating;
   final String cookTime;
-  final List<String> ingredients = ['Coke', 'Pizza', 'Bread'];
 
   RecipeDetailPage({
     Key? key,
+    required this.recipeId,
     required this.imageUrl,
     required this.title,
     required this.rating,
@@ -22,6 +25,53 @@ class RecipeDetailPage extends StatefulWidget {
 }
 
 class _RecipeDetailState extends State<RecipeDetailPage> {
+  List<String>? _ingredients;
+  bool _isLoading = true;
+  late int id;
+
+  @override
+  void initState() {
+    super.initState();
+    id = widget.recipeId;
+    _fetchIngredients();
+  }
+
+  Future<void> _fetchIngredients() async {
+    var url = Uri.https(
+        'api.spoonacular.com', '/recipes/${widget.recipeId}/information', {
+      'apiKey':
+          '23ad611f1e2745e9925805b1ff79f2e8', // Replace with your Spoonacular API Key
+    });
+
+    try {
+      final response = await http.get(url);
+      final jsonResponse = json.decode(response.body);
+      final ingredientsList = jsonResponse['extendedIngredients'] as List;
+      setState(() {
+        _ingredients = ingredientsList
+            .map((ingredient) => ingredient['name'] as String)
+            .toList();
+        _isLoading = false;
+      });
+    } catch (e) {
+      // Handle the exception
+    }
+  }
+
+  // Future<void> getIngredients() async {
+  //   try {
+  //     _ingredients = await SpoonacularRecipeApi.getRecipeInfo(id);
+  //     setState(() {
+  //       _isLoading = false;
+  //     });
+  //   } catch (e) {
+  //     // Handle the error
+  //     setState(() {
+  //       _isLoading = false;
+  //     });
+  //   }
+  // }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -90,7 +140,7 @@ class _RecipeDetailState extends State<RecipeDetailPage> {
                       _iconWithText(
                           Icons.schedule, 'Cook time:\n${widget.cookTime}'),
                       _iconWithText(Icons.kitchen,
-                          'Products:\n${widget.ingredients.length.toString()}'),
+                          'Products:\n${_ingredients!.length.toString()}'),
                     ],
                   ),
                 ),
@@ -101,26 +151,37 @@ class _RecipeDetailState extends State<RecipeDetailPage> {
                     style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
                   ),
                 ),
-                Container(
-                  height: 100, // Adjust height as needed
-                  child: ListView.builder(
-                    scrollDirection: Axis.horizontal,
-                    itemCount: widget.ingredients.length,
-                    itemBuilder: (BuildContext context, int index) {
-                      return Container(
-                        width: 200, // Define a fixed width for each item
-                        child: Card(
-                          child: ListTile(
-                            title: Padding(
-                              padding: EdgeInsets.all(8.0),
-                              child: Center(
-                                child: Text(widget.ingredients[index]),
-                              ),
-                            ),
-                          ),
+                _isLoading
+                    ? const Center(
+                        child:
+                            CircularProgressIndicator()) //progress bar loading
+                    : Container(
+                        height: 100, // Adjust height as needed
+                        child: ListView.builder(
+                          scrollDirection: Axis.horizontal,
+                          itemCount: _ingredients!.length,
+                          itemBuilder: (context, index) {
+                            return Card(
+                              child: Padding(
+                                  padding: EdgeInsets.all(8),
+                                  child: Center(
+                                    child: Text(
+                                      _ingredients![index],
+                                      style: TextStyle(
+                                          fontSize: 16,
+                                          fontWeight: FontWeight.normal),
+                                      textAlign: TextAlign.center,
+                                    ),
+                                  )),
+                            );
+                          },
                         ),
-                      );
-                    },
+                      ),
+                      Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Text(
+                    'Steps',
+                    style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
                   ),
                 ),
               ],
@@ -158,21 +219,22 @@ class _RecipeDetailState extends State<RecipeDetailPage> {
       ),
       child: Padding(
         padding: const EdgeInsets.all(10),
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              CircleAvatar(
-                backgroundColor: Colors.yellow[600],
-                child: Icon(icon, color: Colors.white),
-              ),
-              const SizedBox(height: 8),
-              Text(
-                text,
-                style: const TextStyle(fontSize: 16, fontWeight: FontWeight.normal),
-                textAlign: TextAlign.center,
-              ),
-            ],
-          ),
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            CircleAvatar(
+              backgroundColor: Colors.yellow[600],
+              child: Icon(icon, color: Colors.white),
+            ),
+            const SizedBox(height: 8),
+            Text(
+              text,
+              style:
+                  const TextStyle(fontSize: 16, fontWeight: FontWeight.normal),
+              textAlign: TextAlign.center,
+            ),
+          ],
+        ),
       ),
     );
   }

@@ -70,16 +70,19 @@ class RecipeCard extends StatelessWidget {
                     color: Colors.black.withOpacity(0.4),
                     borderRadius: BorderRadius.circular(15),
                   ),
-                  child: Row(
-                    children: [
-                      Icon(
-                        Icons.star,
-                        color: Colors.yellow,
-                        size: 18,
+                  child: Padding(
+                    padding: EdgeInsets.all(5),
+                      child: Row(
+                        children: [
+                          Icon(
+                            Icons.star,
+                            color: Colors.yellow,
+                            size: 18,
+                          ),
+                          SizedBox(width: 7),
+                          Text(rating, style: TextStyle(color: Colors.white),),
+                        ],
                       ),
-                      SizedBox(width: 7),
-                      Text(rating, style: TextStyle(color: Colors.white),),
-                    ],
                   ),
                 ),
                 Container(
@@ -89,16 +92,19 @@ class RecipeCard extends StatelessWidget {
                     color: Colors.black.withOpacity(0.4),
                     borderRadius: BorderRadius.circular(15),
                   ),
-                  child: Row(
-                    children: [
-                      Icon(
-                        Icons.schedule,
-                        color: Colors.yellow,
-                        size: 18,
+                  child: Padding(
+                    padding: EdgeInsets.all(5),
+                    child: Row(
+                        children: [
+                          Icon(
+                            Icons.schedule,
+                            color: Colors.yellow,
+                            size: 18,
+                          ),
+                          SizedBox(width: 7),
+                          Text(cookTime, style: TextStyle(color: Colors.white)),
+                        ],
                       ),
-                      SizedBox(width: 7),
-                      Text(cookTime, style: TextStyle(color: Colors.white)),
-                    ],
                   ),
                 )
               ],

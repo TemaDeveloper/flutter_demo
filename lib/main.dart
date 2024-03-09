@@ -1,15 +1,14 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:flutter_application_1/auth/login.dart';
 import 'package:flutter_application_1/bottom_bar/bar.dart';
 import 'package:flutter_application_1/listModels/recipe_card.dart';
 import 'package:flutter_application_1/listModels/my_card.dart';
 
 import 'package:flutter_application_1/onboding/bording_screen.dart';
+import 'package:flutter_application_1/listModels/spoonacular_recipe.dart';
+import 'package:flutter_application_1/listModels/spoonacular_recipe.api.dart';
 
-import 'package:flutter_application_1/listModels/recipe.dart';
-import 'package:flutter_application_1/listModels/recipe.api.dart';
 import 'package:flutter_application_1/recipe_detail.dart';
 
 void main() {
@@ -40,7 +39,7 @@ class HomePage extends StatefulWidget {
 
 class _MyHomePageState extends State<HomePage> {
   var _currentIndex = 0;
-  List<Recipe>? _recipes;
+  List<SpoonacularRecipe>? _listRecipes;
   bool _isLoading = true;
   late MyCard myCard1, myCard2, myCard3;
   List<MyCard> myCards = [];
@@ -67,7 +66,7 @@ class _MyHomePageState extends State<HomePage> {
 
   //getting recipes from API
   Future<void> getRecipes() async {
-    _recipes = await RecipeApi.getRecipe();
+    _listRecipes = await SpoonacularRecipeApi.getRecipeSpoon();
     setState(() {
       _isLoading = false;
     });
@@ -82,21 +81,21 @@ class _MyHomePageState extends State<HomePage> {
               child: CircularProgressIndicator()) //progress bar loading
           : ListView.builder(
               //if success fetch data
-              itemCount: _recipes!.length,
+              itemCount: _listRecipes!.length,
               itemBuilder: (context, index) {
                 return GestureDetector(
                   onTap: () {
                     Navigator.push(context, CupertinoPageRoute(builder: (context) => RecipeDetailPage(
-                    imageUrl:  _recipes![index].images,
-                    title: _recipes![index].title, 
-                    rating: _recipes![index].rating, 
-                    cookTime: _recipes![index].totalTime,)));
+                    imageUrl:  _listRecipes![index].image,
+                    title: _listRecipes![index].title, 
+                    rating: _listRecipes![index].rating, 
+                    cookTime: _listRecipes![index].totalTime,)));
                   },
                   child: RecipeCard(
-                    title: _recipes![index].title,
-                    cookTime: _recipes![index].totalTime,
-                    rating: _recipes![index].rating.toString(),
-                    thumbnailUrl: _recipes![index].images));
+                    title: _listRecipes![index].title,
+                    cookTime: _listRecipes![index].totalTime,
+                    rating: _listRecipes![index].rating.toString(),
+                    thumbnailUrl: _listRecipes![index].image));
               },
             ),
       Center(child: Text('Likes')),

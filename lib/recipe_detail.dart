@@ -86,7 +86,7 @@ class _RecipeDetailState extends State<RecipeDetailPage> {
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                     children: [
-                      _iconWithText(Icons.star, 'Rating:\n${widget.rating}'),
+                      _iconWithText(Icons.star, 'Quality:\n${widget.rating}'),
                       _iconWithText(
                           Icons.schedule, 'Cook time:\n${widget.cookTime}'),
                       _iconWithText(Icons.kitchen,

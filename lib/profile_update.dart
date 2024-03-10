@@ -111,7 +111,7 @@ class _UpdateProfileState extends State<UpdateProfile> {
               onPressed: () async {
                 _handleImageSelection(context).then((file) {
                   if (file != null) {
-                    authTryChangeAvatar(file);
+                    authTryChange(avatar: file);
                   }
                 }).catchError((e) => print("Image Picking, GOT ERROR: $e"));
               },

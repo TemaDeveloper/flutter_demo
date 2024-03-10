@@ -71,26 +71,10 @@ Future<AuthResponse> authEmailPass(String email, String password) async {
   );
 }
 
-Future<bool> authTryChangeAvatar(XFile path) async {
-  final pb = getPb();
-
-  var file = http.MultipartFile.fromBytes(
-    'avatar',
-    await File(path.path).readAsBytes(),
-    filename: path.name,
-  );
-
-  try {
-    await pb.collection('users').update(pb.authStore.model.id, files: [file]);
-    return true;
-  } catch (e) {
-    return false;
-  }
-}
-
 Future<bool> authTryChange({
   String? name,
   String? lastName,
+  XFile? avatar,
 }) async {
   final pb = getPb();
   if (!pb.authStore.isValid) {
@@ -104,7 +88,18 @@ Future<bool> authTryChange({
   }
 
   try {
-    await pb.collection('users').update(pb.authStore.model.id, body: body);
+    if (avatar != null) {
+      var file = http.MultipartFile.fromBytes(
+        'avatar',
+        await File(avatar.path).readAsBytes(),
+        filename: avatar.name,
+      );
+      await pb
+          .collection('users')
+          .update(pb.authStore.model.id, body: body, files: [file]);
+    } else {
+      await pb.collection('users').update(pb.authStore.model.id, body: body);
+    }
     return true;
   } catch (e) {
     return false;

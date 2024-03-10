@@ -28,13 +28,15 @@ class MyApp extends StatelessWidget {
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
         useMaterial3: true,
       ),
-      home: OnbodingScreen(),
+      home: const OnbodingScreen(),
     );
   }
 }
 
 class HomePage extends StatefulWidget {
   static const title = 'CookeryDays';
+
+  const HomePage({super.key});
   @override
   State<HomePage> createState() => _MyHomePageState();
 }
@@ -229,15 +231,20 @@ class _MyHomePageState extends State<HomePage> {
                   ? 1
                   : _listRecipes!.length,
             ),
+<<<<<<< HEAD
           ),
         ],
       ),
       Center(child: Text('Likes')),
       Center(child: Text('Search')),
+=======
+      const Center(child: Text('Likes')),
+      const Center(child: Text('Search')),
+>>>>>>> ecd146b12589204a02be73196597d35ba596050a
       SingleChildScrollView(
           //profile screen
           child: Container(
-        padding: EdgeInsets.all(10),
+        padding: const EdgeInsets.all(10),
         child: Column(
           children: [
             //Profile Image
@@ -249,7 +256,7 @@ class _MyHomePageState extends State<HomePage> {
             ),
 
             //User Name
-            Padding(
+            const Padding(
               padding: EdgeInsets.all(10),
               child: Text('Name',
                   style: TextStyle(fontSize: 32, fontWeight: FontWeight.bold)),
@@ -263,8 +270,8 @@ class _MyHomePageState extends State<HomePage> {
 
             //Button Edit
             Padding(
-              padding: EdgeInsets.fromLTRB(10, 0, 10, 10),
-              child: Container(
+              padding: const EdgeInsets.fromLTRB(10, 0, 10, 10),
+              child: SizedBox(
                 width: 200,
                 height: 50,
                 child: ElevatedButton(
@@ -272,27 +279,32 @@ class _MyHomePageState extends State<HomePage> {
                       Navigator.push(
                           context,
                           CupertinoPageRoute(
-                              builder: (context) => LoginPage()));
+                              builder: (context) => const LoginPage()));
                     },
+<<<<<<< HEAD
                     child: Text('Update Profile',
                         style: TextStyle(
                             fontSize: 16,
                             fontWeight: FontWeight.normal,
                             color: Colors.deepPurple))),
+=======
+                    child: const Text('Update Profile',
+                        style: TextStyle(fontSize: 16, fontWeight: FontWeight.normal, color: Colors.deepPurple))),
+>>>>>>> ecd146b12589204a02be73196597d35ba596050a
               ),
             ),
 
             //Title 'My Cards'
-            Padding(
+            const Padding(
               padding: EdgeInsets.fromLTRB(10, 0, 10, 10),
-              child: const Text('My Recipes',
+              child: Text('My Recipes',
                   style: TextStyle(fontSize: 24, color: Colors.black)),
             ),
 
             //List of Created Recipes
             Padding(
-              padding: EdgeInsets.only(bottom: 10),
-              child: Container(
+              padding: const EdgeInsets.only(bottom: 10),
+              child: SizedBox(
                 height: 300,
                 child: ListView.builder(
                     scrollDirection: Axis.horizontal,

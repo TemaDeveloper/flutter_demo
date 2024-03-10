@@ -3,21 +3,45 @@ import 'package:pocketbase/pocketbase.dart';
 
 PocketBase? pb;
 
+const String _baseUrl = kDebugMode ? 'http://127.0.0.1:8090' : 'TODO';
+
 PocketBase getPb() {
-  const url = kDebugMode ? 'http://127.0.0.1:8090' : 'TODO';
-  pb ??= PocketBase(url); // SAME AS: if (pb == null) { pb = PocketBase(url); }
+  pb ??= PocketBase(_baseUrl); // SAME AS: if (pb == null) { pb = PocketBase(url); }
   return pb!;
 }
 
-Future<bool> authEmailPass(String email, String password) async {
-  print("authenticating: $email, $password");
+class AuthResponse {
+  final bool isLogged;
+  final bool needsVerification;
+  final String? avatar;
+
+  const AuthResponse({
+    required this.isLogged,
+    required this.needsVerification,
+    required this.avatar,
+  });
+}
+
+// Calling it again, causes relogin(logout + login)
+Future<AuthResponse> authEmailPass(String email, String password) async {
   final pb = getPb();
-  final authData = await pb.collection('users').authWithPassword(
+  pb.authStore.clear();
+
+  await pb.collection('users').authWithPassword(
     email,
     password,
   );
 
-  print(authData.meta);
+  bool isVerified = pb.authStore.model.getDataValue("verified") as bool;
+  bool isLogged = pb.authStore.isValid;
+  final id = pb.authStore.model.id;
 
-  return pb.authStore.isValid;
+  final avatarName = pb.authStore.model.getDataValue("avatar");
+  String? avatarUrl = avatarName == "" ? null : "$_baseUrl/api/files/_pb_users_auth_/$id/$avatarName";
+
+  return AuthResponse(
+    isLogged: isLogged,
+    needsVerification: !isVerified,
+    avatar: avatarUrl,
+  );
 }

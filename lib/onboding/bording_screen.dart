@@ -1,7 +1,6 @@
 import 'dart:ui';
 
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:flutter_application_1/auth/login.dart';
 import 'package:flutter_application_1/main.dart';
 import 'package:rive/rive.dart';
@@ -97,11 +96,13 @@ class _OnbodingScreenState extends State<OnbodingScreen> {
                           title: 'Start',
                           press: () {
                             _btnAnimationController.isActive = true;
-                             Navigator.push(
-                                         context,
-                                         CupertinoPageRoute(
-                                             builder: (context) => const LoginPage()));
-                        
+                            Navigator.push(
+                              context,
+                              CupertinoPageRoute(
+                                builder: (context) => const LoginPage(),
+                              ),
+                            );
+
                             Future.delayed(
                               const Duration(milliseconds: 800),
                               () {
@@ -112,20 +113,27 @@ class _OnbodingScreenState extends State<OnbodingScreen> {
                             );
                           },
                         ),
-
-                        TextButton(onPressed: () {
-                          Navigator.push(context, CupertinoPageRoute(builder: (context) => HomePage()));
-                        }, child: Padding(
-                          padding: EdgeInsets.all(10),
-                          child: Text('Login as a guest', style: Theme.of(context).textTheme.labelLarge,))
-                      
-                        )],
+                        TextButton(
+                          onPressed: () {
+                            Navigator.push(
+                                context,
+                                CupertinoPageRoute(
+                                    builder: (context) => HomePage()));
+                          },
+                          child: Padding(
+                            padding: const EdgeInsets.all(10),
+                            child: Text(
+                              'Login as a guest',
+                              style: Theme.of(context).textTheme.labelLarge,
+                            ),
+                          ),
+                        )
+                      ],
                     ),
                     const Padding(
                       padding: EdgeInsets.symmetric(vertical: 24),
-                      child: Text(
-                          ""),
-                    )
+                      child: Text(""),
+                    ),
                   ],
                 ),
               ),
@@ -136,3 +144,4 @@ class _OnbodingScreenState extends State<OnbodingScreen> {
     );
   }
 }
+

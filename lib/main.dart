@@ -1,7 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
-import 'package:flutter_application_1/auth/login.dart';
+import 'package:flutter_application_1/profile_update.dart';
 import 'package:flutter_application_1/bottom_bar/bar.dart';
 import 'package:flutter_application_1/listModels/cuisine_card.dart';
 import 'package:flutter_application_1/listModels/recipe_card.dart';
@@ -276,7 +276,7 @@ class _MyHomePageState extends State<HomePage> {
                       Navigator.push(
                           context,
                           CupertinoPageRoute(
-                              builder: (context) => const LoginPage()));
+                              builder: (context) => UpdateProfile()));
                     },
 
                     child: Text('Update Profile',

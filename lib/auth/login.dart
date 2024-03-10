@@ -8,6 +8,7 @@ enum LoginStatus {
   none, // find good name for starting state
   waiting,
   success,
+  requiresVerification,
   error,
 }
 
@@ -41,11 +42,21 @@ class _LoginState extends State<LoginPage> {
       _loginStatus = LoginStatus.waiting;
     });
 
-    authEmailPass(emailController.text, passController.text).then((value) {
+    authEmailPass(emailController.text, passController.text).then((resp) {
       setState(() {
-        _loginStatus = value ? LoginStatus.success : LoginStatus.error;
+        print(resp.avatar);
+        if (resp.isLogged) {
+          if (resp.needsVerification) {
+            _loginStatus = LoginStatus.requiresVerification;
+          } else {
+            _loginStatus = LoginStatus.success;
+          }
+        }
       });
-    }).catchError((e) => print(e));
+    }).catchError((e) {
+      // TODO: handle each error case apropiately
+      _loginStatus = LoginStatus.error;
+    });
   }
 
   @override
@@ -58,7 +69,7 @@ class _LoginState extends State<LoginPage> {
           Navigator.push(
             context,
             CupertinoPageRoute(
-              builder: (context) => HomePage(),
+              builder: (context) => const HomePage(),
             ),
           );
         },
@@ -216,17 +227,21 @@ class _LoginState extends State<LoginPage> {
                             width: double.infinity,
                             height: 70,
                             child: Padding(
-                              padding: EdgeInsets.symmetric(horizontal: 10),
+                              padding:
+                                  const EdgeInsets.symmetric(horizontal: 10),
                               child: Row(
                                 mainAxisAlignment: MainAxisAlignment.center,
                                 children: <Widget>[
-                                  Image.asset('assets/images/img_google.png', width: 30, height: 30),
-                                  SizedBox(width: 10),
-                                  Text('Google',
-                                      style: TextStyle(
-                                          fontSize: 16,
-                                          fontWeight: FontWeight.normal,
-                                          color: Colors.black))
+                                  Image.asset('assets/images/img_google.png',
+                                      width: 30, height: 30),
+                                  const SizedBox(width: 10),
+                                  const Text(
+                                    'Google',
+                                    style: TextStyle(
+                                        fontSize: 16,
+                                        fontWeight: FontWeight.normal,
+                                        color: Colors.black),
+                                  ),
                                 ],
                               ),
                             ),

@@ -3,18 +3,18 @@ import 'package:http/http.dart' as http;
 import 'package:flutter_application_1/listModels/spoonacular_recipe.dart';
 
 class SpoonacularRecipeApi {
-  
-
-  static Future<List<SpoonacularRecipe>> getRecipeSpoon() async {
-    var spoonacularUri =
-        Uri.https('api.spoonacular.com', '/recipes/complexSearch', {
-      "apiKey": "23ad611f1e2745e9925805b1ff79f2e8",
+  static Future<List<SpoonacularRecipe>> getRecipeSpoon(String cuisine) async {
+    var url = Uri.https(
+        'api.spoonacular.com', '/recipes/complexSearch', {
+      'apiKey': '23ad611f1e2745e9925805b1ff79f2e8',
+      'cuisine': cuisine,
       "addRecipeInformation": "true",
       "number": "30",
       "sort": "popularity",
       "maxReadyTime": "20",
     });
-    final spoonacularResponse = await http.get(spoonacularUri);
+
+    final spoonacularResponse = await http.get(url);
     Map spoonacularData = jsonDecode(spoonacularResponse.body);
     List _tempSpoonacular = [];
 

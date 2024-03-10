@@ -28,6 +28,8 @@ class _RecipeDetailState extends State<RecipeDetailPage> {
   List<String>? _ingredients;
   bool _isLoading = true;
   late int id;
+  String? recipeSteps;
+  int increment = 1;
 
   @override
   void initState() {
@@ -39,15 +41,22 @@ class _RecipeDetailState extends State<RecipeDetailPage> {
   Future<void> _fetchIngredients() async {
     var url = Uri.https(
         'api.spoonacular.com', '/recipes/${widget.recipeId}/information', {
-      'apiKey':
-          '23ad611f1e2745e9925805b1ff79f2e8', // Replace with your Spoonacular API Key
+      'apiKey': '23ad611f1e2745e9925805b1ff79f2e8',
     });
 
     try {
       final response = await http.get(url);
       final jsonResponse = json.decode(response.body);
       final ingredientsList = jsonResponse['extendedIngredients'] as List;
+      final stepsList =
+          jsonResponse['analyzedInstructions'][0]['steps'] as List;
+
       setState(() {
+        recipeSteps = stepsList
+            .asMap()
+            .map((i, step) => MapEntry(i, "${i + 1}. ${step['step']}"))
+            .values
+            .join('\n\n');
         _ingredients = ingredientsList
             .map((ingredient) => ingredient['name'] as String)
             .toList();
@@ -57,20 +66,6 @@ class _RecipeDetailState extends State<RecipeDetailPage> {
       // Handle the exception
     }
   }
-
-  // Future<void> getIngredients() async {
-  //   try {
-  //     _ingredients = await SpoonacularRecipeApi.getRecipeInfo(id);
-  //     setState(() {
-  //       _isLoading = false;
-  //     });
-  //   } catch (e) {
-  //     // Handle the error
-  //     setState(() {
-  //       _isLoading = false;
-  //     });
-  //   }
-  // }
 
   @override
   Widget build(BuildContext context) {
@@ -139,8 +134,8 @@ class _RecipeDetailState extends State<RecipeDetailPage> {
                       _iconWithText(Icons.star, 'Quality:\n${widget.rating}'),
                       _iconWithText(
                           Icons.schedule, 'Cook time:\n${widget.cookTime}'),
-                      _iconWithText(Icons.kitchen,
-                          'Products:\n${_ingredients!.length.toString()}'),
+                       _iconWithText(Icons.kitchen,
+                           'Products:\n${_ingredients?.length.toString() ?? 'Loading...'}'),
                     ],
                   ),
                 ),
@@ -177,13 +172,24 @@ class _RecipeDetailState extends State<RecipeDetailPage> {
                           },
                         ),
                       ),
-                      Padding(
+                Padding(
                   padding: const EdgeInsets.all(8.0),
                   child: Text(
                     'Steps',
                     style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
                   ),
                 ),
+                Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Text(
+                    recipeSteps ?? "Loading Steps",
+                    style:
+                        TextStyle(fontSize: 16, fontWeight: FontWeight.normal),
+                  ),
+                ),
+                SizedBox(
+                  height: 50,
+                )
               ],
             ),
           ),

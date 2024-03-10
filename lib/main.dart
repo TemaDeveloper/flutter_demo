@@ -1,7 +1,9 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 import 'package:flutter_application_1/auth/login.dart';
 import 'package:flutter_application_1/bottom_bar/bar.dart';
+import 'package:flutter_application_1/listModels/cuisine_card.dart';
 import 'package:flutter_application_1/listModels/recipe_card.dart';
 import 'package:flutter_application_1/listModels/my_card.dart';
 
@@ -42,12 +44,37 @@ class _MyHomePageState extends State<HomePage> {
   List<SpoonacularRecipe>? _listRecipes;
   bool _isLoading = true;
   late MyCard myCard1, myCard2, myCard3;
+  late CuisineCard italianCard,
+      americanCard,
+      europeanCard,
+      japaneseCard,
+      chineseCard,
+      indianCard,
+      frenchCard;
   List<MyCard> myCards = [];
+  List<CuisineCard> cuisines = [];
+  int selectedIdx = 0;
 
   @override
   void initState() {
     super.initState();
-    getRecipes();
+    getRecipes('Italian');
+
+    italianCard =
+        CuisineCard(title: 'Italian', image: 'assets/images/img_italian.JPG');
+    americanCard =
+        CuisineCard(title: 'American', image: 'assets/images/img_american.JPG');
+    europeanCard =
+        CuisineCard(title: 'European', image: 'assets/images/img_european.JPG');
+    japaneseCard =
+        CuisineCard(title: 'Japanese', image: 'assets/images/img_japanese.JPG');
+    chineseCard =
+        CuisineCard(title: 'Chinese', image: 'assets/images/img_chinese.JPG');
+    indianCard =
+        CuisineCard(title: 'Indian', image: 'assets/images/img_indian.JPG');
+    frenchCard =
+        CuisineCard(title: 'French', image: 'assets/images/img_french.JPG');
+
     myCard1 = MyCard(
         title: 'title1',
         image:
@@ -62,11 +89,20 @@ class _MyHomePageState extends State<HomePage> {
             'https://i0.wp.com/picjumbo.com/wp-content/uploads/silhouette-of-an-olive-tree-after-beautiful-purple-sunset-free-photo.jpg?w=600&quality=80');
 
     myCards = [myCard1, myCard2, myCard3];
+    cuisines = [
+      italianCard,
+      americanCard,
+      europeanCard,
+      japaneseCard,
+      chineseCard,
+      indianCard,
+      frenchCard
+    ];
   }
 
   //getting recipes from API
-  Future<void> getRecipes() async {
-    _listRecipes = await SpoonacularRecipeApi.getRecipeSpoon();
+  Future<void> getRecipes(String cuisine) async {
+    _listRecipes = await SpoonacularRecipeApi.getRecipeSpoon(cuisine);
     setState(() {
       _isLoading = false;
     });
@@ -76,30 +112,126 @@ class _MyHomePageState extends State<HomePage> {
   Widget build(BuildContext context) {
     //home screen
     final List<Widget> bodies = [
-      _isLoading
-          ? const Center(
-              child: CircularProgressIndicator()) //progress bar loading
-          : ListView.builder(
-              //if success fetch data
-              itemCount: _listRecipes!.length,
-              itemBuilder: (context, index) {
-                return GestureDetector(
-                  onTap: () {
-                    Navigator.push(context, CupertinoPageRoute(builder: (context) => RecipeDetailPage(
-                    recipeId: _listRecipes![index].recipeId,
-                    imageUrl:  _listRecipes![index].image,
-                    title: _listRecipes![index].title, 
-                    rating: _listRecipes![index].rating, 
-                    cookTime: _listRecipes![index].totalTime,)));
-                  },
-                  child: RecipeCard(
-                    recipeId: _listRecipes![index].recipeId,
-                    title: _listRecipes![index].title,
-                    cookTime: _listRecipes![index].totalTime,
-                    rating: _listRecipes![index].rating.toString(),
-                    thumbnailUrl: _listRecipes![index].image));
-              },
+      CustomScrollView(
+        slivers: <Widget>[
+          // Sliver for horizontal list of cuisines
+         
+          SliverToBoxAdapter(
+            child: Container(
+              height: 250,
+              child: ListView.builder(
+                itemCount: cuisines.length + 1,
+                scrollDirection: Axis.horizontal,
+                itemBuilder: (context, index) {
+                  if (index == 0) {
+                    return SizedBox(
+                      
+                          child: Padding(
+                            padding: EdgeInsets.all(16.0),
+                            child: RichText(
+                              text: TextSpan(
+                                style: DefaultTextStyle.of(context).style,
+                                children: <TextSpan>[
+                                  const TextSpan(
+                                    text: 'Welcome\nback,',
+                                    style: TextStyle(
+                                      fontWeight: FontWeight.bold,
+                                      fontSize: 24,
+                                    ),
+                                  ),
+                                  const TextSpan(
+                                    text: '\nArtemii!\n',
+                                    style: TextStyle(
+                                      fontWeight: FontWeight.bold,
+                                      fontSize: 24,
+                                      fontFamily: 'Poppins',
+                                      color: Colors.deepPurple,
+                                    ),
+                                  ),
+                                  const TextSpan(
+                                    text: '\nLook up for a bunch\nof different cuisines\nin CookeryDays',
+                                    style: TextStyle(
+                                      fontWeight: FontWeight.normal,
+                                      fontSize: 16,
+                                      color: Colors.black,
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                          
+                        ),
+                      
+                    );
+                  }
+                  int adjustedIndex = index - 1;
+                  return GestureDetector(
+                    onTap: () {
+                      //Choosing a cuisine make a list
+                      getRecipes(cuisines[adjustedIndex].title);
+                      setState(() {
+                        selectedIdx = adjustedIndex;
+                      });
+                    },
+                    child: CuisineCard(
+                      title: cuisines[adjustedIndex].title,
+                      image: cuisines[adjustedIndex].image,
+                      isSelected: selectedIdx == adjustedIndex,
+                    ),
+                  );
+                },
+              ),
             ),
+          ),
+          // Sliver for recipe list
+          SliverToBoxAdapter(
+            child: Align(
+              alignment: Alignment.centerLeft,
+              child: Padding(
+                padding: EdgeInsets.all(10),
+                child: Text(
+                  cuisines[selectedIdx].title,
+                  style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+                ),
+              ),
+            ),
+          ),
+          SliverList(
+            delegate: SliverChildBuilderDelegate(
+              (context, index) {
+                return _isLoading
+                    ? Center(child: CircularProgressIndicator())
+                    : GestureDetector(
+                        onTap: () {
+                          Navigator.push(
+                            context,
+                            CupertinoPageRoute(
+                              builder: (context) => RecipeDetailPage(
+                                recipeId: _listRecipes![index].recipeId,
+                                imageUrl: _listRecipes![index].image,
+                                title: _listRecipes![index].title,
+                                rating: _listRecipes![index].rating,
+                                cookTime: _listRecipes![index].totalTime,
+                              ),
+                            ),
+                          );
+                        },
+                        child: RecipeCard(
+                          recipeId: _listRecipes![index].recipeId,
+                          title: _listRecipes![index].title,
+                          cookTime: _listRecipes![index].totalTime,
+                          rating: _listRecipes![index].rating.toString(),
+                          thumbnailUrl: _listRecipes![index].image,
+                        ),
+                      );
+              },
+              childCount: (_isLoading || _listRecipes == null)
+                  ? 1
+                  : _listRecipes!.length,
+            ),
+          ),
+        ],
+      ),
       Center(child: Text('Likes')),
       Center(child: Text('Search')),
       SingleChildScrollView(
@@ -143,7 +275,10 @@ class _MyHomePageState extends State<HomePage> {
                               builder: (context) => LoginPage()));
                     },
                     child: Text('Update Profile',
-                        style: TextStyle(fontSize: 16, fontWeight: FontWeight.normal, color: Colors.deepPurple))),
+                        style: TextStyle(
+                            fontSize: 16,
+                            fontWeight: FontWeight.normal,
+                            color: Colors.deepPurple))),
               ),
             ),
 

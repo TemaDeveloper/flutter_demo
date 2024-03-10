@@ -231,16 +231,13 @@ class _MyHomePageState extends State<HomePage> {
                   ? 1
                   : _listRecipes!.length,
             ),
-<<<<<<< HEAD
+
           ),
         ],
       ),
       Center(child: Text('Likes')),
       Center(child: Text('Search')),
-=======
-      const Center(child: Text('Likes')),
-      const Center(child: Text('Search')),
->>>>>>> ecd146b12589204a02be73196597d35ba596050a
+
       SingleChildScrollView(
           //profile screen
           child: Container(
@@ -281,16 +278,13 @@ class _MyHomePageState extends State<HomePage> {
                           CupertinoPageRoute(
                               builder: (context) => const LoginPage()));
                     },
-<<<<<<< HEAD
+
                     child: Text('Update Profile',
                         style: TextStyle(
                             fontSize: 16,
                             fontWeight: FontWeight.normal,
                             color: Colors.deepPurple))),
-=======
-                    child: const Text('Update Profile',
-                        style: TextStyle(fontSize: 16, fontWeight: FontWeight.normal, color: Colors.deepPurple))),
->>>>>>> ecd146b12589204a02be73196597d35ba596050a
+
               ),
             ),
 

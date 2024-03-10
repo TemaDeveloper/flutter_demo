@@ -1,6 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
+import 'package:flutter_application_1/avatar.dart';
 import 'package:flutter_application_1/profile_update.dart';
 import 'package:flutter_application_1/bottom_bar/bar.dart';
 import 'package:flutter_application_1/listModels/cuisine_card.dart';
@@ -119,7 +119,7 @@ class _MyHomePageState extends State<HomePage> {
           // Sliver for horizontal list of cuisines
          
           SliverToBoxAdapter(
-            child: Container(
+            child: SizedBox(
               height: 250,
               child: ListView.builder(
                 itemCount: cuisines.length + 1,
@@ -129,19 +129,19 @@ class _MyHomePageState extends State<HomePage> {
                     return SizedBox(
                       
                           child: Padding(
-                            padding: EdgeInsets.all(16.0),
+                            padding: const EdgeInsets.all(16.0),
                             child: RichText(
                               text: TextSpan(
                                 style: DefaultTextStyle.of(context).style,
-                                children: <TextSpan>[
-                                  const TextSpan(
+                                children: const <TextSpan>[
+                                  TextSpan(
                                     text: 'Welcome\nback,',
                                     style: TextStyle(
                                       fontWeight: FontWeight.bold,
                                       fontSize: 24,
                                     ),
                                   ),
-                                  const TextSpan(
+                                  TextSpan(
                                     text: '\nArtemii!\n',
                                     style: TextStyle(
                                       fontWeight: FontWeight.bold,
@@ -150,7 +150,7 @@ class _MyHomePageState extends State<HomePage> {
                                       color: Colors.deepPurple,
                                     ),
                                   ),
-                                  const TextSpan(
+                                  TextSpan(
                                     text: '\nLook up for a bunch\nof different cuisines\nin CookeryDays',
                                     style: TextStyle(
                                       fontWeight: FontWeight.normal,
@@ -190,10 +190,10 @@ class _MyHomePageState extends State<HomePage> {
             child: Align(
               alignment: Alignment.centerLeft,
               child: Padding(
-                padding: EdgeInsets.all(10),
+                padding: const EdgeInsets.all(10),
                 child: Text(
                   cuisines[selectedIdx].title,
-                  style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+                  style: const TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
                 ),
               ),
             ),
@@ -202,7 +202,7 @@ class _MyHomePageState extends State<HomePage> {
             delegate: SliverChildBuilderDelegate(
               (context, index) {
                 return _isLoading
-                    ? Center(child: CircularProgressIndicator())
+                    ? const Center(child: CircularProgressIndicator())
                     : GestureDetector(
                         onTap: () {
                           Navigator.push(
@@ -235,8 +235,8 @@ class _MyHomePageState extends State<HomePage> {
           ),
         ],
       ),
-      Center(child: Text('Likes')),
-      Center(child: Text('Search')),
+      const Center(child: Text('Likes')),
+      const Center(child: Text('Search')),
 
       SingleChildScrollView(
           //profile screen
@@ -244,13 +244,9 @@ class _MyHomePageState extends State<HomePage> {
         padding: const EdgeInsets.all(10),
         child: Column(
           children: [
-            //Profile Image
 
-            const CircleAvatar(
-              radius: 70,
-              backgroundImage: NetworkImage(''),
-              backgroundColor: Colors.amber,
-            ),
+            //Profile Image
+            avatarWidgetCreate(),
 
             //User Name
             const Padding(
@@ -276,10 +272,10 @@ class _MyHomePageState extends State<HomePage> {
                       Navigator.push(
                           context,
                           CupertinoPageRoute(
-                              builder: (context) => UpdateProfile()));
+                              builder: (context) => const UpdateProfile()));
                     },
 
-                    child: Text('Update Profile',
+                    child: const Text('Update Profile',
                         style: TextStyle(
                             fontSize: 16,
                             fontWeight: FontWeight.normal,

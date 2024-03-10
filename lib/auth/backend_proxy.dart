@@ -1,13 +1,30 @@
-import 'package:flutter/foundation.dart';
-import 'package:pocketbase/pocketbase.dart';
+import 'dart:io';
 
-PocketBase? pb;
+import 'package:flutter/foundation.dart';
+import 'package:image_picker/image_picker.dart';
+import 'package:pocketbase/pocketbase.dart';
+import 'package:http/http.dart' as http;
 
 const String _baseUrl = kDebugMode ? 'http://127.0.0.1:8090' : 'TODO';
+PocketBase? _pb;
+
+UserData? _user;
+
+class UserData {
+  String? username;
+  String? name;
+  String? email;
+  String? avatarUrl;
+}
 
 PocketBase getPb() {
-  pb ??= PocketBase(_baseUrl); // SAME AS: if (pb == null) { pb = PocketBase(url); }
-  return pb!;
+  _pb ??= PocketBase(
+      _baseUrl); // SAME AS: if (pb == null) { pb = PocketBase(url); }
+  return _pb!;
+}
+
+UserData? getUser() {
+  return _user;
 }
 
 class AuthResponse {
@@ -28,20 +45,68 @@ Future<AuthResponse> authEmailPass(String email, String password) async {
   pb.authStore.clear();
 
   await pb.collection('users').authWithPassword(
-    email,
-    password,
-  );
+        email,
+        password,
+      );
 
   bool isVerified = pb.authStore.model.getDataValue("verified") as bool;
   bool isLogged = pb.authStore.isValid;
   final id = pb.authStore.model.id;
 
   final avatarName = pb.authStore.model.getDataValue("avatar");
-  String? avatarUrl = avatarName == "" ? null : "$_baseUrl/api/files/_pb_users_auth_/$id/$avatarName";
+  String? avatarUrl = avatarName == ""
+      ? null
+      : "$_baseUrl/api/files/_pb_users_auth_/$id/$avatarName";
+
+  _user = UserData()
+    ..username = pb.authStore.model.getDataValue("username") as String?
+    ..name = pb.authStore.model.getDataValue("name") as String?
+    ..email = pb.authStore.model.getDataValue("email") as String?
+    ..avatarUrl = avatarUrl;
 
   return AuthResponse(
     isLogged: isLogged,
     needsVerification: !isVerified,
     avatar: avatarUrl,
   );
+}
+
+Future<bool> authTryChangeAvatar(XFile path) async {
+  final pb = getPb();
+
+  var file = http.MultipartFile.fromBytes(
+    'avatar',
+    await File(path.path).readAsBytes(),
+    filename: path.name,
+  );
+
+  try {
+    await pb.collection('users').update(pb.authStore.model.id, files: [file]);
+    return true;
+  } catch (e) {
+    return false;
+  }
+}
+
+Future<bool> authTryChange({
+  String? name,
+  String? lastName,
+}) async {
+  final pb = getPb();
+  if (!pb.authStore.isValid) {
+    return false;
+  }
+
+  final body = <String, dynamic>{};
+
+  if (name != null || lastName != null) {
+    body["name"] = "${name ?? ""} ${lastName ?? ""}";
+  }
+
+  try {
+    await pb.collection('users').update(pb.authStore.model.id, body: body);
+    return true;
+  } catch (e) {
+    return false;
+  }
 }

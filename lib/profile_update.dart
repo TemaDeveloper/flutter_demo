@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_application_1/auth/backend_proxy.dart';
 import 'package:flutter_application_1/avatar.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:provider/provider.dart';
 
 Future<XFile?> _handleImageSelection(BuildContext context) async {
   final ImagePicker picker = ImagePicker();
@@ -64,21 +65,17 @@ class _UpdateProfileState extends State<UpdateProfile> {
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _nameController = TextEditingController();
   final TextEditingController _surnameController = TextEditingController();
+
   bool? _changeSucsess;
   XFile? _image;
 
-  void updateCb() {
+  void updateCb(BuildContext ctx) {
     strOrNull(String str) => str == '' ? null : str;
-
-    authTryChange(
-      name: strOrNull(_nameController.text),
-      lastName: strOrNull(_surnameController.text),
-    ).then((sucsess) {
-      setState(() => _changeSucsess = sucsess);
-    }).catchError((e) {
-      print("update profile callback, GOT ERROR: $e");
-      setState(() => _changeSucsess = false);
-    });
+    final usrProvider = Provider.of<UserProvider>(ctx, listen: false);
+    usrProvider
+        .setAll(name: strOrNull(_nameController.text), avatar: _image)
+        .then((r) => setState(() => _changeSucsess = r))
+        .catchError((e) => setState(() => _changeSucsess = false));
   }
 
   @override
@@ -105,16 +102,12 @@ class _UpdateProfileState extends State<UpdateProfile> {
         child: Column(
           children: [
             const SizedBox(height: 20),
-            avatarWidgetCreate(),
+            const AvatarWidget(),
             const SizedBox(height: 20),
             TextButton(
-              onPressed: () async {
-                _handleImageSelection(context).then((file) {
-                  if (file != null) {
-                    authTryChange(avatar: file);
-                  }
-                }).catchError((e) => print("Image Picking, GOT ERROR: $e"));
-              },
+              onPressed: () => _handleImageSelection(context)
+                  .then((file) => setState(() => _image = file))
+                  .catchError((e) => print("Image selection Error: $e")),
               child: const Text('Change Profile Avatar'),
             ),
             Padding(
@@ -145,7 +138,7 @@ class _UpdateProfileState extends State<UpdateProfile> {
               ),
             ),
             ElevatedButton(
-              onPressed: updateCb,
+              onPressed: () => updateCb(context),
               child: const Text('Update Profile'),
             ),
             const SizedBox(height: 20),

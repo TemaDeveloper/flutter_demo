@@ -12,6 +12,9 @@ import 'package:flutter_application_1/listModels/spoonacular_recipe.dart';
 import 'package:flutter_application_1/listModels/spoonacular_recipe.api.dart';
 
 import 'package:flutter_application_1/recipe_detail.dart';
+import 'package:provider/provider.dart';
+
+import 'auth/backend_proxy.dart';
 
 void main() {
   runApp(const MyApp());
@@ -23,12 +26,19 @@ class MyApp extends StatelessWidget {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      theme: ThemeData(
-        colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
-        useMaterial3: true,
-      ),
-      home: const OnbodingScreen(),
+    return MultiProvider(
+      providers: [
+        ChangeNotifierProvider(create: (context) => UserProvider()),
+      ],
+      builder: (context, child) {
+        return MaterialApp(
+          theme: ThemeData(
+            colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
+            useMaterial3: true,
+          ),
+          home: const OnbodingScreen(),
+        );
+      },
     );
   }
 }
@@ -117,7 +127,7 @@ class _MyHomePageState extends State<HomePage> {
       CustomScrollView(
         slivers: <Widget>[
           // Sliver for horizontal list of cuisines
-         
+
           SliverToBoxAdapter(
             child: SizedBox(
               height: 250,
@@ -127,43 +137,41 @@ class _MyHomePageState extends State<HomePage> {
                 itemBuilder: (context, index) {
                   if (index == 0) {
                     return SizedBox(
-                      
-                          child: Padding(
-                            padding: const EdgeInsets.all(16.0),
-                            child: RichText(
-                              text: TextSpan(
-                                style: DefaultTextStyle.of(context).style,
-                                children: const <TextSpan>[
-                                  TextSpan(
-                                    text: 'Welcome\nback,',
-                                    style: TextStyle(
-                                      fontWeight: FontWeight.bold,
-                                      fontSize: 24,
-                                    ),
-                                  ),
-                                  TextSpan(
-                                    text: '\nArtemii!\n',
-                                    style: TextStyle(
-                                      fontWeight: FontWeight.bold,
-                                      fontSize: 24,
-                                      fontFamily: 'Poppins',
-                                      color: Colors.deepPurple,
-                                    ),
-                                  ),
-                                  TextSpan(
-                                    text: '\nLook up for a bunch\nof different cuisines\nin CookeryDays',
-                                    style: TextStyle(
-                                      fontWeight: FontWeight.normal,
-                                      fontSize: 16,
-                                      color: Colors.black,
-                                    ),
-                                  ),
-                                ],
+                      child: Padding(
+                        padding: const EdgeInsets.all(16.0),
+                        child: RichText(
+                          text: TextSpan(
+                            style: DefaultTextStyle.of(context).style,
+                            children: const <TextSpan>[
+                              TextSpan(
+                                text: 'Welcome\nback,',
+                                style: TextStyle(
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: 24,
+                                ),
                               ),
-                            ),
-                          
+                              TextSpan(
+                                text: '\nArtemii!\n',
+                                style: TextStyle(
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: 24,
+                                  fontFamily: 'Poppins',
+                                  color: Colors.deepPurple,
+                                ),
+                              ),
+                              TextSpan(
+                                text:
+                                    '\nLook up for a bunch\nof different cuisines\nin CookeryDays',
+                                style: TextStyle(
+                                  fontWeight: FontWeight.normal,
+                                  fontSize: 16,
+                                  color: Colors.black,
+                                ),
+                              ),
+                            ],
+                          ),
                         ),
-                      
+                      ),
                     );
                   }
                   int adjustedIndex = index - 1;
@@ -193,7 +201,8 @@ class _MyHomePageState extends State<HomePage> {
                 padding: const EdgeInsets.all(10),
                 child: Text(
                   cuisines[selectedIdx].title,
-                  style: const TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+                  style: const TextStyle(
+                      fontSize: 24, fontWeight: FontWeight.bold),
                 ),
               ),
             ),
@@ -231,22 +240,19 @@ class _MyHomePageState extends State<HomePage> {
                   ? 1
                   : _listRecipes!.length,
             ),
-
           ),
         ],
       ),
       const Center(child: Text('Likes')),
       const Center(child: Text('Search')),
-
       SingleChildScrollView(
           //profile screen
           child: Container(
         padding: const EdgeInsets.all(10),
         child: Column(
           children: [
-
             //Profile Image
-            avatarWidgetCreate(),
+            const AvatarWidget(),
 
             //User Name
             const Padding(
@@ -274,13 +280,11 @@ class _MyHomePageState extends State<HomePage> {
                           CupertinoPageRoute(
                               builder: (context) => const UpdateProfile()));
                     },
-
                     child: const Text('Update Profile',
                         style: TextStyle(
                             fontSize: 16,
                             fontWeight: FontWeight.normal,
                             color: Colors.deepPurple))),
-
               ),
             ),
 

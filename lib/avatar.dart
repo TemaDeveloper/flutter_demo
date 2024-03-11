@@ -1,19 +1,17 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'auth/backend_proxy.dart';
 
-Widget avatarWidgetCreate() {
-  final userData = getUser();
+class AvatarWidget extends StatelessWidget {
+  const AvatarWidget({super.key});
 
-
-  if (userData == null || userData.avatarUrl == null || userData.avatarUrl == "") {
-    return const CircleAvatar(
-      radius: 60,
-      backgroundColor: Color(0xFFFF0000), // red
+  @override
+  Widget build(BuildContext context) {
+    final user = context.watch<UserProvider>();
+    return CircleAvatar(
+      backgroundImage: user.avatarUrl != null
+          ? NetworkImage(user.avatarUrl!)
+          : null,
     );
   }
-
-  return CircleAvatar(
-    radius: 60,
-    foregroundImage: NetworkImage(userData.avatarUrl!),
-  );
 }

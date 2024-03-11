@@ -16,11 +16,11 @@ class SpoonacularRecipeApi {
 
     final spoonacularResponse = await http.get(url);
     Map spoonacularData = jsonDecode(spoonacularResponse.body);
-    List _tempSpoonacular = [];
+    List tempSpoonacular = [];
 
     for (var i in spoonacularData['results']) {
-      _tempSpoonacular.add(i);
+      tempSpoonacular.add(i);
     }
-    return SpoonacularRecipe.recipesFromSnapshot(_tempSpoonacular);
+    return SpoonacularRecipe.recipesFromSnapshot(tempSpoonacular);
   }
 }

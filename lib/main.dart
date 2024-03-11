@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_application_1/avatar.dart';
 import 'package:flutter_application_1/profile_update.dart';
 import 'package:flutter_application_1/bottom_bar/bar.dart';
 import 'package:flutter_application_1/listModels/cuisine_card.dart';
@@ -11,6 +12,9 @@ import 'package:flutter_application_1/listModels/spoonacular_recipe.dart';
 import 'package:flutter_application_1/listModels/spoonacular_recipe.api.dart';
 
 import 'package:flutter_application_1/recipe_detail.dart';
+import 'package:provider/provider.dart';
+
+import 'auth/backend_proxy.dart';
 
 import 'package:provider/provider.dart';
 import 'package:flutter_application_1/theme_provider.dart';
@@ -29,10 +33,18 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final themeProvider = Provider.of<ThemeProvider>(context);
-    return MaterialApp(
-      theme: themeProvider.currentTheme,
-      home: const OnbodingScreen(),
-    );
+    return MultiProvider(
+      providers: [
+        ChangeNotifierProvider(create: (context) => UserProvider()),
+      ],
+      builder: (context, child) {
+        return MaterialApp(
+          theme: themeProvider.currentTheme,
+          home: const OnbodingScreen(),
+        );
+      });
+    
+  
   }
 }
 
@@ -115,6 +127,8 @@ class _MyHomePageState extends State<HomePage> {
 
   @override
   Widget build(BuildContext context) {
+    final usrProvider = Provider.of<UserProvider>(context);
+
     //home screen
     final List<Widget> bodies = [
       CustomScrollView(
@@ -122,7 +136,7 @@ class _MyHomePageState extends State<HomePage> {
           // Sliver for horizontal list of cuisines
 
           SliverToBoxAdapter(
-            child: Container(
+            child: SizedBox(
               height: 250,
               child: ListView.builder(
                 itemCount: cuisines.length + 1,
@@ -131,7 +145,7 @@ class _MyHomePageState extends State<HomePage> {
                   if (index == 0) {
                     return SizedBox(
                       child: Padding(
-                        padding: EdgeInsets.all(16.0),
+                        padding: const EdgeInsets.all(16.0),
                         child: RichText(
                           text: TextSpan(
                             style: DefaultTextStyle.of(context).style,
@@ -143,21 +157,24 @@ class _MyHomePageState extends State<HomePage> {
                                   fontSize: 24,
                                 ),
                               ),
-                              const TextSpan(
-                                text: '\nArtemii!\n',
-                                style: TextStyle(
-                                  fontWeight: FontWeight.bold,
-                                  fontSize: 24,
-                                  fontFamily: 'Poppins',
-                                  color: Colors.deepPurple,
+                              if (usrProvider.name != null)
+                                TextSpan(
+                                  text:
+                                      '\n${usrProvider.name!}\n', // The '!' is used for null check assertion
+                                  style: const TextStyle(
+                                    fontWeight: FontWeight.bold,
+                                    fontSize: 24,
+                                    fontFamily: 'Poppins',
+                                    color: Colors.deepPurple,
+                                  ),
                                 ),
-                              ),
                               const TextSpan(
                                 text:
                                     '\nLook up for a bunch\nof different cuisines\nin CookeryDays',
                                 style: TextStyle(
                                   fontWeight: FontWeight.normal,
                                   fontSize: 16,
+                                  color: Colors.black,
                                 ),
                               ),
                             ],
@@ -190,10 +207,11 @@ class _MyHomePageState extends State<HomePage> {
             child: Align(
               alignment: Alignment.centerLeft,
               child: Padding(
-                padding: EdgeInsets.all(10),
+                padding: const EdgeInsets.all(10),
                 child: Text(
                   cuisines[selectedIdx].title,
-                  style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+                  style: const TextStyle(
+                      fontSize: 24, fontWeight: FontWeight.bold),
                 ),
               ),
             ),
@@ -202,7 +220,7 @@ class _MyHomePageState extends State<HomePage> {
             delegate: SliverChildBuilderDelegate(
               (context, index) {
                 return _isLoading
-                    ? Center(child: CircularProgressIndicator())
+                    ? const Center(child: CircularProgressIndicator())
                     : GestureDetector(
                         onTap: () {
                           Navigator.push(
@@ -237,34 +255,35 @@ class _MyHomePageState extends State<HomePage> {
           ),
         ],
       ),
-      Center(child: Text('Likes')),
-      Center(child: Text('Search')),
+      const Center(
+        child: Text('Likes'),
+      ),
+      const Center(
+        child: Text('Search'),
+      ),
+      // TODO: make sure anon user is not allowed to access this page/or redirect to login/signup
       SingleChildScrollView(
-          //profile screen
-          child: Container(
-        padding: const EdgeInsets.all(10),
-        child: Column(
-          children: [
-            //Profile Image
+        //profile screen
+        child: Container(
+          padding: const EdgeInsets.all(10),
+          child: Column(
+            children: [
+              //Profile Image
+              const AvatarWidget(),
 
-            const CircleAvatar(
-              radius: 70,
-              backgroundImage: NetworkImage(''),
-              backgroundColor: Colors.amber,
-            ),
-
-            //User Name
-            const Padding(
-              padding: EdgeInsets.all(10),
-              child: Text('Name',
-                  style: TextStyle(fontSize: 32, fontWeight: FontWeight.bold)),
-            ),
-            //User Email
-            const Padding(
-              padding: EdgeInsets.fromLTRB(10, 0, 10, 10),
-              child: Text('Email',
-                  style: TextStyle(fontSize: 16, color: Colors.black)),
-            ),
+              //User Name
+              Padding(
+                padding: const EdgeInsets.all(10),
+                child: Text(usrProvider.name ?? 'noName',
+                    style: const TextStyle(
+                        fontSize: 32, fontWeight: FontWeight.bold)),
+              ),
+              //User Email
+              Padding(
+                padding: const EdgeInsets.fromLTRB(10, 0, 10, 10),
+                child: Text(usrProvider.email ?? 'NoEmail',
+                    style: const TextStyle(fontSize: 16, color: Colors.black)),
+              ),
 
             //Button Edit
             Padding(
@@ -284,32 +303,40 @@ class _MyHomePageState extends State<HomePage> {
               ),
             ),
 
-            //Title 'My Cards'
-            const Padding(
-              padding: EdgeInsets.fromLTRB(10, 0, 10, 10),
-              child: Text('My Recipes',
-                  style: TextStyle(fontSize: 24, color: Colors.black)),
-            ),
+              //Title 'My Cards'
+              const Padding(
+                padding: EdgeInsets.fromLTRB(10, 0, 10, 10),
+                child: Text('My Recipes',
+                    style: TextStyle(fontSize: 24, color: Colors.black),),
+              ),
 
-            //List of Created Recipes
-            Padding(
-              padding: const EdgeInsets.only(bottom: 10),
-              child: SizedBox(
-                height: 300,
-                child: ListView.builder(
+              //List of Created Recipes
+              Padding(
+                padding: const EdgeInsets.only(bottom: 10),
+                child: SizedBox(
+                  height: 300,
+                  child: ListView.builder(
                     scrollDirection: Axis.horizontal,
                     itemCount: myCards.length,
                     itemBuilder: (context, index) {
                       return MyCard(
                           title: myCards[index].title,
                           image: myCards[index].image);
-                    }),
+                    },
+                  ),
+                ),
               ),
-            ),
-          ],
+            ],
+          ),
         ),
-      )),
+      ),
     ];
+
+    // profile screen
+    if (_currentIndex == 3 && context.read<UserProvider>().isAnon) {
+      /// TODO: TEMA ebi
+      print("TEMA: explain to user that this is not how things are done!!!");
+    }
 
     // Removed MaterialApp widget here
 

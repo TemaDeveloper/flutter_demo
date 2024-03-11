@@ -115,10 +115,11 @@ class _OnbodingScreenState extends State<OnbodingScreen> {
                         ),
                         TextButton(
                           onPressed: () {
+
                             Navigator.push(
                                 context,
                                 CupertinoPageRoute(
-                                    builder: (context) => HomePage()));
+                                    builder: (context) => const HomePage()));
                           },
                           child: Padding(
                             padding: const EdgeInsets.all(10),

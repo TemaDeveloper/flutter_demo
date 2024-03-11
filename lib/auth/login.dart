@@ -3,6 +3,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter_application_1/auth/backend_proxy.dart';
 import 'package:flutter_application_1/auth/signup.dart';
 import 'package:flutter_application_1/main.dart';
+import 'package:provider/provider.dart';
 
 enum LoginStatus {
   none, // find good name for starting state
@@ -37,14 +38,14 @@ class _LoginState extends State<LoginPage> {
     });
   }
 
-  void tryLoginEmailPass() {
+  void tryLoginEmailPass(BuildContext context) {
     setState(() {
       _loginStatus = LoginStatus.waiting;
     });
 
-    authEmailPass(emailController.text, passController.text).then((resp) {
+    final usrProvider = context.read<UserProvider>();
+    authEmailPass(emailController.text, passController.text, usrProvider).then((resp) {
       setState(() {
-        print(resp.avatar);
         if (resp.isLogged) {
           if (resp.needsVerification) {
             _loginStatus = LoginStatus.requiresVerification;
@@ -163,7 +164,7 @@ class _LoginState extends State<LoginPage> {
                         width: double.infinity,
                         height: 50,
                         child: ElevatedButton(
-                          onPressed: tryLoginEmailPass,
+                          onPressed: () => tryLoginEmailPass(context),
                           child: const Text(
                             'Login',
                             style: TextStyle(

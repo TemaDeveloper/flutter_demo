@@ -9,7 +9,7 @@ class RecipeCard extends StatefulWidget {
   final String cookTime;
   final String thumbnailUrl;
 
-  RecipeCard({
+  const RecipeCard({super.key, 
     required this.recipeId,
     required this.userName,
     required this.avatarUrl,

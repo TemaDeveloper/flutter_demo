@@ -86,8 +86,6 @@ Future<AuthResponse> authEmailPass(
     );
   }
 
-  assert(email == pb.authStore.model.getDataValue("email"));
-
   String? name = pb.authStore.model.getDataValue("name") == ""
       ? null
       : pb.authStore.model.getDataValue("name");

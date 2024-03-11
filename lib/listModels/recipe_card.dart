@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
 
-
-class RecipeCard extends StatelessWidget {
+class RecipeCard extends StatefulWidget {
   final int recipeId;
+  final String userName;
+  final String avatarUrl;
   final String title;
   final String rating;
   final String cookTime;
@@ -10,110 +11,136 @@ class RecipeCard extends StatelessWidget {
 
   RecipeCard({
     required this.recipeId,
+    required this.userName,
+    required this.avatarUrl,
     required this.title,
     required this.cookTime,
     required this.rating,
     required this.thumbnailUrl,
   });
+
+  @override
+  _RecipeCardState createState() => _RecipeCardState();
+}
+
+class _RecipeCardState extends State<RecipeCard> {
+  bool isLiked = false;
+
   @override
   Widget build(BuildContext context) {
     return Container(
-      margin: EdgeInsets.symmetric(horizontal: 22, vertical: 10),
-      width: MediaQuery.of(context).size.width,
-      height: 180,
-      decoration: BoxDecoration(
-        color: Colors.black,
-        borderRadius: BorderRadius.circular(15),
-        boxShadow: [
-          BoxShadow(
-            color: Colors.black.withOpacity(0.6),
-            offset: Offset(
-              0.0,
-              10.0,
-            ),
-            blurRadius: 10.0,
-            spreadRadius: -6.0,
-          ),
-        ],
-        image: DecorationImage(
-          colorFilter: ColorFilter.mode(
-            Colors.black.withOpacity(0.35),
-            BlendMode.multiply,
-          ),
-          image: NetworkImage(thumbnailUrl),
-          fit: BoxFit.cover,
-        ),
-      ),
-      child: Stack(
+      margin: EdgeInsets.symmetric(horizontal: 10, vertical: 10),
+      child: Column(
         children: [
-          Align(
-            child: Padding(
-              padding: EdgeInsets.symmetric(horizontal: 5.0),
-              child: Text(
-                title,
-                style: TextStyle(
-                  fontSize: 19,
-                  color: Colors.white,
-                ),
-                overflow: TextOverflow.ellipsis,
-                maxLines: 2,
-                textAlign: TextAlign.center,
+          Padding(
+            padding: EdgeInsets.only(bottom: 5),
+            child: ListTile(
+              leading: CircleAvatar(
+                backgroundImage: NetworkImage(widget.avatarUrl),
+              ),
+              title: Text(
+                widget.userName,
+                style: TextStyle(fontWeight: FontWeight.normal),
               ),
             ),
-            alignment: Alignment.center,
           ),
-          Align(
+          Container(
+            width: MediaQuery.of(context).size.width,
+            height: 300,
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(10),
+            ),
+            child: Stack(
+              children: [
+                Positioned.fill(
+                  child: ClipRRect(
+                    borderRadius: BorderRadius.circular(10),
+                    child: Image.network(
+                      widget.thumbnailUrl,
+                      fit: BoxFit.cover,
+                    ),
+                  ),
+                ),
+                Positioned(
+                  bottom: 0,
+                  left: 0,
+                  right: 0,
+                  child: Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        _buildInfoContainer(Icons.star, widget.rating),
+                        _buildInfoContainer(Icons.schedule, widget.cookTime),
+                      ],
+                    ),
+                  ),
+                ),
+                Positioned(
+                  top: 10,
+                  left: 10,
+                  right: 10,
+                  child: Container(
+                    padding: EdgeInsets.symmetric(horizontal: 5, vertical: 3),
+                    decoration: BoxDecoration(
+                      color: Colors.black.withOpacity(0.5),
+                      borderRadius: BorderRadius.circular(5),
+                    ),
+                    child: Text(
+                      widget.title,
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
+                      style: const TextStyle(
+                        fontSize: 24,
+                        color: Colors.white,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ),
+          Padding(
+            padding: const EdgeInsets.all(8.0),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                Container(
-                  padding: EdgeInsets.all(5),
-                  margin: EdgeInsets.all(10),
-                  decoration: BoxDecoration(
-                    color: Colors.black.withOpacity(0.4),
-                    borderRadius: BorderRadius.circular(15),
+                Text('Quick Description'),
+                IconButton(
+                  icon: Icon(
+                    isLiked ? Icons.favorite : Icons.favorite_border,
+                    color: isLiked
+                        ? Colors.deepPurple
+                        : Theme.of(context).iconTheme.color,
                   ),
-                  child: Padding(
-                    padding: EdgeInsets.all(5),
-                      child: Row(
-                        children: [
-                          Icon(
-                            Icons.star,
-                            color: Colors.yellow,
-                            size: 18,
-                          ),
-                          SizedBox(width: 7),
-                          Text(rating, style: TextStyle(color: Colors.white),),
-                        ],
-                      ),
-                  ),
+                  onPressed: () {
+                    setState(() {
+                      isLiked = !isLiked;
+                    });
+                  },
                 ),
-                Container(
-                  padding: EdgeInsets.all(5),
-                  margin: EdgeInsets.all(10),
-                  decoration: BoxDecoration(
-                    color: Colors.black.withOpacity(0.4),
-                    borderRadius: BorderRadius.circular(15),
-                  ),
-                  child: Padding(
-                    padding: EdgeInsets.all(5),
-                    child: Row(
-                        children: [
-                          Icon(
-                            Icons.schedule,
-                            color: Colors.yellow,
-                            size: 18,
-                          ),
-                          SizedBox(width: 7),
-                          Text(cookTime, style: TextStyle(color: Colors.white)),
-                        ],
-                      ),
-                  ),
-                )
               ],
             ),
-            alignment: Alignment.bottomLeft,
           ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildInfoContainer(IconData icon, String text) {
+    return Container(
+      padding: EdgeInsets.all(5),
+      margin: EdgeInsets.only(right: 10),
+      decoration: BoxDecoration(
+        color: Colors.black.withOpacity(0.4),
+        borderRadius: BorderRadius.circular(15),
+      ),
+      child: Row(
+        children: [
+          Icon(icon, color: Colors.yellow, size: 18),
+          SizedBox(width: 7),
+          Text(text, style: TextStyle(color: Colors.white)),
         ],
       ),
     );

@@ -1,6 +1,5 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:flutter_application_1/profile_update.dart';
 import 'package:flutter_application_1/bottom_bar/bar.dart';
 import 'package:flutter_application_1/listModels/cuisine_card.dart';
@@ -13,8 +12,14 @@ import 'package:flutter_application_1/listModels/spoonacular_recipe.api.dart';
 
 import 'package:flutter_application_1/recipe_detail.dart';
 
+import 'package:provider/provider.dart';
+import 'package:flutter_application_1/theme_provider.dart';
+
 void main() {
-  runApp(const MyApp());
+  runApp(ChangeNotifierProvider(
+    create: (context) => ThemeProvider(isDarkMode: false),
+    child: MyApp(),
+  ));
 }
 
 class MyApp extends StatelessWidget {
@@ -23,11 +28,9 @@ class MyApp extends StatelessWidget {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
+    final themeProvider = Provider.of<ThemeProvider>(context);
     return MaterialApp(
-      theme: ThemeData(
-        colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
-        useMaterial3: true,
-      ),
+      theme: themeProvider.currentTheme,
       home: const OnbodingScreen(),
     );
   }
@@ -117,7 +120,7 @@ class _MyHomePageState extends State<HomePage> {
       CustomScrollView(
         slivers: <Widget>[
           // Sliver for horizontal list of cuisines
-         
+
           SliverToBoxAdapter(
             child: Container(
               height: 250,
@@ -127,43 +130,40 @@ class _MyHomePageState extends State<HomePage> {
                 itemBuilder: (context, index) {
                   if (index == 0) {
                     return SizedBox(
-                      
-                          child: Padding(
-                            padding: EdgeInsets.all(16.0),
-                            child: RichText(
-                              text: TextSpan(
-                                style: DefaultTextStyle.of(context).style,
-                                children: <TextSpan>[
-                                  const TextSpan(
-                                    text: 'Welcome\nback,',
-                                    style: TextStyle(
-                                      fontWeight: FontWeight.bold,
-                                      fontSize: 24,
-                                    ),
-                                  ),
-                                  const TextSpan(
-                                    text: '\nArtemii!\n',
-                                    style: TextStyle(
-                                      fontWeight: FontWeight.bold,
-                                      fontSize: 24,
-                                      fontFamily: 'Poppins',
-                                      color: Colors.deepPurple,
-                                    ),
-                                  ),
-                                  const TextSpan(
-                                    text: '\nLook up for a bunch\nof different cuisines\nin CookeryDays',
-                                    style: TextStyle(
-                                      fontWeight: FontWeight.normal,
-                                      fontSize: 16,
-                                      color: Colors.black,
-                                    ),
-                                  ),
-                                ],
+                      child: Padding(
+                        padding: EdgeInsets.all(16.0),
+                        child: RichText(
+                          text: TextSpan(
+                            style: DefaultTextStyle.of(context).style,
+                            children: <TextSpan>[
+                              const TextSpan(
+                                text: 'Welcome\nback,',
+                                style: TextStyle(
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: 24,
+                                ),
                               ),
-                            ),
-                          
+                              const TextSpan(
+                                text: '\nArtemii!\n',
+                                style: TextStyle(
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: 24,
+                                  fontFamily: 'Poppins',
+                                  color: Colors.deepPurple,
+                                ),
+                              ),
+                              const TextSpan(
+                                text:
+                                    '\nLook up for a bunch\nof different cuisines\nin CookeryDays',
+                                style: TextStyle(
+                                  fontWeight: FontWeight.normal,
+                                  fontSize: 16,
+                                ),
+                              ),
+                            ],
+                          ),
                         ),
-                      
+                      ),
                     );
                   }
                   int adjustedIndex = index - 1;
@@ -220,6 +220,9 @@ class _MyHomePageState extends State<HomePage> {
                         },
                         child: RecipeCard(
                           recipeId: _listRecipes![index].recipeId,
+                          userName: 'CookeryDays',
+                          avatarUrl:
+                              'https://www.creativefabrica.com/wp-content/uploads/2020/12/23/Chef-Hat-Flat-Icon-Bakery-Graphics-7312643-1-1-580x387.jpg',
                           title: _listRecipes![index].title,
                           cookTime: _listRecipes![index].totalTime,
                           rating: _listRecipes![index].rating.toString(),
@@ -231,13 +234,11 @@ class _MyHomePageState extends State<HomePage> {
                   ? 1
                   : _listRecipes!.length,
             ),
-
           ),
         ],
       ),
       Center(child: Text('Likes')),
       Center(child: Text('Search')),
-
       SingleChildScrollView(
           //profile screen
           child: Container(
@@ -269,22 +270,17 @@ class _MyHomePageState extends State<HomePage> {
             Padding(
               padding: const EdgeInsets.fromLTRB(10, 0, 10, 10),
               child: SizedBox(
-                width: 200,
+                width: double.infinity,
                 height: 50,
                 child: ElevatedButton(
                     onPressed: () {
-                      Navigator.push(
-                          context,
-                          CupertinoPageRoute(
-                              builder: (context) => UpdateProfile()));
+                      //Go to AdditionRecipe page
                     },
-
-                    child: Text('Update Profile',
+                    child: Text('Add Your Recipe',
                         style: TextStyle(
                             fontSize: 16,
                             fontWeight: FontWeight.normal,
                             color: Colors.deepPurple))),
-
               ),
             ),
 
@@ -316,10 +312,19 @@ class _MyHomePageState extends State<HomePage> {
     ];
 
     // Removed MaterialApp widget here
+
     return Scaffold(
       appBar: AppBar(
         title: const Text(HomePage.title),
         automaticallyImplyLeading: false,
+        actions: <Widget>[
+          IconButton(
+            icon: Icon(Icons.settings),
+            onPressed: () {
+              _showSettingsDialog();
+            },
+          ),
+        ],
       ),
       body: _currentIndex < bodies.length
           ? bodies[_currentIndex]
@@ -346,6 +351,54 @@ class _MyHomePageState extends State<HomePage> {
               selectedColor: Colors.teal),
         ],
       ),
+    );
+  }
+
+  void _showSettingsDialog() {
+    final themeProvider = Provider.of<ThemeProvider>(context, listen: false);
+    showModalBottomSheet(
+      context: context,
+      builder: (BuildContext context) {
+        return SafeArea(
+          child: Padding(
+            padding: EdgeInsets.all(20),
+            child: Wrap(
+              children: <Widget>[
+                ListTile(
+                  leading: Icon(Icons.update),
+                  title: Text('Update Profile'),
+                  onTap: () {
+                    Navigator.push(
+                        context,
+                        CupertinoPageRoute(
+                            builder: (context) => UpdateProfile()));
+                  },
+                ),
+                SwitchListTile(
+                  title: Text('Dark Theme'),
+                  secondary: Icon(
+                      themeProvider.currentTheme == ThemeData.light()
+                          ? Icons.wb_sunny
+                          : Icons.nights_stay), // Sun or moon icon
+                  value: themeProvider.currentTheme ==
+                      ThemeData
+                          .dark(), // Your condition to check if dark theme is enabled
+                  onChanged: (bool value) {
+                    themeProvider.toggleTheme();
+                  },
+                ),
+                ListTile(
+                  leading: Icon(Icons.exit_to_app),
+                  title: Text('Log Out'),
+                  onTap: () {
+                    // TODO: Implement log out action
+                  },
+                ),
+              ],
+            ),
+          ),
+        );
+      },
     );
   }
 }

@@ -8,64 +8,70 @@ class UpdateProfile extends StatefulWidget {
 class _UpdateProfileState extends State<UpdateProfile> {
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _nameController = TextEditingController();
-  final TextEditingController _surnameController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Update Profile'),
+        title: const Text('Update Profile'),
       ),
       body: SingleChildScrollView(
         child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            SizedBox(height: 20),
+            const SizedBox(height: 40),
             CircleAvatar(
-              radius: 60,
-              backgroundImage: NetworkImage('https://via.placeholder.com/150'), // Replace with your image URL
+              radius: 90,
+              backgroundImage: const NetworkImage(
+                  'https://via.placeholder.com/150'), // Replace with your image URL
+              backgroundColor: Colors.deepPurple
+                  .shade100, // Custom color for CircleAvatar background
             ),
-            SizedBox(height: 20),
-            TextButton(
-              onPressed: () {
-                // TODO: Eduard Ebash
-              },
-              child: Text('Change Profile Avatar'),
-            ),
+            const SizedBox(height: 10),
+            TextButton(onPressed: () {
+              //Image Picker
+            }, child: const Text('Change Profile Avatar')),
+            _buildTextField(context, 'Email', _emailController),
+            _buildTextField(context, 'Name', _nameController),
             Padding(
-              padding: EdgeInsets.all(16.0),
-              child: Column(
-                children: [
-                  TextField(
-                    controller: _emailController,
-                    decoration: InputDecoration(
-                      labelText: 'Email',
-                    ),
-                  ),
-                  SizedBox(height: 10),
-                  TextField(
-                    controller: _nameController,
-                    decoration: InputDecoration(
-                      labelText: 'Name',
-                    ),
-                  ),
-                  SizedBox(height: 10),
-                  TextField(
-                    controller: _surnameController,
-                    decoration: InputDecoration(
-                      labelText: 'Surname',
-                    ),
-                  ),
-                ],
-              ),
+              padding: const EdgeInsets.all(10),
+              child: Container(
+                  width: double.infinity,
+                  height: 50,
+                  child: ElevatedButton(
+                      onPressed: () {
+                        //Update Profile
+                      },
+                      child:  const Text('Update Profile',
+                          style: TextStyle(
+                              fontSize: 16, fontWeight: FontWeight.normal))),
+                ),
+              
             ),
-            ElevatedButton(
-              onPressed: () {
-                // TODO: Implement update profile functionality
-              },
-              child: Text('Update Profile'),
-            ),
-            SizedBox(height: 20),
+            const SizedBox(height: 30),
           ],
+        ),
+      ),
+    );
+  }
+
+  Widget _buildTextField(
+      BuildContext context, String label, TextEditingController controller) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+      child: Container(
+        height: 60,
+        decoration: BoxDecoration(
+            color: Colors.grey[200], borderRadius: BorderRadius.circular(12)),
+        child: Padding(
+          padding: const EdgeInsets.all(16),
+          child: TextField(
+            controller: controller,
+            decoration: InputDecoration(
+              border: InputBorder.none,
+              hintText: label,
+            ),
+          ),
         ),
       ),
     );

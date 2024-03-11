@@ -44,14 +44,21 @@ class _LoginState extends State<LoginPage> {
     });
 
     final usrProvider = context.read<UserProvider>();
-    authEmailPass(emailController.text, passController.text, usrProvider).then((resp) {
+    usrProvider.loginEmailPass(emailController.text, passController.text).then((resp) {
       setState(() {
-        if (resp.isLogged) {
-          if (resp.needsVerification) {
-            _loginStatus = LoginStatus.requiresVerification;
-          } else {
+        switch (resp) {
+          case AuthResponse.sucsess:
             _loginStatus = LoginStatus.success;
-          }
+            break;
+          case AuthResponse.needsVerification:
+            _loginStatus = LoginStatus.requiresVerification;
+            break;
+          case AuthResponse.incorrectPassOrEmail:
+            _loginStatus = LoginStatus.error;
+            break;
+          case AuthResponse.otherError:
+            _loginStatus = LoginStatus.error;
+            break;
         }
       });
     }).catchError((e) {

@@ -20,7 +20,7 @@ class RecipeCard extends StatefulWidget {
   });
 
   @override
-  _RecipeCardState createState() => _RecipeCardState();
+  State<RecipeCard> createState() => _RecipeCardState();
 }
 
 class _RecipeCardState extends State<RecipeCard> {
@@ -29,18 +29,18 @@ class _RecipeCardState extends State<RecipeCard> {
   @override
   Widget build(BuildContext context) {
     return Container(
-      margin: EdgeInsets.symmetric(horizontal: 10, vertical: 10),
+      margin: const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
       child: Column(
         children: [
           Padding(
-            padding: EdgeInsets.only(bottom: 5),
+            padding: const EdgeInsets.only(bottom: 5),
             child: ListTile(
               leading: CircleAvatar(
                 backgroundImage: NetworkImage(widget.avatarUrl),
               ),
               title: Text(
                 widget.userName,
-                style: TextStyle(fontWeight: FontWeight.normal),
+                style: const TextStyle(fontWeight: FontWeight.normal),
               ),
             ),
           ),
@@ -81,7 +81,7 @@ class _RecipeCardState extends State<RecipeCard> {
                   left: 10,
                   right: 10,
                   child: Container(
-                    padding: EdgeInsets.symmetric(horizontal: 5, vertical: 3),
+                    padding: const EdgeInsets.symmetric(horizontal: 5, vertical: 3),
                     decoration: BoxDecoration(
                       color: Colors.black.withOpacity(0.5),
                       borderRadius: BorderRadius.circular(5),
@@ -106,7 +106,7 @@ class _RecipeCardState extends State<RecipeCard> {
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                Text('Quick Description'),
+                const Text('Quick Description'),
                 IconButton(
                   icon: Icon(
                     isLiked ? Icons.favorite : Icons.favorite_border,
@@ -130,8 +130,8 @@ class _RecipeCardState extends State<RecipeCard> {
 
   Widget _buildInfoContainer(IconData icon, String text) {
     return Container(
-      padding: EdgeInsets.all(5),
-      margin: EdgeInsets.only(right: 10),
+      padding: const EdgeInsets.all(5),
+      margin: const EdgeInsets.only(right: 10),
       decoration: BoxDecoration(
         color: Colors.black.withOpacity(0.4),
         borderRadius: BorderRadius.circular(15),
@@ -139,8 +139,8 @@ class _RecipeCardState extends State<RecipeCard> {
       child: Row(
         children: [
           Icon(icon, color: Colors.yellow, size: 18),
-          SizedBox(width: 7),
-          Text(text, style: TextStyle(color: Colors.white)),
+          const SizedBox(width: 7),
+          Text(text, style: const TextStyle(color: Colors.white)),
         ],
       ),
     );

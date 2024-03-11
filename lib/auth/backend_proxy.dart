@@ -4,175 +4,164 @@ import 'package:image_picker/image_picker.dart';
 import 'package:pocketbase/pocketbase.dart';
 import 'package:http/http.dart' as http;
 
+const String _baseUrl = kDebugMode ? 'http://127.0.0.1:8090' : 'TODO';
+
+enum AuthResponse {
+  incorrectPassOrEmail,
+  needsVerification,
+  otherError,
+  sucsess,
+}
+
 class UserProvider extends ChangeNotifier {
+  final PocketBase _pb = PocketBase(_baseUrl);
+
   /// false means logged in
   bool _isAnon = true;
+  bool get isAnon => _isAnon;
+
+  bool get needsVerification {
+    if (!_pb.authStore.isValid) {
+      return false;
+    }
+    return !_pb.authStore.model.getDataValue("verified") as bool;
+  }
 
   /// Not empty strings
-  String? _email;
-  String? _userName;
-  String? _name;
-  String? _avatarUrl;
+  String? get email {
+    if (!_pb.authStore.isValid || _isAnon) {
+      return null;
+    }
+    final em = _pb.authStore.model.getDataValue("email");
 
-  bool get isAnon => _isAnon;
-  String? get name => _name;
-  String? get avatarUrl => _avatarUrl;
-  String? get email => _email;
-  String? get username => _userName;
+    return em == "" ? null : em;
+  }
 
-  Future<bool> setAll(
-      {String? name, XFile? avatar}) async {
-    final res = await authTryChange(name: name, avatar: avatar);
-    if (!res.success) {
+  String? get username {
+    if (!_pb.authStore.isValid || _isAnon) {
+      return null;
+    }
+    final un = _pb.authStore.model.getDataValue("username");
+    return un == "" ? null : un;
+  }
+
+  String? get name {
+    if (!_pb.authStore.isValid || _isAnon) {
+      return null;
+    }
+    final nm = _pb.authStore.model.getDataValue("name");
+    return nm == "" ? null : nm;
+  }
+
+  String? get avatarUrl {
+    if (!_pb.authStore.isValid) {
+      return null;
+    }
+
+    final id = _pb.authStore.model.id;
+    final avatarName = _pb.authStore.model.getDataValue("avatar");
+
+    String? avatarUrl = avatarName == ""
+        ? null
+        : "$_baseUrl/api/files/_pb_users_auth_/$id/$avatarName";
+
+    return avatarUrl;
+  }
+
+
+
+  Future<bool> setAll({String? name, XFile? avatar}) async {
+    if (name == null && avatar == null) {
       return false;
     }
 
-    _name = name;
-    _avatarUrl = res.avatarUrl;
+    if (!_pb.authStore.isValid) {
+      return false;
+    }
+
+    final body = <String, dynamic>{};
+
+    if (name != null) {
+      body["name"] = name;
+    }
+
+    try {
+      http.MultipartFile? file;
+      if (avatar != null) {
+        file = http.MultipartFile.fromBytes(
+          'avatar',
+          await File(avatar.path).readAsBytes(),
+          filename: avatar.name,
+        );
+      }
+
+      (file == null)
+          ? await _pb
+              .collection('users')
+              .update(_pb.authStore.model.id, body: body)
+          : await _pb
+              .collection('users')
+              .update(_pb.authStore.model.id, body: body, files: [file]);
+
+    } catch (e) {
+      print("AuthStore.setAll error: $e");
+      return false;
+    }
+
     notifyListeners();
     return true;
   }
-}
-
-const String _baseUrl = kDebugMode ? 'http://127.0.0.1:8090' : 'TODO';
-PocketBase? _pb;
-
-PocketBase getPb() {
-  _pb ??= PocketBase(
-      _baseUrl); // SAME AS: if (pb == null) { pb = PocketBase(url); }
-  return _pb!;
-}
-
-String? getAvatarUrl() {
-  final pb = getPb();
-  final id = pb.authStore.model.id;
-  final avatarName = pb.authStore.model.getDataValue("avatar");
-
-  String? avatarUrl = avatarName == ""
-      ? null
-      : "$_baseUrl/api/files/_pb_users_auth_/$id/$avatarName";
-
-  return avatarUrl;
-}
-
-class AuthResponse {
-  final bool isLogged;
-  final bool needsVerification;
-
-  const AuthResponse({
-    required this.isLogged,
-    required this.needsVerification,
-  });
-}
-
-// Calling it again, causes relogin(logout + login)
-Future<AuthResponse> authEmailPass(
-    String email, String password, UserProvider provider) async {
-  final pb = getPb();
-  pb.authStore.clear();
-
-  await pb.collection('users').authWithPassword(
-        email,
-        password,
-      );
-
-  bool isVerified = pb.authStore.model.getDataValue("verified") as bool;
-  bool isLogged = pb.authStore.isValid;
-
-  if (!pb.authStore.isValid) {
-    return AuthResponse(
-      isLogged: isLogged,
-      needsVerification: false,
-    );
-  }
-
-  String? name = pb.authStore.model.getDataValue("name") == ""
-      ? null
-      : pb.authStore.model.getDataValue("name");
 
 
-  String? userName = pb.authStore.model.getDataValue("username") == ""
-      ? null
-      : pb.authStore.model.getDataValue("username");
 
-  provider._isAnon = false;
-  provider._avatarUrl = getAvatarUrl();
-  provider._name = name;
-  provider._email = email == "" ? email : null;
-  provider._userName = userName;
-
-  return AuthResponse(
-    isLogged: isLogged,
-    needsVerification: !isVerified,
-  );
-}
-
-void authAnon(UserProvider usrProvider) async {
-  usrProvider
-    .._isAnon = true
-    .._avatarUrl = null
-    .._name = null
-    .._email = null
-    .._userName = null;
-
-  // well, it should be okay just in this case
-  // ignore: invalid_use_of_protected_member, invalid_use_of_visible_for_testing_member
-  usrProvider.notifyListeners();
-}
-
-class ChangeResponse {
-  final bool success;
-  final String? name;
-  final String? email;
-  final String? avatarUrl;
-
-  const ChangeResponse({
-    required this.success,
-    this.name,
-    this.email,
-    this.avatarUrl,
-  });
-}
-
-/// null means no change
-Future<ChangeResponse> authTryChange({
-  String? name,
-  String? lastName,
-  XFile? avatar,
-}) async {
-  if (name == null && lastName == null && avatar == null) {
-    return const ChangeResponse(success: false);
-  }
-
-  final pb = getPb();
-  if (!pb.authStore.isValid) {
-    return const ChangeResponse(success: false);
-  }
-
-  final body = <String, dynamic>{};
-
-  if (name != null || lastName != null) {
-    body["name"] = "${name ?? ""} ${lastName ?? ""}";
-  }
-
-  try {
-    http.MultipartFile? file;
-    if (avatar != null) {
-      file = http.MultipartFile.fromBytes(
-        'avatar',
-        await File(avatar.path).readAsBytes(),
-        filename: avatar.name,
-      );
+  void logout() {
+    if (_isAnon || !_pb.authStore.isValid) {
+      return;
     }
 
-    (file == null)
-        ? await pb.collection('users').update(pb.authStore.model.id, body: body)
-        : await pb
-            .collection('users')
-            .update(pb.authStore.model.id, body: body, files: [file]);
+    _pb.authStore.clear();
+  }
 
-    return ChangeResponse(success: true, name: name, avatarUrl: getAvatarUrl());
-  } catch (e) {
-    return const ChangeResponse(success: false);
+
+
+  Future<AuthResponse> loginEmailPass(
+      String loginEmailOrUserName, String password) async {
+    if (!_isAnon && _pb.authStore.isValid) {
+      final isVerified = _pb.authStore.model.getDataValue("verified") as bool;
+      return isVerified ? AuthResponse.sucsess : AuthResponse.needsVerification;
+    }
+
+    if (loginEmailOrUserName == '' || password == '') {
+      return AuthResponse.incorrectPassOrEmail;
+    }
+
+    await _pb.collection('users').authWithPassword(
+          loginEmailOrUserName,
+          password,
+        );
+
+    // TODO: more sophisticated checking of errors
+    // maybe we need to clear store
+    if (!_pb.authStore.isValid) {
+      return AuthResponse.incorrectPassOrEmail;
+    }
+
+    _isAnon = false;
+    notifyListeners();
+
+    if (needsVerification) {
+      return AuthResponse.needsVerification;
+    }
+
+    return AuthResponse.sucsess;
+  }
+
+  Future<void> loginAnon() async {
+    if (!_isAnon && _pb.authStore.isValid) {
+      _pb.authStore.clear();
+    }
+
+    _isAnon = true;
+    notifyListeners();
   }
 }

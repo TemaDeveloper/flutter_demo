@@ -76,19 +76,19 @@ class _MyHomePageState extends State<HomePage> {
     getRecipes('Italian');
 
     italianCard =
-        CuisineCard(title: 'Italian', image: 'assets/images/img_italian.JPG');
+        const CuisineCard(title: 'Italian', image: 'assets/images/img_italian.JPG');
     americanCard =
-        CuisineCard(title: 'American', image: 'assets/images/img_american.JPG');
+        const CuisineCard(title: 'American', image: 'assets/images/img_american.JPG');
     europeanCard =
-        CuisineCard(title: 'European', image: 'assets/images/img_european.JPG');
+        const CuisineCard(title: 'European', image: 'assets/images/img_european.JPG');
     japaneseCard =
-        CuisineCard(title: 'Japanese', image: 'assets/images/img_japanese.JPG');
+        const CuisineCard(title: 'Japanese', image: 'assets/images/img_japanese.JPG');
     chineseCard =
-        CuisineCard(title: 'Chinese', image: 'assets/images/img_chinese.JPG');
+        const CuisineCard(title: 'Chinese', image: 'assets/images/img_chinese.JPG');
     indianCard =
-        CuisineCard(title: 'Indian', image: 'assets/images/img_indian.JPG');
+        const CuisineCard(title: 'Indian', image: 'assets/images/img_indian.JPG');
     frenchCard =
-        CuisineCard(title: 'French', image: 'assets/images/img_french.JPG');
+        const CuisineCard(title: 'French', image: 'assets/images/img_french.JPG');
 
     myCard1 = const MyCard(
         title: 'title1',

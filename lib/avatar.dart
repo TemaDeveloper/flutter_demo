@@ -7,7 +7,7 @@ class AvatarWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final user = context.watch<UserProvider>();
+    final user = Provider.of<UserProvider>(context);
     return CircleAvatar(
       backgroundImage: user.avatarUrl != null
           ? NetworkImage(user.avatarUrl!)

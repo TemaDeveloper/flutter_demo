@@ -11,17 +11,17 @@ class RecipeDetailPage extends StatefulWidget {
   final double rating;
   final String cookTime;
 
-  RecipeDetailPage({
-    Key? key,
+  const RecipeDetailPage({
+    super.key,
     required this.recipeId,
     required this.imageUrl,
     required this.title,
     required this.rating,
     required this.cookTime,
-  }) : super(key: key);
+  });
 
   @override
-  _RecipeDetailState createState() => _RecipeDetailState();
+  State<RecipeDetailPage> createState() => _RecipeDetailState();
 }
 
 class _RecipeDetailState extends State<RecipeDetailPage> {
@@ -139,8 +139,8 @@ class _RecipeDetailState extends State<RecipeDetailPage> {
                     ],
                   ),
                 ),
-                Padding(
-                  padding: const EdgeInsets.all(8.0),
+                const Padding(
+                  padding: EdgeInsets.all(8.0),
                   child: Text(
                     'Ingredients',
                     style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
@@ -150,7 +150,7 @@ class _RecipeDetailState extends State<RecipeDetailPage> {
                     ? const Center(
                         child:
                             CircularProgressIndicator()) //progress bar loading
-                    : Container(
+                    : SizedBox(
                         height: 100, // Adjust height as needed
                         child: ListView.builder(
                           scrollDirection: Axis.horizontal,
@@ -158,11 +158,11 @@ class _RecipeDetailState extends State<RecipeDetailPage> {
                           itemBuilder: (context, index) {
                             return Card(
                               child: Padding(
-                                  padding: EdgeInsets.all(8),
+                                  padding: const EdgeInsets.all(8),
                                   child: Center(
                                     child: Text(
                                       _ingredients![index],
-                                      style: TextStyle(
+                                      style: const TextStyle(
                                           fontSize: 16,
                                           fontWeight: FontWeight.normal),
                                       textAlign: TextAlign.center,
@@ -172,8 +172,8 @@ class _RecipeDetailState extends State<RecipeDetailPage> {
                           },
                         ),
                       ),
-                Padding(
-                  padding: const EdgeInsets.all(8.0),
+                const Padding(
+                  padding: EdgeInsets.all(8.0),
                   child: Text(
                     'Steps',
                     style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
@@ -184,10 +184,10 @@ class _RecipeDetailState extends State<RecipeDetailPage> {
                   child: Text(
                     recipeSteps ?? "Loading Steps",
                     style:
-                        TextStyle(fontSize: 16, fontWeight: FontWeight.normal),
+                        const TextStyle(fontSize: 16, fontWeight: FontWeight.normal),
                   ),
                 ),
-                SizedBox(
+                const SizedBox(
                   height: 50,
                 )
               ],

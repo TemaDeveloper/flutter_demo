@@ -18,8 +18,9 @@ class _SignUpPageState extends State<SignUpPage> {
   void _changeObscure() {
     setState(() {
       _obscured = !_obscured;
-      if (textFieldFocusNode.hasPrimaryFocus)
+      if (textFieldFocusNode.hasPrimaryFocus) {
         return; // If focus is on text field, dont unfocus
+      }
       textFieldFocusNode.canRequestFocus =
           false; // Prevents focus if tap on eye
     });
@@ -180,13 +181,13 @@ class _SignUpPageState extends State<SignUpPage> {
                             width: double.infinity,
                             height: 70,
                             child: Padding(
-                              padding: EdgeInsets.symmetric(horizontal: 10),
+                              padding: const EdgeInsets.symmetric(horizontal: 10),
                               child: Row(
                                 mainAxisAlignment: MainAxisAlignment.center,
                                 children: <Widget>[
                                   Image.asset('assets/images/img_google.png', width: 30, height: 30),
-                                  SizedBox(width: 10),
-                                  Text('Google',
+                                  const SizedBox(width: 10),
+                                  const Text('Google',
                                       style: TextStyle(
                                           fontSize: 16,
                                           fontWeight: FontWeight.normal,

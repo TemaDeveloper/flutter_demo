@@ -6,7 +6,7 @@ class CuisineCard extends StatelessWidget{
   final String image;
   final bool isSelected;
 
-  CuisineCard({
+  const CuisineCard({super.key, 
     required this.title,
     required this.image,
     this.isSelected = false,
@@ -14,7 +14,7 @@ class CuisineCard extends StatelessWidget{
 
   @override
   Widget build(BuildContext context){
-     return Container(
+     return SizedBox(
       width: 200, // fixed width for horizontal scrolling
       child: Card(
         shape: RoundedRectangleBorder(
@@ -45,7 +45,7 @@ class CuisineCard extends StatelessWidget{
                       color: Colors.white,
                     ),
                       child: Padding(
-                        padding: EdgeInsets.all(5),
+                        padding: const EdgeInsets.all(5),
                         child: Text(
                         title,
                         style: TextStyle(

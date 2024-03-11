@@ -37,7 +37,7 @@ class AnimatedBtn extends StatelessWidget {
                   const SizedBox(width: 8),
                   Text(
                     title,
-                    style: TextStyle(fontSize: 16, fontWeight: FontWeight.normal, color: Colors.deepPurple)
+                    style: const TextStyle(fontSize: 16, fontWeight: FontWeight.normal, color: Colors.deepPurple)
                   )
                 ],
               ),

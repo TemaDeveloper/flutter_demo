@@ -117,7 +117,7 @@ class _UpdateProfileState extends State<UpdateProfile> {
               ],
             ),
             Padding(
-              padding: EdgeInsets.all(10),
+              padding: const EdgeInsets.all(10),
               child: SizedBox(
                 width: double.infinity,
                 height: 50,
@@ -149,9 +149,9 @@ class _UpdateProfileState extends State<UpdateProfile> {
             decoration: InputDecoration(
               border: InputBorder.none,
               hintText: label,
-              hintStyle: TextStyle(color: Colors.black),
+              hintStyle: const TextStyle(color: Colors.black),
             ),
-            style: TextStyle(color: Colors.black),
+            style: const TextStyle(color: Colors.black),
           ),
         ),
       ),

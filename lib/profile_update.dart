@@ -64,7 +64,6 @@ class UpdateProfile extends StatefulWidget {
 class _UpdateProfileState extends State<UpdateProfile> {
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _nameController = TextEditingController();
-  final TextEditingController _surnameController = TextEditingController();
 
   bool? _changeSucsess;
   XFile? _image;
@@ -111,36 +110,22 @@ class _UpdateProfileState extends State<UpdateProfile> {
                   .catchError((e) => print("Image selection Error: $e")),
               child: const Text('Change Profile Avatar'),
             ),
-            Padding(
-              padding: const EdgeInsets.all(16.0),
-              child: Column(
-                children: [
-                  TextField(
-                    controller: _emailController,
-                    decoration: const InputDecoration(
-                      labelText: 'Email',
-                    ),
-                  ),
-                  const SizedBox(height: 10),
-                  TextField(
-                    controller: _nameController,
-                    decoration: const InputDecoration(
-                      labelText: 'Name',
-                    ),
-                  ),
-                  const SizedBox(height: 10),
-                  TextField(
-                    controller: _surnameController,
-                    decoration: const InputDecoration(
-                      labelText: 'Surname',
-                    ),
-                  ),
-                ],
-              ),
+            Column(
+              children: [
+                _buildTextField(context, 'Email', _emailController),
+                _buildTextField(context, 'Name', _nameController),
+              ],
             ),
-            ElevatedButton(
-              onPressed: () => updateCb(context),
-              child: const Text('Update Profile'),
+            Padding(
+              padding: EdgeInsets.all(10),
+              child: SizedBox(
+                width: double.infinity,
+                height: 50,
+                child: ElevatedButton(
+                  onPressed: () => updateCb(context),
+                  child: const Text('Update Profile'),
+                ),
+              ),
             ),
             const SizedBox(height: 20),
           ],
@@ -164,7 +149,9 @@ class _UpdateProfileState extends State<UpdateProfile> {
             decoration: InputDecoration(
               border: InputBorder.none,
               hintText: label,
+              hintStyle: TextStyle(color: Colors.black),
             ),
+            style: TextStyle(color: Colors.black),
           ),
         ),
       ),

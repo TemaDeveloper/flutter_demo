@@ -6,16 +6,19 @@ import 'package:http/http.dart' as http;
 
 class UserProvider extends ChangeNotifier {
   /// false means logged in
-  bool isAnon = true;
+  bool _isAnon = true;
 
   /// Not empty strings
-  // String? _email;
-  // String? _username;
+  String? _email;
+  String? _userName;
   String? _name;
   String? _avatarUrl;
 
+  bool get isAnon => _isAnon;
   String? get name => _name;
   String? get avatarUrl => _avatarUrl;
+  String? get email => _email;
+  String? get username => _userName;
 
   Future<bool> setAll(
       {String? name, XFile? avatar}) async {
@@ -76,18 +79,47 @@ Future<AuthResponse> authEmailPass(
   bool isVerified = pb.authStore.model.getDataValue("verified") as bool;
   bool isLogged = pb.authStore.isValid;
 
+  if (!pb.authStore.isValid) {
+    return AuthResponse(
+      isLogged: isLogged,
+      needsVerification: false,
+    );
+  }
+
+  assert(email == pb.authStore.model.getDataValue("email"));
+
   String? name = pb.authStore.model.getDataValue("name") == ""
       ? null
       : pb.authStore.model.getDataValue("name");
 
-  provider.isAnon = false;
+
+  String? userName = pb.authStore.model.getDataValue("username") == ""
+      ? null
+      : pb.authStore.model.getDataValue("username");
+
+  provider._isAnon = false;
   provider._avatarUrl = getAvatarUrl();
   provider._name = name;
+  provider._email = email == "" ? email : null;
+  provider._userName = userName;
 
   return AuthResponse(
     isLogged: isLogged,
     needsVerification: !isVerified,
   );
+}
+
+void authAnon(UserProvider usrProvider) async {
+  usrProvider
+    .._isAnon = true
+    .._avatarUrl = null
+    .._name = null
+    .._email = null
+    .._userName = null;
+
+  // well, it should be okay just in this case
+  // ignore: invalid_use_of_protected_member, invalid_use_of_visible_for_testing_member
+  usrProvider.notifyListeners();
 }
 
 class ChangeResponse {

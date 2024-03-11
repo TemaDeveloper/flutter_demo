@@ -122,6 +122,8 @@ class _MyHomePageState extends State<HomePage> {
 
   @override
   Widget build(BuildContext context) {
+    final usrProvider = Provider.of<UserProvider>(context);
+
     //home screen
     final List<Widget> bodies = [
       CustomScrollView(
@@ -142,24 +144,26 @@ class _MyHomePageState extends State<HomePage> {
                         child: RichText(
                           text: TextSpan(
                             style: DefaultTextStyle.of(context).style,
-                            children: const <TextSpan>[
-                              TextSpan(
+                            children: <TextSpan>[
+                              const TextSpan(
                                 text: 'Welcome\nback,',
                                 style: TextStyle(
                                   fontWeight: FontWeight.bold,
                                   fontSize: 24,
                                 ),
                               ),
-                              TextSpan(
-                                text: '\nArtemii!\n',
-                                style: TextStyle(
-                                  fontWeight: FontWeight.bold,
-                                  fontSize: 24,
-                                  fontFamily: 'Poppins',
-                                  color: Colors.deepPurple,
+                              if (usrProvider.name != null)
+                                TextSpan(
+                                  text:
+                                      '\n${usrProvider.name!}\n', // The '!' is used for null check assertion
+                                  style: const TextStyle(
+                                    fontWeight: FontWeight.bold,
+                                    fontSize: 24,
+                                    fontFamily: 'Poppins',
+                                    color: Colors.deepPurple,
+                                  ),
                                 ),
-                              ),
-                              TextSpan(
+                              const TextSpan(
                                 text:
                                     '\nLook up for a bunch\nof different cuisines\nin CookeryDays',
                                 style: TextStyle(
@@ -243,77 +247,91 @@ class _MyHomePageState extends State<HomePage> {
           ),
         ],
       ),
-      const Center(child: Text('Likes')),
-      const Center(child: Text('Search')),
+      const Center(
+        child: Text('Likes'),
+      ),
+      const Center(
+        child: Text('Search'),
+      ),
+      // TODO: make sure anon user is not allowed to access this page/or redirect to login/signup
       SingleChildScrollView(
-          //profile screen
-          child: Container(
-        padding: const EdgeInsets.all(10),
-        child: Column(
-          children: [
-            //Profile Image
-            const AvatarWidget(),
+        //profile screen
+        child: Container(
+          padding: const EdgeInsets.all(10),
+          child: Column(
+            children: [
+              //Profile Image
+              const AvatarWidget(),
 
-            //User Name
-            const Padding(
-              padding: EdgeInsets.all(10),
-              child: Text('Name',
-                  style: TextStyle(fontSize: 32, fontWeight: FontWeight.bold)),
-            ),
-            //User Email
-            const Padding(
-              padding: EdgeInsets.fromLTRB(10, 0, 10, 10),
-              child: Text('Email',
-                  style: TextStyle(fontSize: 16, color: Colors.black)),
-            ),
-
-            //Button Edit
-            Padding(
-              padding: const EdgeInsets.fromLTRB(10, 0, 10, 10),
-              child: SizedBox(
-                width: 200,
-                height: 50,
-                child: ElevatedButton(
-                    onPressed: () {
-                      Navigator.push(
-                          context,
-                          CupertinoPageRoute(
-                              builder: (context) => const UpdateProfile()));
-                    },
-                    child: const Text('Update Profile',
-                        style: TextStyle(
-                            fontSize: 16,
-                            fontWeight: FontWeight.normal,
-                            color: Colors.deepPurple))),
+              //User Name
+              Padding(
+                padding: const EdgeInsets.all(10),
+                child: Text(usrProvider.name ?? 'noName',
+                    style: const TextStyle(
+                        fontSize: 32, fontWeight: FontWeight.bold)),
               ),
-            ),
+              //User Email
+              Padding(
+                padding: const EdgeInsets.fromLTRB(10, 0, 10, 10),
+                child: Text(usrProvider.email ?? 'NoEmail',
+                    style: const TextStyle(fontSize: 16, color: Colors.black)),
+              ),
 
-            //Title 'My Cards'
-            const Padding(
-              padding: EdgeInsets.fromLTRB(10, 0, 10, 10),
-              child: Text('My Recipes',
-                  style: TextStyle(fontSize: 24, color: Colors.black)),
-            ),
+              //Button Edit
+              Padding(
+                padding: const EdgeInsets.fromLTRB(10, 0, 10, 10),
+                child: SizedBox(
+                  width: 200,
+                  height: 50,
+                  child: ElevatedButton(
+                      onPressed: () {
+                        Navigator.push(
+                            context,
+                            CupertinoPageRoute(
+                                builder: (context) => const UpdateProfile()));
+                      },
+                      child: const Text('Update Profile',
+                          style: TextStyle(
+                              fontSize: 16,
+                              fontWeight: FontWeight.normal,
+                              color: Colors.deepPurple),),),
+                ),
+              ),
 
-            //List of Created Recipes
-            Padding(
-              padding: const EdgeInsets.only(bottom: 10),
-              child: SizedBox(
-                height: 300,
-                child: ListView.builder(
+              //Title 'My Cards'
+              const Padding(
+                padding: EdgeInsets.fromLTRB(10, 0, 10, 10),
+                child: Text('My Recipes',
+                    style: TextStyle(fontSize: 24, color: Colors.black),),
+              ),
+
+              //List of Created Recipes
+              Padding(
+                padding: const EdgeInsets.only(bottom: 10),
+                child: SizedBox(
+                  height: 300,
+                  child: ListView.builder(
                     scrollDirection: Axis.horizontal,
                     itemCount: myCards.length,
                     itemBuilder: (context, index) {
                       return MyCard(
                           title: myCards[index].title,
                           image: myCards[index].image);
-                    }),
+                    },
+                  ),
+                ),
               ),
-            ),
-          ],
+            ],
+          ),
         ),
-      )),
+      ),
     ];
+
+    // profile screen
+    if (_currentIndex == 3 && context.read<UserProvider>().isAnon) {
+      /// TODO: TEMA ebi
+      print("TEMA: explain to user that this is not how things are done!!!");
+    }
 
     // Removed MaterialApp widget here
     return Scaffold(

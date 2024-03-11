@@ -5,14 +5,14 @@ class MyCard extends StatelessWidget{
   final String title;
   final String image;
 
-  MyCard({
+  const MyCard({super.key, 
     required this.title,
     required this.image
   });
 
   @override
   Widget build(BuildContext context){
-     return Container(
+     return SizedBox(
       width: 200, // fixed width for horizontal scrolling
       child: Card(
         shape: RoundedRectangleBorder(
@@ -39,7 +39,7 @@ class MyCard extends StatelessWidget{
                   color: Colors.black.withOpacity(0.3), // Semi-transparent overlay
                   child: Text(
                     title,
-                    style: TextStyle(
+                    style: const TextStyle(
                       fontSize: 16,
                       fontWeight: FontWeight.normal,
                       color: Colors.white,

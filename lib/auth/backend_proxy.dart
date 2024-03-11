@@ -32,6 +32,15 @@ class UserProvider extends ChangeNotifier {
     notifyListeners();
     return true;
   }
+
+  void logout() {
+    if (_isAnon) {
+      return;
+    }
+
+    final pb = getPb();
+    pb.authStore.clear();
+  }
 }
 
 const String _baseUrl = kDebugMode ? 'http://127.0.0.1:8090' : 'TODO';
@@ -67,12 +76,12 @@ class AuthResponse {
 
 // Calling it again, causes relogin(logout + login)
 Future<AuthResponse> authEmailPass(
-    String email, String password, UserProvider provider) async {
+    String loginEmailOrUserName, String password, UserProvider provider) async {
   final pb = getPb();
   pb.authStore.clear();
 
   await pb.collection('users').authWithPassword(
-        email,
+        loginEmailOrUserName,
         password,
       );
 
@@ -95,10 +104,14 @@ Future<AuthResponse> authEmailPass(
       ? null
       : pb.authStore.model.getDataValue("username");
 
+  final email = pb.authStore.model.getDataValue("email") == ""
+      ? null
+      : pb.authStore.model.getDataValue("email");
+
   provider._isAnon = false;
   provider._avatarUrl = getAvatarUrl();
   provider._name = name;
-  provider._email = email == "" ? email : null;
+  provider._email = email;
   provider._userName = userName;
 
   return AuthResponse(

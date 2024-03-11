@@ -20,7 +20,7 @@ import 'package:flutter_application_1/theme_provider.dart';
 void main() {
   runApp(ChangeNotifierProvider(
     create: (context) => ThemeProvider(isDarkMode: false),
-    child: MyApp(),
+    child: const MyApp(),
   ));
 }
 
@@ -90,15 +90,15 @@ class _MyHomePageState extends State<HomePage> {
     frenchCard =
         CuisineCard(title: 'French', image: 'assets/images/img_french.JPG');
 
-    myCard1 = MyCard(
+    myCard1 = const MyCard(
         title: 'title1',
         image:
             'https://cdn.pixabay.com/photo/2015/04/23/22/00/tree-736885_1280.jpg');
-    myCard2 = MyCard(
+    myCard2 = const MyCard(
         title: 'title2',
         image:
             'https://i0.wp.com/picjumbo.com/wp-content/uploads/silhouette-of-an-olive-tree-after-beautiful-purple-sunset-free-photo.jpg?w=600&quality=80');
-    myCard3 = MyCard(
+    myCard3 = const MyCard(
         title: 'title3',
         image:
             'https://i0.wp.com/picjumbo.com/wp-content/uploads/silhouette-of-an-olive-tree-after-beautiful-purple-sunset-free-photo.jpg?w=600&quality=80');
@@ -291,13 +291,13 @@ class _MyHomePageState extends State<HomePage> {
                 height: 50,
                 child: ElevatedButton(
                     onPressed: () {
-                      //Go to AdditionRecipe page
+                      // TODO: Go to AdditionRecipe page
                     },
-                    child: Text('Add Your Recipe',
+                    child: const Text('Add Your Recipe',
                         style: TextStyle(
                             fontSize: 16,
                             fontWeight: FontWeight.normal,
-                            color: Colors.deepPurple))),
+                            color: Colors.deepPurple),),),
               ),
             ),
 
@@ -344,7 +344,7 @@ class _MyHomePageState extends State<HomePage> {
         automaticallyImplyLeading: false,
         actions: <Widget>[
           IconButton(
-            icon: Icon(Icons.settings),
+            icon: const Icon(Icons.settings),
             onPressed: () {
               _showSettingsDialog();
             },
@@ -381,26 +381,27 @@ class _MyHomePageState extends State<HomePage> {
 
   void _showSettingsDialog() {
     final themeProvider = Provider.of<ThemeProvider>(context, listen: false);
+    final usrProvider = Provider.of<UserProvider>(context, listen: false);
     showModalBottomSheet(
       context: context,
       builder: (BuildContext context) {
         return SafeArea(
           child: Padding(
-            padding: EdgeInsets.all(20),
+            padding: const EdgeInsets.all(20),
             child: Wrap(
               children: <Widget>[
                 ListTile(
-                  leading: Icon(Icons.update),
-                  title: Text('Update Profile'),
+                  leading: const Icon(Icons.update),
+                  title: const Text('Update Profile'),
                   onTap: () {
                     Navigator.push(
                         context,
                         CupertinoPageRoute(
-                            builder: (context) => UpdateProfile()));
+                            builder: (context) => const UpdateProfile()));
                   },
                 ),
                 SwitchListTile(
-                  title: Text('Dark Theme'),
+                  title: const Text('Dark Theme'),
                   secondary: Icon(
                       themeProvider.currentTheme == ThemeData.light()
                           ? Icons.wb_sunny
@@ -413,10 +414,16 @@ class _MyHomePageState extends State<HomePage> {
                   },
                 ),
                 ListTile(
-                  leading: Icon(Icons.exit_to_app),
-                  title: Text('Log Out'),
+                  leading: const Icon(Icons.exit_to_app),
+                  title: const Text('Log Out'),
                   onTap: () {
-                    // TODO: Implement log out action
+                    usrProvider.logout();
+                    Navigator.push(
+                      context,
+                      CupertinoPageRoute(
+                        builder: (context) => const OnbodingScreen(),
+                      ),
+                    );
                   },
                 ),
               ],

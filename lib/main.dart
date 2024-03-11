@@ -172,7 +172,6 @@ class _MyHomePageState extends State<HomePage> {
                                 style: TextStyle(
                                   fontWeight: FontWeight.normal,
                                   fontSize: 16,
-                                  color: Colors.black,
                                 ),
                               ),
                             ],
@@ -280,7 +279,7 @@ class _MyHomePageState extends State<HomePage> {
               Padding(
                 padding: const EdgeInsets.fromLTRB(10, 0, 10, 10),
                 child: Text(usrProvider.email ?? 'NoEmail',
-                    style: const TextStyle(fontSize: 16, color: Colors.black)),
+                    style: const TextStyle(fontSize: 16)),
               ),
 
             //Button Edit
@@ -305,7 +304,7 @@ class _MyHomePageState extends State<HomePage> {
               const Padding(
                 padding: EdgeInsets.fromLTRB(10, 0, 10, 10),
                 child: Text('My Recipes',
-                    style: TextStyle(fontSize: 24, color: Colors.black),),
+                    style: TextStyle(fontSize: 24),),
               ),
 
               //List of Created Recipes

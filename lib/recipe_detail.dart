@@ -199,7 +199,7 @@ class _RecipeDetailState extends State<RecipeDetailPage> {
                           },
                         ),
                       )),
-                Padding(
+                const Padding(
                   padding: const EdgeInsets.all(8.0),
                   child: Text(
                     'Steps',

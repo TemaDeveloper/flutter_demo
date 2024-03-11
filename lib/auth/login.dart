@@ -56,7 +56,8 @@ class _LoginState extends State<LoginPage> {
       });
     }).catchError((e) {
       // TODO: handle each error case apropiately
-      _loginStatus = LoginStatus.error;
+      print("Login error: $e");
+      setState(() => _loginStatus = LoginStatus.error);
     });
   }
 

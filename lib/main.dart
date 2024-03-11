@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_application_1/addition_recipe.dart';
 import 'package:flutter_application_1/avatar.dart';
 import 'package:flutter_application_1/profile_update.dart';
 import 'package:flutter_application_1/bottom_bar/bar.dart';
@@ -290,7 +291,7 @@ class _MyHomePageState extends State<HomePage> {
                 height: 50,
                 child: ElevatedButton(
                     onPressed: () {
-                      //Go to AdditionRecipe page
+                      Navigator.push(context, CupertinoPageRoute(builder: (context) => AdditionRecipe()));
                     },
                     child: Text('Add Your Recipe',
                         style: TextStyle(

@@ -9,6 +9,7 @@ class AvatarWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     final user = context.watch<UserProvider>();
     return CircleAvatar(
+      radius: 90,
       backgroundImage: user.avatarUrl != null
           ? NetworkImage(user.avatarUrl!)
           : null,

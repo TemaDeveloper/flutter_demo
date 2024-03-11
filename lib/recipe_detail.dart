@@ -3,6 +3,7 @@ import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
+//import 'package:flutter_application_1/listModels/ingredient_card.dart';
 
 class RecipeDetailPage extends StatefulWidget {
   final int recipeId;
@@ -134,8 +135,8 @@ class _RecipeDetailState extends State<RecipeDetailPage> {
                       _iconWithText(Icons.star, 'Quality:\n${widget.rating}'),
                       _iconWithText(
                           Icons.schedule, 'Cook time:\n${widget.cookTime}'),
-                       _iconWithText(Icons.kitchen,
-                           'Products:\n${_ingredients?.length.toString() ?? 'Loading...'}'),
+                      _iconWithText(Icons.kitchen,
+                          'Products:\n${_ingredients?.length.toString() ?? 'Loading...'}'),
                     ],
                   ),
                 ),
@@ -149,17 +150,41 @@ class _RecipeDetailState extends State<RecipeDetailPage> {
                 _isLoading
                     ? const Center(
                         child:
-                            CircularProgressIndicator()) //progress bar loading
-                    : Container(
-                        height: 100, // Adjust height as needed
+                            CircularProgressIndicator()) // Progress bar loading
+                    : Padding(
+                      padding: EdgeInsets.symmetric(horizontal: 8),
+                      child: Container(
+                        height: 200, // Adjust height as needed
                         child: ListView.builder(
                           scrollDirection: Axis.horizontal,
                           itemCount: _ingredients!.length,
                           itemBuilder: (context, index) {
-                            return Card(
-                              child: Padding(
-                                  padding: EdgeInsets.all(8),
-                                  child: Center(
+                            return Center(
+                              child: Column(
+                                mainAxisSize: MainAxisSize.min,
+                                children: [
+                                  Card(
+                                    shape: RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.circular(10),
+                                    ),
+                                    child: ClipRRect(
+                                      borderRadius: BorderRadius.circular(
+                                          10), // Rounded corners
+                                      child: Image.network(
+                                        'https://www.themealdb.com/images/ingredients/${_ingredients![index]}.png',
+                                        
+                                        height: 150,
+                                        errorBuilder: (BuildContext context,
+                                            Object exception,
+                                            StackTrace? stackTrace) {
+                                          return Icon(Icons
+                                              .error); // Placeholder for error
+                                        },
+                                      ),
+                                    ),
+                                  ),
+                                  Padding(
+                                    padding: EdgeInsets.only(top: 8),
                                     child: Text(
                                       _ingredients![index],
                                       style: TextStyle(
@@ -167,11 +192,13 @@ class _RecipeDetailState extends State<RecipeDetailPage> {
                                           fontWeight: FontWeight.normal),
                                       textAlign: TextAlign.center,
                                     ),
-                                  )),
+                                  ),
+                                ],
+                              ),
                             );
                           },
                         ),
-                      ),
+                      )),
                 Padding(
                   padding: const EdgeInsets.all(8.0),
                   child: Text(
@@ -230,13 +257,13 @@ class _RecipeDetailState extends State<RecipeDetailPage> {
           children: [
             CircleAvatar(
               backgroundColor: Colors.yellow[600],
-              child: Icon(icon, color: Colors.white),
+              child: Icon(icon, color: Colors.black),
             ),
             const SizedBox(height: 8),
             Text(
               text,
               style:
-                  const TextStyle(fontSize: 16, fontWeight: FontWeight.normal),
+                  const TextStyle(fontSize: 16, fontWeight: FontWeight.normal, color: Colors.black),
               textAlign: TextAlign.center,
             ),
           ],

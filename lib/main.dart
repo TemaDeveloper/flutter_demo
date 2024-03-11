@@ -15,8 +15,6 @@ import 'package:flutter_application_1/recipe_detail.dart';
 import 'package:provider/provider.dart';
 
 import 'auth/backend_proxy.dart';
-
-import 'package:provider/provider.dart';
 import 'package:flutter_application_1/theme_provider.dart';
 
 void main() {

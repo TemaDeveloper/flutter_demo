@@ -2,6 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_application_1/addition_recipe.dart';
 import 'package:flutter_application_1/avatar.dart';
+import 'package:flutter_application_1/like_screen.dart';
 import 'package:flutter_application_1/profile_update.dart';
 import 'package:flutter_application_1/bottom_bar/bar.dart';
 import 'package:flutter_application_1/listModels/cuisine_card.dart';
@@ -33,17 +34,15 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     final themeProvider = Provider.of<ThemeProvider>(context);
     return MultiProvider(
-      providers: [
-        ChangeNotifierProvider(create: (context) => UserProvider()),
-      ],
-      builder: (context, child) {
-        return MaterialApp(
-          theme: themeProvider.currentTheme,
-          home: const OnbodingScreen(),
-        );
-      });
-    
-  
+        providers: [
+          ChangeNotifierProvider(create: (context) => UserProvider()),
+        ],
+        builder: (context, child) {
+          return MaterialApp(
+            theme: themeProvider.currentTheme,
+            home: const OnbodingScreen(),
+          );
+        });
   }
 }
 
@@ -76,20 +75,20 @@ class _MyHomePageState extends State<HomePage> {
     super.initState();
     getRecipes('Italian');
 
-    italianCard =
-        const CuisineCard(title: 'Italian', image: 'assets/images/img_italian.JPG');
-    americanCard =
-        const CuisineCard(title: 'American', image: 'assets/images/img_american.JPG');
-    europeanCard =
-        const CuisineCard(title: 'European', image: 'assets/images/img_european.JPG');
-    japaneseCard =
-        const CuisineCard(title: 'Japanese', image: 'assets/images/img_japanese.JPG');
-    chineseCard =
-        const CuisineCard(title: 'Chinese', image: 'assets/images/img_chinese.JPG');
-    indianCard =
-        const CuisineCard(title: 'Indian', image: 'assets/images/img_indian.JPG');
-    frenchCard =
-        const CuisineCard(title: 'French', image: 'assets/images/img_french.JPG');
+    italianCard = const CuisineCard(
+        title: 'Italian', image: 'assets/images/img_italian.JPG');
+    americanCard = const CuisineCard(
+        title: 'American', image: 'assets/images/img_american.JPG');
+    europeanCard = const CuisineCard(
+        title: 'European', image: 'assets/images/img_european.JPG');
+    japaneseCard = const CuisineCard(
+        title: 'Japanese', image: 'assets/images/img_japanese.JPG');
+    chineseCard = const CuisineCard(
+        title: 'Chinese', image: 'assets/images/img_chinese.JPG');
+    indianCard = const CuisineCard(
+        title: 'Indian', image: 'assets/images/img_indian.JPG');
+    frenchCard = const CuisineCard(
+        title: 'French', image: 'assets/images/img_french.JPG');
 
     myCard1 = const MyCard(
         title: 'title1',
@@ -253,8 +252,10 @@ class _MyHomePageState extends State<HomePage> {
           ),
         ],
       ),
-      const Center(
-        child: Text('Likes'),
+      Expanded(
+        child: Center(
+          child: LikeScreen(),
+        ),
       ),
       const Center(
         child: Text('Search'),
@@ -283,29 +284,37 @@ class _MyHomePageState extends State<HomePage> {
                     style: const TextStyle(fontSize: 16)),
               ),
 
-            //Button Edit
-            Padding(
-              padding: const EdgeInsets.fromLTRB(10, 0, 10, 10),
-              child: SizedBox(
-                width: double.infinity,
-                height: 50,
-                child: ElevatedButton(
+              //Button Edit
+              Padding(
+                padding: const EdgeInsets.fromLTRB(10, 0, 10, 10),
+                child: SizedBox(
+                  width: double.infinity,
+                  height: 50,
+                  child: ElevatedButton(
                     onPressed: () {
-                      Navigator.push(context, CupertinoPageRoute(builder: (context) => AdditionRecipe()));
+                      Navigator.push(
+                          context,
+                          CupertinoPageRoute(
+                              builder: (context) => AdditionRecipe()));
                     },
-                    child: const Text('Add Your Recipe',
-                        style: TextStyle(
-                            fontSize: 16,
-                            fontWeight: FontWeight.normal,
-                            color: Colors.deepPurple),),),
+                    child: const Text(
+                      'Add Your Recipe',
+                      style: TextStyle(
+                          fontSize: 16,
+                          fontWeight: FontWeight.normal,
+                          color: Colors.deepPurple),
+                    ),
+                  ),
+                ),
               ),
-            ),
 
               //Title 'My Cards'
               const Padding(
                 padding: EdgeInsets.fromLTRB(10, 0, 10, 10),
-                child: Text('My Recipes',
-                    style: TextStyle(fontSize: 24),),
+                child: Text(
+                  'My Recipes',
+                  style: TextStyle(fontSize: 24),
+                ),
               ),
 
               //List of Created Recipes

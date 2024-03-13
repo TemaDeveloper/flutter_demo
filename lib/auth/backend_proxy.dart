@@ -1,5 +1,6 @@
 import 'dart:io';
 import 'package:flutter/foundation.dart';
+import 'package:flutter_application_1/listModels/my_card.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:pocketbase/pocketbase.dart';
 import 'package:http/http.dart' as http;
@@ -16,6 +17,32 @@ enum AuthResponse {
 class UserProvider extends ChangeNotifier {
   final PocketBase _pb = PocketBase(_baseUrl);
 
+  final List<MyCard> _myCards = [
+    const MyCard(
+        title: 'title1',
+        image:
+            'https://cdn.pixabay.com/photo/2015/04/23/22/00/tree-736885_1280.jpg'),
+    const MyCard(
+        title: 'title2',
+        image:
+            'https://i0.wp.com/picjumbo.com/wp-content/uploads/silhouette-of-an-olive-tree-after-beautiful-purple-sunset-free-photo.jpg?w=600&quality=80'),
+    const MyCard(
+        title: 'title3',
+        image:
+            'https://i0.wp.com/picjumbo.com/wp-content/uploads/silhouette-of-an-olive-tree-after-beautiful-purple-sunset-free-photo.jpg?w=600&quality=80'),
+  ];
+  get myCards => _myCards;
+
+  removeCard(MyCard card) {
+    _myCards.remove(card);
+    notifyListeners();
+  }
+
+  addCard(MyCard card) {
+    _myCards.add(card);
+    notifyListeners();
+  }
+
   /// false means logged in
   bool _isAnon = true;
   bool get isAnon => _isAnon;
@@ -24,7 +51,7 @@ class UserProvider extends ChangeNotifier {
     if (!_pb.authStore.isValid) {
       return false;
     }
-    return !_pb.authStore.model.getDataValue("verified") as bool;
+    return !_pb.authStore.model.getDataValue("verified");
   }
 
   /// Not empty strings
@@ -68,8 +95,6 @@ class UserProvider extends ChangeNotifier {
     return avatarUrl;
   }
 
-
-
   Future<bool> setAll({String? name, XFile? avatar}) async {
     if (name == null && avatar == null) {
       return false;
@@ -95,14 +120,17 @@ class UserProvider extends ChangeNotifier {
         );
       }
 
-      (file == null)
-          ? await _pb
-              .collection('users')
-              .update(_pb.authStore.model.id, body: body)
-          : await _pb
-              .collection('users')
-              .update(_pb.authStore.model.id, body: body, files: [file]);
+      final avatarName = _pb.authStore.model.getDataValue("avatar") as String;
 
+      if (file == null) {
+        await _pb
+            .collection('users')
+            .update(_pb.authStore.model.id, body: body);
+      } else if (avatarName != avatar!.name) {
+        await _pb
+            .collection('users')
+            .update(_pb.authStore.model.id, body: body, files: [file]);
+      }
     } catch (e) {
       print("AuthStore.setAll error: $e");
       return false;
@@ -112,8 +140,6 @@ class UserProvider extends ChangeNotifier {
     return true;
   }
 
-
-
   void logout() {
     if (_isAnon || !_pb.authStore.isValid) {
       return;
@@ -121,8 +147,6 @@ class UserProvider extends ChangeNotifier {
 
     _pb.authStore.clear();
   }
-
-
 
   Future<AuthResponse> loginEmailPass(
       String loginEmailOrUserName, String password) async {

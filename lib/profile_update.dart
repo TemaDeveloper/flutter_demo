@@ -106,7 +106,11 @@ class _UpdateProfileState extends State<UpdateProfile> {
             const SizedBox(height: 20),
             TextButton(
               onPressed: () => _handleImageSelection(context)
-                  .then((file) => setState(() => _image = file))
+                  .then((file) { 
+                    final usrProvider = Provider.of<UserProvider>(context, listen: false);
+                    usrProvider.setAll(avatar: file);
+                    setState(() => _image = file);
+                  })
                   .catchError((e) => print("Image selection Error: $e")),
               child: const Text('Change Profile Avatar'),
             ),

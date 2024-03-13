@@ -1,4 +1,3 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'dart:math';
 
@@ -10,8 +9,10 @@ class Recipe {
 }
 
 class LikeScreen extends StatefulWidget {
+  const LikeScreen({super.key});
+
   @override
-  _LikeScreenState createState() => _LikeScreenState();
+  State<LikeScreen> createState() => _LikeScreenState();
 }
 
 class _LikeScreenState extends State<LikeScreen> {
@@ -59,7 +60,7 @@ class _LikeScreenState extends State<LikeScreen> {
             //Go to RecipeDetails Screen
           },
           child: Padding(
-            padding: EdgeInsets.symmetric(horizontal: 8),
+            padding: const EdgeInsets.symmetric(horizontal: 8),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
@@ -87,18 +88,18 @@ class _LikeScreenState extends State<LikeScreen> {
                               context: context,
                               builder: (BuildContext context) {
                                 return AlertDialog(
-                                  title: Text('Remove Recipe'),
-                                  content: Text(
+                                  title: const Text('Remove Recipe'),
+                                  content: const Text(
                                       'Are you sure that you want to remove this recipe from loved ones?'),
                                   actions: <Widget>[
                                     TextButton(
-                                      child: Text('No'),
+                                      child: const Text('No'),
                                       onPressed: () {
                                         Navigator.of(context).pop();
                                       },
                                     ),
                                     TextButton(
-                                      child: Text('Yes'),
+                                      child: const Text('Yes'),
                                       onPressed: () {
                                         setState(() {
                                           recipes!.removeAt(index);
@@ -117,10 +118,10 @@ class _LikeScreenState extends State<LikeScreen> {
                   ),
                 ),
                 Padding(
-                  padding: EdgeInsets.symmetric(vertical: 8.0),
+                  padding: const EdgeInsets.symmetric(vertical: 8.0),
                   child: Text(
                     recipes![index].title,
-                    style: TextStyle(
+                    style: const TextStyle(
                       fontSize: 16,
                       fontWeight: FontWeight.bold,
                     ),

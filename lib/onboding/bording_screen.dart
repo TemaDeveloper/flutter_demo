@@ -1,8 +1,10 @@
 import 'dart:ui';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_application_1/auth/backend_proxy.dart';
 import 'package:flutter_application_1/auth/login.dart';
 import 'package:flutter_application_1/main.dart';
+import 'package:provider/provider.dart';
 import 'package:rive/rive.dart';
 
 import 'components/animated_btn.dart';
@@ -115,7 +117,8 @@ class _OnbodingScreenState extends State<OnbodingScreen> {
                         ),
                         TextButton(
                           onPressed: () {
-
+                            final usrProvider = Provider.of<UserProvider>(context, listen: false);
+                            usrProvider.loginAnon();
                             Navigator.push(
                                 context,
                                 CupertinoPageRoute(

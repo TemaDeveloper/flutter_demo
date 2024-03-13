@@ -1,16 +1,21 @@
 import 'package:flutter/material.dart';
 
-class AdditionRecipe extends StatefulWidget {
+class RecipeAdd extends StatefulWidget {
+  RecipeAdd({super.key}) {
+    throw UnimplementedError("Well, just fetching for now"); 
+  }
+
   @override
-  _AdditionRecipeState createState() => _AdditionRecipeState();
+  State<RecipeAdd> createState() => _RecipeAddState();
+
 }
 
-class _AdditionRecipeState extends State<AdditionRecipe> {
+class _RecipeAddState extends State<RecipeAdd> {
   final _titleController = TextEditingController();
   final _descriptionController = TextEditingController();
   final _ingredientController = TextEditingController();
-  List<String> _ingredients = [];
-  List<TextEditingController> _stepControllers = [];
+  final List<String> _ingredients = [];
+  final List<TextEditingController> _stepControllers = [];
 
   void _addIngredient() {
     if (_ingredientController.text.isNotEmpty) {
@@ -44,19 +49,21 @@ class _AdditionRecipeState extends State<AdditionRecipe> {
     _titleController.dispose();
     _descriptionController.dispose();
     _ingredientController.dispose();
-    _stepControllers.forEach((controller) => controller.dispose());
+    for (var controller in _stepControllers) {
+      controller.dispose();
+    }
     super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text("Addition Recipe")),
+      appBar: AppBar(title: const Text("Addition Recipe")),
       body: SingleChildScrollView(
         child: Column(
           children: [
             Padding(
-              padding: EdgeInsets.fromLTRB(8.0, 20, 8, 10),
+              padding: const EdgeInsets.fromLTRB(8.0, 20, 8, 10),
               child: GestureDetector(
                 onTap: () {
                   // Implement image picking functionality
@@ -88,7 +95,7 @@ class _AdditionRecipeState extends State<AdditionRecipe> {
             ),
 
             Padding(
-              padding: EdgeInsets.symmetric(horizontal: 8),
+              padding: const EdgeInsets.symmetric(horizontal: 8),
               child: TextField(
                   controller: _titleController,
                   decoration: InputDecoration(
@@ -98,7 +105,7 @@ class _AdditionRecipeState extends State<AdditionRecipe> {
                   )),
             ),
             Padding(
-              padding: EdgeInsets.symmetric(vertical: 8, horizontal: 8),
+              padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 8),
               child: TextField(
                   controller: _descriptionController,
                   decoration: InputDecoration(
@@ -116,7 +123,7 @@ class _AdditionRecipeState extends State<AdditionRecipe> {
                           TextStyle(fontSize: 24, fontWeight: FontWeight.bold)),
                 )),
             Padding(
-              padding: EdgeInsets.symmetric(horizontal: 8.0),
+              padding: const EdgeInsets.symmetric(horizontal: 8.0),
               child: Row(
                 children: [
                   Expanded(
@@ -127,26 +134,26 @@ class _AdditionRecipeState extends State<AdditionRecipe> {
                         border: OutlineInputBorder(
                             borderRadius: BorderRadius.circular(10)),
                         contentPadding:
-                            EdgeInsets.symmetric(vertical: 10, horizontal: 8),
+                            const EdgeInsets.symmetric(vertical: 10, horizontal: 8),
                       ),
                     ),
                   ),
                   Padding(
-                    padding: EdgeInsets.only(left: 8.0),
+                    padding: const EdgeInsets.only(left: 8.0),
                     child: ElevatedButton(
                       onPressed: _addIngredient,
-                      child: Icon(Icons.add),
                       style: ElevatedButton.styleFrom(
                         padding:
-                            EdgeInsets.symmetric(vertical: 15, horizontal: 20),
+                            const EdgeInsets.symmetric(vertical: 15, horizontal: 20),
                       ),
+                      child: const Icon(Icons.add),
                     ),
                   ),
                 ],
               ),
             ),
             Padding(
-              padding: EdgeInsets.all(8.0),
+              padding: const EdgeInsets.all(8.0),
               child: Align(
                 alignment: Alignment.centerLeft,
                 child: Wrap(
@@ -155,7 +162,7 @@ class _AdditionRecipeState extends State<AdditionRecipe> {
                   runSpacing: 8.0,
                   children: _ingredients
                       .map((ingredient) => Container(
-                            padding: EdgeInsets.all(5),
+                            padding: const EdgeInsets.all(5),
                             decoration: BoxDecoration(
                               color: Colors.yellow,
                               borderRadius: BorderRadius.circular(10),
@@ -164,9 +171,9 @@ class _AdditionRecipeState extends State<AdditionRecipe> {
                               mainAxisSize: MainAxisSize.min,
                               children: [
                                 Text(ingredient,
-                                    style: TextStyle(color: Colors.black)),
+                                    style: const TextStyle(color: Colors.black)),
                                 IconButton(
-                                  icon: Icon(
+                                  icon: const Icon(
                                     Icons.clear,
                                     color: Colors.black,
                                   ),
@@ -198,7 +205,7 @@ class _AdditionRecipeState extends State<AdditionRecipe> {
                     alignment: Alignment.centerRight,
                     child: ElevatedButton(
                       onPressed: _addStep,
-                      child: Text('Add Step'),
+                      child: const Text('Add Step'),
                     ),
                   ),
                 ],
@@ -208,7 +215,7 @@ class _AdditionRecipeState extends State<AdditionRecipe> {
             // Steps List
             for (int i = 0; i < _stepControllers.length; i++)
               Padding(
-                padding: EdgeInsets.fromLTRB(8, 0, 8, 10),
+                padding: const EdgeInsets.fromLTRB(8, 0, 8, 10),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
@@ -216,9 +223,9 @@ class _AdditionRecipeState extends State<AdditionRecipe> {
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
                         Text("Step ${i + 1}",
-                            style: TextStyle(fontWeight: FontWeight.bold)),
+                            style: const TextStyle(fontWeight: FontWeight.bold)),
                         IconButton(
-                          icon: Icon(Icons.clear),
+                          icon: const Icon(Icons.clear),
                           onPressed: () => _removeStep(i),
                         ),
                       ],
@@ -239,14 +246,14 @@ class _AdditionRecipeState extends State<AdditionRecipe> {
         ),
       ),
       bottomNavigationBar: Padding(
-        padding: EdgeInsets.all(8.0),
+        padding: const EdgeInsets.all(8.0),
         child: SizedBox(
           height: 50,
           child: ElevatedButton(
             onPressed: () {
               // Implement submission functionality
             },
-            child: Text('Submit'),
+            child: const Text('Submit'),
           ),
         ),
       ),

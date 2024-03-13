@@ -36,18 +36,6 @@ class _HomeScreenState extends State<HomeScreen> {
     //     frenchCard;
 
     cuisines = [
-      const CuisineCard(
-          title: 'Italian', image: 'assets/images/img_italian.JPG'),
-      const CuisineCard(
-          title: 'American', image: 'assets/images/img_american.JPG'),
-      const CuisineCard(
-          title: 'European', image: 'assets/images/img_european.JPG'),
-      const CuisineCard(
-          title: 'Japanese', image: 'assets/images/img_japanese.JPG'),
-      const CuisineCard(
-          title: 'Chinese', image: 'assets/images/img_chinese.JPG'),
-      const CuisineCard(title: 'Indian', image: 'assets/images/img_indian.JPG'),
-      const CuisineCard(title: 'French', image: 'assets/images/img_french.JPG'),
     ];
   }
 

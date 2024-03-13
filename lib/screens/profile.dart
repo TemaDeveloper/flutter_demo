@@ -1,6 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_application_1/addition_recipe.dart';
+import 'package:flutter_application_1/add_recipe.dart';
 import 'package:flutter_application_1/auth/backend_proxy.dart';
 import 'package:flutter_application_1/avatar.dart';
 import 'package:flutter_application_1/listModels/my_card.dart';
@@ -47,7 +47,7 @@ class ProfileScreen extends StatelessWidget {
                     Navigator.push(
                         context,
                         CupertinoPageRoute(
-                            builder: (context) => AdditionRecipe()));
+                            builder: (context) => RecipeAdd()));
                   },
                   child: const Text(
                     'Add Your Recipe',

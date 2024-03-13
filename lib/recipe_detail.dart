@@ -152,8 +152,8 @@ class _RecipeDetailState extends State<RecipeDetailPage> {
                         child:
                             CircularProgressIndicator()) // Progress bar loading
                     : Padding(
-                      padding: EdgeInsets.symmetric(horizontal: 8),
-                      child: Container(
+                      padding: const EdgeInsets.symmetric(horizontal: 8),
+                      child: SizedBox(
                         height: 200, // Adjust height as needed
                         child: ListView.builder(
                           scrollDirection: Axis.horizontal,
@@ -177,14 +177,14 @@ class _RecipeDetailState extends State<RecipeDetailPage> {
                                         errorBuilder: (BuildContext context,
                                             Object exception,
                                             StackTrace? stackTrace) {
-                                          return Icon(Icons
+                                          return const Icon(Icons
                                               .error); // Placeholder for error
                                         },
                                       ),
                                     ),
                                   ),
                                   Padding(
-                                    padding: EdgeInsets.only(top: 8),
+                                    padding: const EdgeInsets.only(top: 8),
                                     child: Text(
                                       _ingredients![index],
                                       style: const TextStyle(
@@ -200,7 +200,7 @@ class _RecipeDetailState extends State<RecipeDetailPage> {
                         ),
                       )),
                 const Padding(
-                  padding: const EdgeInsets.all(8.0),
+                  padding: EdgeInsets.all(8.0),
                   child: Text(
                     'Steps',
                     style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),

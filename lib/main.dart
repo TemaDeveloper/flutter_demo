@@ -1,18 +1,25 @@
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_application_1/auth/signup.dart';
 import 'package:flutter_application_1/profile_update.dart';
 import 'package:flutter_application_1/bottom_bar/bar.dart';
 import 'package:flutter_application_1/onboding/bording_screen.dart';
+import 'package:flutter_application_1/recipe/provider.dart';
 import 'package:flutter_application_1/red_popup.dart';
 import 'package:flutter_application_1/screens/home.dart';
 import 'package:flutter_application_1/screens/likes.dart';
 import 'package:flutter_application_1/screens/profile.dart';
+import 'package:pocketbase/pocketbase.dart';
 import 'package:provider/provider.dart';
 import 'auth/backend_proxy.dart';
 import 'package:flutter_application_1/theme_provider.dart';
 
+const String backendBaseUrl = kDebugMode ? 'http://127.0.0.1:8090' : 'TODO';
+late PocketBase pb;
+
 void main() {
+  pb = PocketBase(backendBaseUrl);
   runApp(ChangeNotifierProvider(
     create: (context) => ThemeProvider(isDarkMode: false),
     child: const MyApp(),
@@ -28,7 +35,8 @@ class MyApp extends StatelessWidget {
     final themeProvider = Provider.of<ThemeProvider>(context);
     return MultiProvider(
         providers: [
-          ChangeNotifierProvider(create: (context) => UserProvider()),
+          ChangeNotifierProvider(create: (ctx) => UserProvider()),
+          // ChangeNotifierProvider(create: (ctx) => RecipeProvider()),
         ],
         builder: (context, child) {
           return MaterialApp(
@@ -60,6 +68,9 @@ class _MyHomePageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
     final usrProvider = Provider.of<UserProvider>(context);
+    // final recipeProvider = Provider.of<RecipeProvider>(context, listen: false);
+    // print(recipeProvider.selectedType);
+
     final List<Widget> bodies = [
       const HomeScreen(),
       const Center(
@@ -68,11 +79,6 @@ class _MyHomePageState extends State<HomePage> {
       const LikeScreen(),
       const ProfileScreen(),
     ];
-
-
-    if (_currentIndex == Screens.profile.index && usrProvider.isAnon) {
-
-    }
 
     return Scaffold(
       appBar: AppBar(

@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_application_1/auth/backend_proxy.dart';
+import 'package:flutter_application_1/auth/login.dart';
 import 'package:flutter_application_1/listModels/cuisine_card.dart';
 import 'package:flutter_application_1/listModels/recipe_card.dart';
 import 'package:flutter_application_1/listModels/spoonacular_recipe.api.dart';
@@ -17,7 +18,7 @@ class HomeScreen extends StatefulWidget {
 
 class _HomeScreenState extends State<HomeScreen> {
   List<SpoonacularRecipe>? _listRecipes;
-  List<CuisineCard> cuisines = [];
+  List<CuisineCard>? cuisines;
   int selectedIdx = 0;
   bool _isLoading = true;
 
@@ -36,6 +37,18 @@ class _HomeScreenState extends State<HomeScreen> {
     //     frenchCard;
 
     cuisines = [
+      const CuisineCard(
+          title: 'Italian', image: 'assets/images/img_italian.JPG'),
+      const CuisineCard(
+          title: 'American', image: 'assets/images/img_american.JPG'),
+      const CuisineCard(
+          title: 'European', image: 'assets/images/img_european.JPG'),
+      const CuisineCard(
+          title: 'Japanese', image: 'assets/images/img_japanese.JPG'),
+      const CuisineCard(
+          title: 'Chinese', image: 'assets/images/img_chinese.JPG'),
+      const CuisineCard(title: 'Indian', image: 'assets/images/img_indian.JPG'),
+      const CuisineCard(title: 'French', image: 'assets/images/img_french.JPG')
     ];
   }
 
@@ -58,7 +71,7 @@ class _HomeScreenState extends State<HomeScreen> {
           child: SizedBox(
             height: 250,
             child: ListView.builder(
-              itemCount: cuisines.length + 1,
+              itemCount: cuisines!.length + 1,
               scrollDirection: Axis.horizontal,
               itemBuilder: (context, index) {
                 if (index == 0) {
@@ -68,9 +81,9 @@ class _HomeScreenState extends State<HomeScreen> {
                       child: RichText(
                         text: TextSpan(
                           style: DefaultTextStyle.of(context).style,
-                          children: <TextSpan>[
-                            const TextSpan(
-                              text: 'Welcome\nback,',
+                          children: [
+                            TextSpan(
+                              text: 'Welcome\nback,\n',
                               style: TextStyle(
                                 fontWeight: FontWeight.bold,
                                 fontSize: 24,
@@ -79,17 +92,44 @@ class _HomeScreenState extends State<HomeScreen> {
                             if (usrProvider.name != null)
                               TextSpan(
                                 text:
-                                    '\n${usrProvider.name!}\n', // The '!' is used for null check assertion
+                                    '${usrProvider.name!}', // The '!' is used for null check assertion
                                 style: const TextStyle(
                                   fontWeight: FontWeight.bold,
                                   fontSize: 24,
                                   fontFamily: 'Poppins',
                                   color: Colors.deepPurple,
                                 ),
+                              )
+                            else
+                              WidgetSpan(
+                                child: Column(
+                                  children: [
+                                    TextButton(
+                                      onPressed: () {
+                                        Navigator.push(context, CupertinoPageRoute(builder: (context) => LoginPage()));
+                                      },
+                                      style: TextButton.styleFrom(
+                                        padding: EdgeInsets
+                                            .zero, // Removes padding inside the button
+                                        tapTargetSize: MaterialTapTargetSize
+                                            .shrinkWrap, // Minimizes the touch target size
+                                      ),
+                                      child: const Text(
+                                        "Login",
+                                        style: TextStyle(
+                                          fontWeight: FontWeight.bold,
+                                          fontSize: 24,
+                                          fontFamily: 'Poppins',
+                                          color: Colors.deepPurple,
+                                        ),
+                                      ),
+                                    )
+                                  ],
+                                ),
                               ),
                             const TextSpan(
                               text:
-                                  '\nLook up for a bunch\nof different cuisines\nin CookeryDays',
+                                  '\n\nLook up for a bunch\nof different cuisines\nin CookeryDays',
                               style: TextStyle(
                                 fontWeight: FontWeight.normal,
                                 fontSize: 16,
@@ -102,17 +142,20 @@ class _HomeScreenState extends State<HomeScreen> {
                   );
                 }
                 int adjustedIndex = index - 1;
+
+                print('adjusted index => $adjustedIndex');
+
                 return GestureDetector(
                   onTap: () {
                     //Choosing a cuisine make a list
-                    getRecipes(cuisines[adjustedIndex].title);
+                    getRecipes(cuisines![adjustedIndex].title);
                     setState(() {
                       selectedIdx = adjustedIndex;
                     });
                   },
                   child: CuisineCard(
-                    title: cuisines[adjustedIndex].title,
-                    image: cuisines[adjustedIndex].image,
+                    title: cuisines![adjustedIndex].title,
+                    image: cuisines![adjustedIndex].image,
                     isSelected: selectedIdx == adjustedIndex,
                   ),
                 );
@@ -127,7 +170,7 @@ class _HomeScreenState extends State<HomeScreen> {
             child: Padding(
               padding: const EdgeInsets.all(10),
               child: Text(
-                cuisines[selectedIdx].title,
+                cuisines![selectedIdx].title,
                 style:
                     const TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
               ),

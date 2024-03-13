@@ -1,11 +1,11 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_application_1/auth/login.dart';
 import 'package:flutter_application_1/auth/signup.dart';
 import 'package:flutter_application_1/profile_update.dart';
 import 'package:flutter_application_1/bottom_bar/bar.dart';
 import 'package:flutter_application_1/onboding/bording_screen.dart';
-import 'package:flutter_application_1/recipe/provider.dart';
 import 'package:flutter_application_1/red_popup.dart';
 import 'package:flutter_application_1/screens/home.dart';
 import 'package:flutter_application_1/screens/likes.dart';
@@ -143,12 +143,12 @@ class _MyHomePageState extends State<HomePage> {
                     ? ListTile(
                         leading: const Icon(
                             Icons.person_add), // TODO: Tema find suitable icon
-                        title: const Text('Create Account'),
+                        title: const Text('Login or Create Account'),
                         onTap: () {
                           Navigator.push(
                             context,
                             CupertinoPageRoute(
-                              builder: (context) => const SignUpPage(),
+                              builder: (context) => const LoginPage(),
                             ),
                           );
                         },
@@ -178,7 +178,9 @@ class _MyHomePageState extends State<HomePage> {
                     themeProvider.toggleTheme();
                   },
                 ),
-                ListTile(
+                usrProvider.isAnon
+                    ? const SizedBox.shrink() 
+                  : ListTile(
                   leading: const Icon(Icons.exit_to_app),
                   title: const Text('Log Out'),
                   onTap: () {

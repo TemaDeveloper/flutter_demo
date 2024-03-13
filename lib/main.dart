@@ -72,10 +72,10 @@ class _MyHomePageState extends State<HomePage> {
 
     final List<Widget> bodies = [
       const HomeScreen(),
+      const LikeScreen(),
       const Center(
         child: Text("Search"),
       ),
-      const LikeScreen(),
       const ProfileScreen(),
     ];
 

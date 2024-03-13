@@ -9,7 +9,8 @@ class RecipeCard extends StatefulWidget {
   final String cookTime;
   final String thumbnailUrl;
 
-  const RecipeCard({super.key, 
+  const RecipeCard({
+    super.key,
     required this.recipeId,
     required this.userName,
     required this.avatarUrl,
@@ -31,6 +32,7 @@ class _RecipeCardState extends State<RecipeCard> {
     return Container(
       margin: const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
       child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start, // Align children to the start of the cross axis
         children: [
           Padding(
             padding: const EdgeInsets.only(bottom: 5),
@@ -40,7 +42,7 @@ class _RecipeCardState extends State<RecipeCard> {
               ),
               title: Text(
                 widget.userName,
-                style: const TextStyle(fontWeight: FontWeight.normal),
+                style: const TextStyle(fontSize: 18),
               ),
             ),
           ),
@@ -76,29 +78,17 @@ class _RecipeCardState extends State<RecipeCard> {
                     ),
                   ),
                 ),
-                Positioned(
-                  top: 10,
-                  left: 10,
-                  right: 10,
-                  child: Container(
-                    padding: const EdgeInsets.symmetric(horizontal: 5, vertical: 3),
-                    decoration: BoxDecoration(
-                      color: Colors.black.withOpacity(0.5),
-                      borderRadius: BorderRadius.circular(5),
-                    ),
-                    child: Text(
-                      widget.title,
-                      maxLines: 1,
-                      overflow: TextOverflow.ellipsis,
-                      style: const TextStyle(
-                        fontSize: 24,
-                        color: Colors.white,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                  ),
-                ),
               ],
+            ),
+          ),
+          Padding(
+            padding: EdgeInsets.fromLTRB(8, 8, 8, 0),
+            child: Text(
+              widget.title,
+              maxLines: 1,
+              style: const TextStyle(
+                fontSize: 18,
+              ),
             ),
           ),
           Padding(
@@ -106,13 +96,19 @@ class _RecipeCardState extends State<RecipeCard> {
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                const Text('Quick Description'),
+                const Expanded(
+                  child: Text(
+                    'Quick Description',
+                    overflow: TextOverflow.ellipsis,
+                    style: TextStyle(
+                      // Add your styling here
+                    ),
+                  ),
+                ),
                 IconButton(
                   icon: Icon(
                     isLiked ? Icons.favorite : Icons.favorite_border,
-                    color: isLiked
-                        ? Colors.deepPurple
-                        : Theme.of(context).iconTheme.color,
+                    color: isLiked ? Colors.deepPurple : Theme.of(context).iconTheme.color,
                   ),
                   onPressed: () {
                     setState(() {

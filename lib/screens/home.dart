@@ -143,8 +143,6 @@ class _HomeScreenState extends State<HomeScreen> {
                 }
                 int adjustedIndex = index - 1;
 
-                print('adjusted index => $adjustedIndex');
-
                 return GestureDetector(
                   onTap: () {
                     //Choosing a cuisine make a list

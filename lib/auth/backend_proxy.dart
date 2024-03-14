@@ -13,6 +13,8 @@ enum AuthResponse {
   sucsess,
 }
 
+String avatarNameToUrl(String id, String name) => "$backendBaseUrl/api/files/_pb_users_auth_/$id/$name";
+
 class UserProvider extends ChangeNotifier {
   final List<MyCard> _myCards = [
     const MyCard(
@@ -89,7 +91,7 @@ class UserProvider extends ChangeNotifier {
 
     String? avatarUrl = avatarName == ""
         ? null
-        : "$backendBaseUrl/api/files/pb_users_auth_/$id/$avatarName";
+        : avatarNameToUrl(id, avatarName);
 
     return avatarUrl;
   }

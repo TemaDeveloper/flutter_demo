@@ -1,20 +1,21 @@
 import 'package:flutter/material.dart';
 import 'dart:ui';
 
-class CuisineCard extends StatelessWidget{
+class CuisineCard extends StatelessWidget {
   final String title;
   final String image;
   final bool isSelected;
 
-  const CuisineCard({super.key, 
+  const CuisineCard({
+    super.key,
     required this.title,
     required this.image,
     this.isSelected = false,
   });
 
   @override
-  Widget build(BuildContext context){
-     return SizedBox(
+  Widget build(BuildContext context) {
+    return SizedBox(
       width: 200, // fixed width for horizontal scrolling
       child: Card(
         shape: RoundedRectangleBorder(
@@ -38,15 +39,16 @@ class CuisineCard extends StatelessWidget{
                 filter: ImageFilter.blur(sigmaX: 5, sigmaY: 5),
                 child: Container(
                   alignment: Alignment.center,
-                  color: Colors.black.withOpacity(0.3), // Semi-transparent overlay
+                  color:
+                      Colors.black.withOpacity(0.3), // Semi-transparent overlay
                   child: Container(
                     decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(10),
                       color: Colors.white,
                     ),
-                      child: Padding(
-                        padding: const EdgeInsets.all(5),
-                        child: Text(
+                    child: Padding(
+                      padding: const EdgeInsets.all(5),
+                      child: Text(
                         title,
                         style: TextStyle(
                           fontSize: 16,
@@ -55,7 +57,7 @@ class CuisineCard extends StatelessWidget{
                         ),
                         textAlign: TextAlign.center,
                       ),
-                      ),
+                    ),
                   ),
                 ),
               ),

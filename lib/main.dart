@@ -14,6 +14,8 @@ import 'package:provider/provider.dart';
 import 'auth/backend_proxy.dart';
 import 'package:flutter_application_1/theme_provider.dart';
 
+import 'recipe/provider.dart';
+
 const String backendBaseUrl = kDebugMode ? 'http://127.0.0.1:8090' : 'TODO';
 late PocketBase pb;
 
@@ -35,7 +37,7 @@ class MyApp extends StatelessWidget {
     return MultiProvider(
         providers: [
           ChangeNotifierProvider(create: (ctx) => UserProvider()),
-          // ChangeNotifierProvider(create: (ctx) => RecipeProvider()),
+          ChangeNotifierProvider(create: (ctx) => RecipeProvider()),
         ],
         builder: (context, child) {
           return MaterialApp(
@@ -67,9 +69,6 @@ class _MyHomePageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
     final usrProvider = Provider.of<UserProvider>(context);
-    // final recipeProvider = Provider.of<RecipeProvider>(context, listen: false);
-    // print(recipeProvider.selectedType);
-
     final List<Widget> bodies = [
       const HomeScreen(),
       const LikeScreen(),
@@ -99,7 +98,10 @@ class _MyHomePageState extends State<HomePage> {
         currentIndex: _currentIndex,
         onTap: (i) => setState(() {
           if (i == Screens.profile.index && usrProvider.isAnon) {
-            final err = ErrorPopup(text: "You must be logged in to view your profile", duration: Durations.extralong4);
+            final err = ErrorPopup(
+              text: "You must be logged in to view your profile",
+              duration: Durations.extralong4,
+            );
             err.show(context);
             return;
           }
@@ -141,7 +143,8 @@ class _MyHomePageState extends State<HomePage> {
                 usrProvider.isAnon
                     ? ListTile(
                         leading: const Icon(
-                            Icons.person_add), // TODO: Tema find suitable icon
+                          Icons.person_add,
+                        ), // TODO: Tema find suitable icon
                         title: const Text('Login or Create Account'),
                         onTap: () {
                           Navigator.push(
@@ -178,20 +181,20 @@ class _MyHomePageState extends State<HomePage> {
                   },
                 ),
                 usrProvider.isAnon
-                    ? const SizedBox.shrink() 
-                  : ListTile(
-                  leading: const Icon(Icons.exit_to_app),
-                  title: const Text('Log Out'),
-                  onTap: () {
-                    usrProvider.logout();
-                    Navigator.push(
-                      context,
-                      CupertinoPageRoute(
-                        builder: (context) => const OnbodingScreen(),
+                    ? const SizedBox.shrink()
+                    : ListTile(
+                        leading: const Icon(Icons.exit_to_app),
+                        title: const Text('Log Out'),
+                        onTap: () {
+                          usrProvider.logout();
+                          Navigator.push(
+                            context,
+                            CupertinoPageRoute(
+                              builder: (context) => const OnbodingScreen(),
+                            ),
+                          );
+                        },
                       ),
-                    );
-                  },
-                ),
               ],
             ),
           ),

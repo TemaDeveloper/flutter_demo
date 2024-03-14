@@ -3,7 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_application_1/add_recipe.dart';
 import 'package:flutter_application_1/auth/backend_proxy.dart';
 import 'package:flutter_application_1/avatar.dart';
-import 'package:flutter_application_1/listModels/my_card.dart';
+import 'package:flutter_application_1/listModels/recipe_card.dart';
+import 'package:flutter_application_1/recipe/provider.dart';
 import 'package:provider/provider.dart';
 
 class ProfileScreen extends StatelessWidget {
@@ -78,10 +79,15 @@ class ProfileScreen extends StatelessWidget {
                   scrollDirection: Axis.horizontal,
                   itemCount: usrProvider.myCards.length,
                   itemBuilder: (context, index) {
-                    return MyCard(
-                      title: usrProvider.myCards[index].title,
-                      image: usrProvider.myCards[index].image,
-                    );
+                    final recipeProvider = Provider.of<RecipeProvider>(context);
+                    final usrPrvdr = Provider.of<UserProvider>(context, listen: false);
+                    final r = recipeProvider.recipes[0];
+                    print(recipeProvider.recipes.length);
+                    print("Printing 1st recipe");
+                    print(r.id);
+                    print(r.title);
+                    print(r.description);
+                    print(r.creator == usrPrvdr.id);
                   },
                 ),
               ),

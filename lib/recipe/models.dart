@@ -1,7 +1,7 @@
 class Recipe {
   String id;
+  User creator;
   /// True means our.id == creator.id
-  bool isOwned;
   /*--------------------------*/
   String title;
   String description;
@@ -10,11 +10,29 @@ class Recipe {
 
   Recipe({
     required this.id,
-    required this.isOwned,
+    required this.creator,
     required this.title,
     required this.description,
     required this.ingredients,
     this.previewImgUrl,
+  });
+}
+
+/// Not to be confused with UserProvider
+/// This is a representation of any user
+class User {
+  final String id;
+  final String email;
+  final String username;
+  final String? name; /* e.g. Ivan Ivanov */
+  final String? avatarUrl;
+
+  const User({
+    required this.id,
+    required this.email,
+    required this.username,
+    this.name,
+    this.avatarUrl,
   });
 }
 

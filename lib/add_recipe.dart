@@ -2,12 +2,11 @@ import 'package:flutter/material.dart';
 
 class RecipeAdd extends StatefulWidget {
   RecipeAdd({super.key}) {
-    throw UnimplementedError("Well, just fetching for now"); 
+    throw UnimplementedError("Well, just fetching for now");
   }
 
   @override
   State<RecipeAdd> createState() => _RecipeAddState();
-
 }
 
 class _RecipeAddState extends State<RecipeAdd> {
@@ -133,8 +132,8 @@ class _RecipeAddState extends State<RecipeAdd> {
                         hintText: 'Ingredient',
                         border: OutlineInputBorder(
                             borderRadius: BorderRadius.circular(10)),
-                        contentPadding:
-                            const EdgeInsets.symmetric(vertical: 10, horizontal: 8),
+                        contentPadding: const EdgeInsets.symmetric(
+                            vertical: 10, horizontal: 8),
                       ),
                     ),
                   ),
@@ -143,8 +142,8 @@ class _RecipeAddState extends State<RecipeAdd> {
                     child: ElevatedButton(
                       onPressed: _addIngredient,
                       style: ElevatedButton.styleFrom(
-                        padding:
-                            const EdgeInsets.symmetric(vertical: 15, horizontal: 20),
+                        padding: const EdgeInsets.symmetric(
+                            vertical: 15, horizontal: 20),
                       ),
                       child: const Icon(Icons.add),
                     ),
@@ -161,28 +160,11 @@ class _RecipeAddState extends State<RecipeAdd> {
                   spacing: 8.0,
                   runSpacing: 8.0,
                   children: _ingredients
-                      .map((ingredient) => Container(
-                            padding: const EdgeInsets.all(5),
-                            decoration: BoxDecoration(
-                              color: Colors.yellow,
-                              borderRadius: BorderRadius.circular(10),
-                            ),
-                            child: Row(
-                              mainAxisSize: MainAxisSize.min,
-                              children: [
-                                Text(ingredient,
-                                    style: const TextStyle(color: Colors.black)),
-                                IconButton(
-                                  icon: const Icon(
-                                    Icons.clear,
-                                    color: Colors.black,
-                                  ),
-                                  onPressed: () =>
-                                      _deleteIngredient(ingredient),
-                                  padding: EdgeInsets.zero,
-                                ),
-                              ],
-                            ),
+                      .map((ingredient) => Chip(
+                            label: Text(ingredient),
+                            onDeleted: () {
+                              _deleteIngredient(ingredient);
+                            },
                           ))
                       .toList(),
                 ),
@@ -191,7 +173,7 @@ class _RecipeAddState extends State<RecipeAdd> {
             Padding(
               padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 8),
               child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween, 
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   const Align(
                     alignment: Alignment.centerLeft,
@@ -223,7 +205,8 @@ class _RecipeAddState extends State<RecipeAdd> {
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
                         Text("Step ${i + 1}",
-                            style: const TextStyle(fontWeight: FontWeight.bold)),
+                            style:
+                                const TextStyle(fontWeight: FontWeight.bold)),
                         IconButton(
                           icon: const Icon(Icons.clear),
                           onPressed: () => _removeStep(i),

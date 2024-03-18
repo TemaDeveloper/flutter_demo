@@ -28,17 +28,18 @@ class RecipeProvider extends ChangeNotifier {
   }
 
   List<Recipe> _recipes = [];
-  List<Recipe> get recipes => recipes;
+  List<Recipe> get recipes => _recipes;
 
-  updateRecipeList(int page) async {
+  updateRecipeList(int page) {
     _currentPage = page;
     _isLoading = true;
-    await refreshRecipies();
-    _isLoading = false;
-    notifyListeners();
+    _refreshRecipies(page).then((_) {
+      _isLoading = false;
+      notifyListeners();
+    });
   }
 
-  Future<void> refreshRecipies() async {
+  Future<void> _refreshRecipies(int page) async {
     /*
   Response:   flutter: [{"id":"gijrn4k41fz5tdm","created":"2024-03-13 05:59:14.653Z","updated"
               :"2024-03-13 05:59:14.653Z","collectionId":"6v3drfijw7f02fy","collectionName":"r
@@ -97,12 +98,12 @@ class RecipeProvider extends ChangeNotifier {
               ),
             ),
             steps: await Future.wait(
-              recipe.getListValue("cookingsteps").map(
+              recipe.getListValue<String>("cookingsteps").map(
                 (stepId) async {
                   final resp = await pb
                       .collection("cookingsteps")
                       .getOne(stepId);
-                  final txt = resp.getDataValue("text");
+                  final txt = resp.getDataValue<String>("text");
                   return CookingStep(id: stepId, text: txt);
                 },
               ),

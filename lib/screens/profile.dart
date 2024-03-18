@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_application_1/add_recipe.dart';
 import 'package:flutter_application_1/auth/backend_proxy.dart';
 import 'package:flutter_application_1/avatar.dart';
+import 'package:flutter_application_1/listModels/my_card.dart';
 import 'package:flutter_application_1/listModels/recipe_card.dart';
 import 'package:flutter_application_1/recipe/provider.dart';
 import 'package:provider/provider.dart';
@@ -13,6 +14,7 @@ class ProfileScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final usrProvider = Provider.of<UserProvider>(context);
+    final recipeProvider = Provider.of<RecipeProvider>(context);
 
     return SingleChildScrollView(
       //profile screen
@@ -45,10 +47,8 @@ class ProfileScreen extends StatelessWidget {
                 height: 50,
                 child: ElevatedButton(
                   onPressed: () {
-                    Navigator.push(
-                        context,
-                        CupertinoPageRoute(
-                            builder: (context) => RecipeAdd()));
+                    Navigator.push(context,
+                        CupertinoPageRoute(builder: (context) => RecipeAdd()));
                   },
                   child: const Text(
                     'Add Your Recipe',
@@ -70,28 +70,23 @@ class ProfileScreen extends StatelessWidget {
               ),
             ),
 
-            //List of Created Recipes
-            Padding(
-              padding: const EdgeInsets.only(bottom: 10),
-              child: SizedBox(
-                height: 300,
-                child: ListView.builder(
-                  scrollDirection: Axis.horizontal,
-                  itemCount: usrProvider.myCards.length,
-                  itemBuilder: (context, index) {
-                    final recipeProvider = Provider.of<RecipeProvider>(context);
-                    final usrPrvdr = Provider.of<UserProvider>(context, listen: false);
-                    final r = recipeProvider.recipes[0];
-                    print(recipeProvider.recipes.length);
-                    print("Printing 1st recipe");
-                    print(r.id);
-                    print(r.title);
-                    print(r.description);
-                    print(r.creator == usrPrvdr.id);
-                  },
-                ),
-              ),
-            ),
+            recipeProvider.isLoading
+                ? const CircularProgressIndicator()
+                : Padding(
+                    padding: const EdgeInsets.only(bottom: 10),
+                    child: SizedBox(
+                      height: 300,
+                      child: ListView.builder(
+                        scrollDirection: Axis.horizontal,
+                        itemCount: recipeProvider.recipes.length,
+                        itemBuilder: (context, index) {
+                          final r = recipeProvider.recipes[index];
+                          print("Creating card(title: ${r.title} image: ${r.previewImgUrl})");
+                          return MyCard(title: r.title, image: r.previewImgUrl);
+                        },
+                      ),
+                    ),
+                  ),
           ],
         ),
       ),

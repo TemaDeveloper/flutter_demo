@@ -1,11 +1,12 @@
 import 'package:flutter/foundation.dart';
+import 'package:flutter_application_1/auth/backend_proxy.dart';
 import 'package:flutter_application_1/main.dart';
 import 'package:flutter_application_1/recipe/cuisine_types.dart';
 import 'package:flutter_application_1/recipe/models.dart';
 
 class RecipeProvider extends ChangeNotifier {
   RecipeProvider() {
-    refreshRecipies();
+    updateRecipeList(0);
   }
 
   CuisineTypes _selectedType = CuisineTypes.all;
@@ -29,15 +30,16 @@ class RecipeProvider extends ChangeNotifier {
   List<Recipe> _recipes = [];
   List<Recipe> get recipes => _recipes;
 
-  updateRecipeList(int page) async {
+  updateRecipeList(int page) {
     _currentPage = page;
     _isLoading = true;
-    await refreshRecipies();
-    _isLoading = false;
-    notifyListeners();
+    _refreshRecipies(page).then((_) {
+      _isLoading = false;
+      notifyListeners();
+    });
   }
 
-  Future<void> refreshRecipies() async {
+  Future<void> _refreshRecipies(int page) async {
     /*
   Response:   flutter: [{"id":"gijrn4k41fz5tdm","created":"2024-03-13 05:59:14.653Z","updated"
               :"2024-03-13 05:59:14.653Z","collectionId":"6v3drfijw7f02fy","collectionName":"r
@@ -49,43 +51,69 @@ class RecipeProvider extends ChangeNotifier {
               ingridients":["obv20z7upcpy5am","9h2dca13cvhbepp"],"preview":"","title":"Salad"}
               ]
     */
+    userGet(String id, String property) async => await pb
+        .collection("users")
+        .getFirstListItem('id="$id"')
+        .then((r) => r.getStringValue(property))
+        .catchError((e) => print("Getting $property of user $id"));
+
     final resp = await pb
         .collection("recipies")
         .getFullList()
         // .getList(page: curentPage, perPage: 10, sort: "...")
-        .then(
-          (r) => Future.wait(
-            r.map(
-              (recipe) async => Recipe(
-                id: recipe.getDataValue("id"),
-                isOwned: pb.authStore.isValid
-                    ? recipe.getDataValue("creator") == pb.authStore.model.id
-                    : false,
-                title: recipe.getDataValue("title"),
-                description: recipe.getDataValue("description"),
-                previewImgUrl: recipe.getDataValue("preview") == ""
-                    ? null
-                    : recipe.getDataValue("preview"),
-                ingredients: await Future.wait(
-                  recipe.getListValue("ingridients").map(
-                    (ingId) async {
-                      final resp =
-                          await pb.collection("ingridients").getOne(ingId);
-                      final url = resp.getDataValue("imgUrl");
+        .then((r) {
+      return Future.wait(
+        r.map((recipe) async {
+          final creatorId = recipe.getDataValue("creator");
+          final name = await userGet(creatorId, "name");
+          final avatarName = await userGet(creatorId, "avatar");
+          return Recipe(
+            id: recipe.id,
+            creator: User(
+              id: creatorId,
+              username: await userGet(creatorId, "username"),
+              email: await userGet(creatorId, "email"),
+              name: name == "" ? null : name,
+              avatarUrl: avatarName == ""
+                  ? null
+                  : avatarNameToUrl(creatorId, avatarName),
+            ),
+            title: recipe.getDataValue("title"),
+            description: recipe.getDataValue("description"),
+            previewImgUrl: recipe.getDataValue("preview") == ""
+                ? null
+                : recipe.getDataValue("preview"),
+            ingredients: await Future.wait(
+              recipe.getListValue("ingridients").map(
+                (ingId) async {
+                  final resp = await pb.collection("ingridients").getOne(ingId);
+                  final url = resp.getDataValue("imgUrl");
 
-                      return Ingredient(
-                        name: resp.getDataValue("name"),
-                        imgUrl: url == "" ? null : url,
-                      );
-                    },
-                  ),
-                ),
+                  return Ingredient(
+                    id: ingId,
+                    name: resp.getDataValue("name"),
+                    imgUrl: url == "" ? null : url,
+                  );
+                },
               ),
             ),
-          ),
-        );
+            steps: await Future.wait(
+              recipe.getListValue<String>("cookingsteps").map(
+                (stepId) async {
+                  final resp = await pb
+                      .collection("cookingsteps")
+                      .getOne(stepId);
+                  final txt = resp.getDataValue<String>("text");
+                  return CookingStep(id: stepId, text: txt);
+                },
+              ),
+            ),
+          );
+        }),
+      );
+    });
 
     _recipes = resp;
-    print("Recipes: $_recipes");
+    // print("Recipes: $_recipes");
   }
 }

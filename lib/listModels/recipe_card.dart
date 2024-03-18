@@ -82,7 +82,7 @@ class _RecipeCardState extends State<RecipeCard> {
             ),
           ),
           Padding(
-            padding: EdgeInsets.fromLTRB(8, 8, 8, 0),
+            padding: const EdgeInsets.fromLTRB(8, 8, 8, 0),
             child: Text(
               widget.title,
               maxLines: 1,

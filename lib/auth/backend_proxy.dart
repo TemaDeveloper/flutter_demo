@@ -13,31 +13,19 @@ enum AuthResponse {
   sucsess,
 }
 
-class UserProvider extends ChangeNotifier {
-  final List<MyCard> _myCards = [
-    const MyCard(
-        title: 'title1',
-        image:
-            'https://cdn.pixabay.com/photo/2015/04/23/22/00/tree-736885_1280.jpg'),
-    const MyCard(
-        title: 'title2',
-        image:
-            'https://i0.wp.com/picjumbo.com/wp-content/uploads/silhouette-of-an-olive-tree-after-beautiful-purple-sunset-free-photo.jpg?w=600&quality=80'),
-    const MyCard(
-        title: 'title3',
-        image:
-            'https://i0.wp.com/picjumbo.com/wp-content/uploads/silhouette-of-an-olive-tree-after-beautiful-purple-sunset-free-photo.jpg?w=600&quality=80'),
-  ];
-  get myCards => _myCards;
+String avatarNameToUrl(String id, String name) => "$backendBaseUrl/api/files/_pb_users_auth_/$id/$name";
 
-  removeCard(MyCard card) {
-    _myCards.remove(card);
-    notifyListeners();
+class UserProvider extends ChangeNotifier {
+
+  /// returns ids of liked recipies
+  List<String> get likes => pb.authStore.model.getListValue<String>("liked");
+
+  void like(String id) async {
+    // TODO:
   }
 
-  addCard(MyCard card) {
-    _myCards.add(card);
-    notifyListeners();
+  void dislike(String id) async {
+    // TODO:
   }
 
   get id => pb.authStore.isValid ? pb.authStore.model.id : null;
@@ -89,7 +77,7 @@ class UserProvider extends ChangeNotifier {
 
     String? avatarUrl = avatarName == ""
         ? null
-        : "$backendBaseUrl/api/files/pb_users_auth_/$id/$avatarName";
+        : avatarNameToUrl(id, avatarName);
 
     return avatarUrl;
   }

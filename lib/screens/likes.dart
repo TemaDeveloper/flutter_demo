@@ -1,5 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_application_1/auth/backend_proxy.dart';
 import 'dart:math';
+
+import 'package:flutter_application_1/recipe/provider.dart';
+import 'package:provider/provider.dart';
 
 class Recipe {
   final String title;
@@ -16,44 +20,24 @@ class LikeScreen extends StatefulWidget {
 }
 
 class _LikeScreenState extends State<LikeScreen> {
-  Random random = Random();
-
-  
-  List<Recipe>? recipes;
-  
-
- 
-
-  @override
-  void initState() {
-    super.initState();
-    recipes = [
-    Recipe(
-        title: 'Recipe 1',
-        imageUrl:
-            'https://hips.hearstapps.com/hmg-prod/images/goulash-vertical-64de8d216ea51.jpg'),
-    Recipe(
-        title: 'Recipe 2',
-        imageUrl:
-            'https://hips.hearstapps.com/hmg-prod/images/goulash-vertical-64de8d216ea51.jpg'),
-    Recipe(
-        title: 'Recipe 3',
-        imageUrl:
-            'https://hips.hearstapps.com/hmg-prod/images/goulash-vertical-64de8d216ea51.jpg'),
-    Recipe(
-        title: 'Recipe 4',
-        imageUrl:
-            'https://hips.hearstapps.com/hmg-prod/images/goulash-vertical-64de8d216ea51.jpg'),
-  ];
-  }
   @override
   Widget build(BuildContext context) {
+    final recipeProvider = Provider.of<RecipeProvider>(context);
+    final userProvider = Provider.of<UserProvider>(context);
+
+    if (recipeProvider.isLoading) {
+      return const CircularProgressIndicator();
+    }
+
+    final recipies = recipeProvider.recipes
+        .where((r) => userProvider.likes.contains(r.id))
+        .toList();
     return GridView.builder(
       gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
         crossAxisCount: 2,
         childAspectRatio: 2 / 3, // Adjust this for proper aspect ratio
       ),
-      itemCount: recipes!.length,
+      itemCount: recipies.length,
       itemBuilder: (context, index) {
         return GestureDetector(
           onTap: () {
@@ -70,7 +54,8 @@ class _LikeScreenState extends State<LikeScreen> {
                       ClipRRect(
                         borderRadius: BorderRadius.circular(10),
                         child: Image.network(
-                          recipes![index].imageUrl,
+                          recipies[index].previewImgUrl ??
+                              "Some url", // TODO: handle null case
                           fit: BoxFit.cover,
                         ),
                       ),
@@ -80,8 +65,9 @@ class _LikeScreenState extends State<LikeScreen> {
                         child: IconButton(
                           icon: const CircleAvatar(
                             backgroundColor: Colors.white,
-                            radius: 20, 
-                            child: Icon(Icons.favorite, color: Colors.deepPurple),
+                            radius: 20,
+                            child:
+                                Icon(Icons.favorite, color: Colors.deepPurple),
                           ),
                           onPressed: () {
                             showDialog(
@@ -102,7 +88,8 @@ class _LikeScreenState extends State<LikeScreen> {
                                       child: const Text('Yes'),
                                       onPressed: () {
                                         setState(() {
-                                          recipes!.removeAt(index);
+                                          final id = recipies[index].id;
+                                          userProvider.dislike(id);
                                         });
                                         Navigator.of(context).pop();
                                       },
@@ -120,7 +107,7 @@ class _LikeScreenState extends State<LikeScreen> {
                 Padding(
                   padding: const EdgeInsets.symmetric(vertical: 8.0),
                   child: Text(
-                    recipes![index].title,
+                    recipies[index].title,
                     style: const TextStyle(
                       fontSize: 16,
                       fontWeight: FontWeight.bold,
@@ -128,7 +115,9 @@ class _LikeScreenState extends State<LikeScreen> {
                   ),
                 ),
               ],
-            )));
+            ),
+          ),
+        );
       },
     );
   }

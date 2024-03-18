@@ -3,7 +3,7 @@ class SpoonacularRecipe {
   final double rating;
   final String totalTime;
   final String image;
-  final int recipeId;
+  final String recipeId;
 
   SpoonacularRecipe(
       {required this.recipeId,
@@ -14,7 +14,7 @@ class SpoonacularRecipe {
 
   factory SpoonacularRecipe.fromJson(dynamic json) {
     return SpoonacularRecipe(
-        recipeId: json['id'],
+        recipeId: json['id'].toString(),
         title: json['title'] as String, // Adjusted to Spoonacular's field name
         image: json['image'] as String, // Adjusted to Spoonacular's field name
         rating:

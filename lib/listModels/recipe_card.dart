@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 class RecipeCard extends StatefulWidget {
-  final int recipeId;
+  final String recipeId;
   final String userName;
   final String avatarUrl;
   final String title;

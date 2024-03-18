@@ -6,18 +6,18 @@ import 'dart:convert';
 //import 'package:flutter_application_1/listModels/ingredient_card.dart';
 
 class RecipeDetailPage extends StatefulWidget {
-  final int recipeId;
-  final String imageUrl;
+  final String recipeId;
+  final String? imageUrl;
   final String title;
-  final double rating;
+  final double? rating;
   final String cookTime;
 
   const RecipeDetailPage({
     super.key,
     required this.recipeId,
-    required this.imageUrl,
+    this.imageUrl,
     required this.title,
-    required this.rating,
+    this.rating,
     required this.cookTime,
   });
 
@@ -28,7 +28,7 @@ class RecipeDetailPage extends StatefulWidget {
 class _RecipeDetailState extends State<RecipeDetailPage> {
   List<String>? _ingredients;
   bool _isLoading = true;
-  late int id;
+  late String id;
   String? recipeSteps;
   int increment = 1;
 
@@ -85,7 +85,7 @@ class _RecipeDetailState extends State<RecipeDetailPage> {
                 Stack(children: [
                   //Background Image
                   Image.network(
-                    widget.imageUrl,
+                    widget.imageUrl!,
                     fit: BoxFit.cover,
                     width: MediaQuery.of(context).size.width,
                     height: 300,
@@ -105,7 +105,7 @@ class _RecipeDetailState extends State<RecipeDetailPage> {
                       child: ClipRRect(
                         borderRadius: BorderRadius.circular(10),
                         child: Image.network(
-                          widget.imageUrl,
+                          widget.imageUrl!,
                           width: 300,
                           height: 200,
                           fit: BoxFit.cover,

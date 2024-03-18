@@ -8,6 +8,8 @@ class Recipe {
   List<Ingredient> ingredients;
   List<CookingStep> steps;
   String? previewImgUrl;
+  //TODO: make rating lately
+  String cookTime;
 
   Recipe({
     required this.id,
@@ -16,7 +18,8 @@ class Recipe {
     required this.description,
     required this.ingredients,
     required this.steps,
-    this.previewImgUrl,
+    required this.previewImgUrl,
+    required this.cookTime
   });
 
   void prettyPrint() {

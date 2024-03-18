@@ -108,6 +108,7 @@ class RecipeProvider extends ChangeNotifier {
                 },
               ),
             ),
+            cookTime: "",
           );
         }),
       );

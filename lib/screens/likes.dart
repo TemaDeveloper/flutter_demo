@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_application_1/auth/backend_proxy.dart';
-import 'dart:math';
 
 import 'package:flutter_application_1/recipe/provider.dart';
 import 'package:provider/provider.dart';

@@ -5,9 +5,6 @@ import 'item.dart';
 
 // TODO: find a way to make constructor const
 class BottomNavBar extends StatelessWidget {
-  /// A bottom bar that faithfully follows the design by Aurélien Salomon
-  ///
-  /// https://dribbble.com/shots/5925052-Google-Bottom-Bar-Navigation-Pattern/
   BottomNavBar({
     super.key,
     required List<BottomNavBarItem> items,
@@ -52,8 +49,6 @@ class BottomNavBar extends StatelessWidget {
   final Color?  selectedItemColor;
   final Color?  unselectedItemColor;
   final double? selectedColorOpacity;
-
-
 
   @override
   Widget build(BuildContext context) {

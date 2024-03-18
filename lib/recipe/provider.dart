@@ -28,7 +28,7 @@ class RecipeProvider extends ChangeNotifier {
   }
 
   List<Recipe> _recipes = [];
-  List<Recipe> get recipes => _recipes;
+  List<Recipe> get recipes => recipes;
 
   updateRecipeList(int page) async {
     _currentPage = page;
@@ -66,9 +66,8 @@ class RecipeProvider extends ChangeNotifier {
           final creatorId = recipe.getDataValue("creator");
           final name = await userGet(creatorId, "name");
           final avatarName = await userGet(creatorId, "avatar");
-          print("Recipe id: ${recipe.getDataValue("id")}");
           return Recipe(
-            id: recipe.getDataValue("id"),
+            id: recipe.id,
             creator: User(
               id: creatorId,
               username: await userGet(creatorId, "username"),
@@ -90,9 +89,21 @@ class RecipeProvider extends ChangeNotifier {
                   final url = resp.getDataValue("imgUrl");
 
                   return Ingredient(
+                    id: ingId,
                     name: resp.getDataValue("name"),
                     imgUrl: url == "" ? null : url,
                   );
+                },
+              ),
+            ),
+            steps: await Future.wait(
+              recipe.getListValue("cookingsteps").map(
+                (stepId) async {
+                  final resp = await pb
+                      .collection("cookingsteps")
+                      .getOne(stepId);
+                  final txt = resp.getDataValue("text");
+                  return CookingStep(id: stepId, text: txt);
                 },
               ),
             ),

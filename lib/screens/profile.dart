@@ -79,9 +79,9 @@ class ProfileScreen extends StatelessWidget {
                       child: ListView.builder(
                         scrollDirection: Axis.horizontal,
                         itemCount: recipeProvider.recipes.length,
+                        // TODO: check if we created it
                         itemBuilder: (context, index) {
                           final r = recipeProvider.recipes[index];
-                          print("Creating card(title: ${r.title} image: ${r.previewImgUrl})");
                           return MyCard(title: r.title, image: r.previewImgUrl);
                         },
                       ),

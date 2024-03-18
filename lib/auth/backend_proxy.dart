@@ -4,7 +4,6 @@ import 'package:flutter_application_1/main.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:http/http.dart' as http;
 
-
 enum AuthResponse {
   incorrectPassOrEmail,
   needsVerification,
@@ -12,22 +11,71 @@ enum AuthResponse {
   sucsess,
 }
 
-String avatarNameToUrl(String id, String name) => "$backendBaseUrl/api/files/_pb_users_auth_/$id/$name";
+
+String avatarNameToUrl(String id, String name) =>
+    "$backendBaseUrl/api/files/_pb_users_auth_/$id/$name";
+
+class IngredientCreateInfo {
+  final String name;
+  final XFile? img;
+  const IngredientCreateInfo({required this.name, this.img});
+}
+
+class CookingStepCreateInfo {
+  final String text;
+  const CookingStepCreateInfo({required this.text});
+}
 
 class UserProvider extends ChangeNotifier {
 
-  /// returns ids of liked recipies
+  /*-----------------------------------------------------------------------*/
+  /*--------------------------------LIKES----------------------------------*/
+  /*-----------------------------------------------------------------------*/
   List<String> get likes => pb.authStore.model.getListValue<String>("liked");
 
-  void like(String id) async {
-    // TODO:
+  void like(String id) {
+    var liked = likes;
+    liked = liked.contains(id) ? liked : liked
+      ..add(id);
+    pb
+        .collection('users')
+        .update(pb.authStore.model.id, body: {"liked": liked})
+        .catchError((e) => print("UserProvider.like error: $e"))
+        .then((_) => notifyListeners());
   }
 
   void dislike(String id) async {
-    // TODO:
+    var liked = likes;
+    liked = !liked.contains(id) ? liked : liked
+      ..remove(id);
+    pb
+        .collection('users')
+        .update(pb.authStore.model.id, body: {"liked": liked})
+        .catchError((e) => print("UserProvider.dislike error: $e"))
+        .then((_) => notifyListeners());
   }
 
-  get id => pb.authStore.isValid ? pb.authStore.model.id : null;
+  /*-----------------------------------------------------------------------*/
+  /*-----------------------------AddRecipie--------------------------------*/
+  /*-----------------------------------------------------------------------*/
+  Future<bool> addRecipie({
+    required String title,
+    required String description,
+    // XFile? previewImg,
+    // required List<IngredientCreateInfo> ingredients,
+    // required List<CookingStepCreateInfo> steps,
+  }) async {
+    pb.collection('recipies').create(body: {
+      title: title,
+      description: description,
+    }).catchError( (e) => print("UserProvider.addRecipie error: $e") );
+    return true;
+  }
+
+  /*-----------------------------------------------------------------------*/
+  /*-----------------------------PROPERTIES--------------------------------*/
+  /*-----------------------------------------------------------------------*/
+  String? get id => pb.authStore.isValid || _isAnon ? pb.authStore.model.id : null;
 
   /// false means logged in
   bool _isAnon = true;
@@ -74,9 +122,8 @@ class UserProvider extends ChangeNotifier {
     final id = pb.authStore.model.id;
     final avatarName = pb.authStore.model.getDataValue("avatar");
 
-    String? avatarUrl = avatarName == ""
-        ? null
-        : avatarNameToUrl(id, avatarName);
+    String? avatarUrl =
+        avatarName == "" ? null : avatarNameToUrl(id, avatarName);
 
     return avatarUrl;
   }
@@ -109,9 +156,7 @@ class UserProvider extends ChangeNotifier {
       final avatarName = pb.authStore.model.getDataValue("avatar") as String;
 
       if (file == null) {
-        await pb
-            .collection('users')
-            .update(pb.authStore.model.id, body: body);
+        await pb.collection('users').update(pb.authStore.model.id, body: body);
       } else if (avatarName != avatar!.name) {
         await pb
             .collection('users')

@@ -1,9 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_application_1/auth/backend_proxy.dart';
+import 'package:provider/provider.dart';
 
 class RecipeAdd extends StatefulWidget {
-  RecipeAdd({super.key}) {
-    throw UnimplementedError("Well, just fetching for now");
-  }
+  const RecipeAdd({super.key});
+  // RecipeAdd({super.key}) {
+  //   throw UnimplementedError("Well, just fetching for now");
+  // }
 
   @override
   State<RecipeAdd> createState() => _RecipeAddState();
@@ -15,6 +18,14 @@ class _RecipeAddState extends State<RecipeAdd> {
   final _ingredientController = TextEditingController();
   final List<String> _ingredients = [];
   final List<TextEditingController> _stepControllers = [];
+
+  void _addRecipe(BuildContext ctx) {
+    final usrPr = Provider.of<UserProvider>(ctx, listen: false);
+    usrPr.addRecipie(
+      title: _titleController.text,
+      description: _descriptionController.text,
+    );
+  }
 
   void _addIngredient() {
     if (_ingredientController.text.isNotEmpty) {
@@ -233,9 +244,7 @@ class _RecipeAddState extends State<RecipeAdd> {
         child: SizedBox(
           height: 50,
           child: ElevatedButton(
-            onPressed: () {
-              // Implement submission functionality
-            },
+            onPressed: () => _addRecipe(context),
             child: const Text('Submit'),
           ),
         ),

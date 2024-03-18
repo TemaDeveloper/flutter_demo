@@ -1,17 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_application_1/auth/backend_proxy.dart';
-import 'dart:math';
 
 import 'package:flutter_application_1/recipe/provider.dart';
 import 'package:provider/provider.dart';
 
-class Recipe {
-  final String title;
-  final String imageUrl;
-
-  Recipe({required this.title, required this.imageUrl});
-}
-
+//TODO: figure out a way to update
 class LikeScreen extends StatefulWidget {
   const LikeScreen({super.key});
 
@@ -54,8 +47,7 @@ class _LikeScreenState extends State<LikeScreen> {
                       ClipRRect(
                         borderRadius: BorderRadius.circular(10),
                         child: Image.network(
-                          recipies[index].previewImgUrl ??
-                              "Some url", // TODO: handle null case
+                          recipies[index].previewImgUrl ?? "https://via.placeholder.com/150",
                           fit: BoxFit.cover,
                         ),
                       ),

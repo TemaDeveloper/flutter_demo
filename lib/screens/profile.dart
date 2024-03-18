@@ -4,7 +4,6 @@ import 'package:flutter_application_1/add_recipe.dart';
 import 'package:flutter_application_1/auth/backend_proxy.dart';
 import 'package:flutter_application_1/avatar.dart';
 import 'package:flutter_application_1/listModels/my_card.dart';
-import 'package:flutter_application_1/listModels/recipe_card.dart';
 import 'package:flutter_application_1/recipe/provider.dart';
 import 'package:provider/provider.dart';
 

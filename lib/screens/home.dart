@@ -38,7 +38,7 @@ class _HomeScreenState extends State<HomeScreen> {
 
     cuisines = [
       const CuisineCard(
-          title: 'Italian', image: 'assets/images/img_italian.JPG'),
+          title: 'Italian',  image: 'assets/images/img_italian.JPG'),
       const CuisineCard(
           title: 'American', image: 'assets/images/img_american.JPG'),
       const CuisineCard(
@@ -46,7 +46,7 @@ class _HomeScreenState extends State<HomeScreen> {
       const CuisineCard(
           title: 'Japanese', image: 'assets/images/img_japanese.JPG'),
       const CuisineCard(
-          title: 'Chinese', image: 'assets/images/img_chinese.JPG'),
+          title: 'Chinese',  image: 'assets/images/img_chinese.JPG'),
       const CuisineCard(title: 'Indian', image: 'assets/images/img_indian.JPG'),
       const CuisineCard(title: 'French', image: 'assets/images/img_french.JPG')
     ];
@@ -82,7 +82,7 @@ class _HomeScreenState extends State<HomeScreen> {
                         text: TextSpan(
                           style: DefaultTextStyle.of(context).style,
                           children: [
-                            TextSpan(
+                            const TextSpan(
                               text: 'Welcome\nback,\n',
                               style: TextStyle(
                                 fontWeight: FontWeight.bold,
@@ -92,7 +92,7 @@ class _HomeScreenState extends State<HomeScreen> {
                             if (usrProvider.name != null)
                               TextSpan(
                                 text:
-                                    '${usrProvider.name!}', // The '!' is used for null check assertion
+                                    usrProvider.name!, // The '!' is used for null check assertion
                                 style: const TextStyle(
                                   fontWeight: FontWeight.bold,
                                   fontSize: 24,
@@ -106,7 +106,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                   children: [
                                     TextButton(
                                       onPressed: () {
-                                        Navigator.push(context, CupertinoPageRoute(builder: (context) => LoginPage()));
+                                        Navigator.push(context, CupertinoPageRoute(builder: (context) => const LoginPage()));
                                       },
                                       style: TextButton.styleFrom(
                                         padding: EdgeInsets

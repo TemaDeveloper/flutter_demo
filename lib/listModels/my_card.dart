@@ -18,7 +18,7 @@ class MyCard extends StatelessWidget {
         elevation: 5,
         child: Stack(
           children: [
-            image == null
+            image != null
                 ? ClipRRect(
                     borderRadius: BorderRadius.circular(15),
                     child: Image.network(

@@ -38,7 +38,7 @@ class _HomeScreenState extends State<HomeScreen> {
 
     cuisines = [
       const CuisineCard(
-          title: 'Italian',  image: 'assets/images/img_italian.JPG'),
+          title: 'Italian', image: 'assets/images/img_italian.JPG'),
       const CuisineCard(
           title: 'American', image: 'assets/images/img_american.JPG'),
       const CuisineCard(
@@ -46,7 +46,7 @@ class _HomeScreenState extends State<HomeScreen> {
       const CuisineCard(
           title: 'Japanese', image: 'assets/images/img_japanese.JPG'),
       const CuisineCard(
-          title: 'Chinese',  image: 'assets/images/img_chinese.JPG'),
+          title: 'Chinese', image: 'assets/images/img_chinese.JPG'),
       const CuisineCard(title: 'Indian', image: 'assets/images/img_indian.JPG'),
       const CuisineCard(title: 'French', image: 'assets/images/img_french.JPG')
     ];
@@ -75,9 +75,9 @@ class _HomeScreenState extends State<HomeScreen> {
               scrollDirection: Axis.horizontal,
               itemBuilder: (context, index) {
                 if (index == 0) {
-                  return SizedBox(
+                  return Center(
                     child: Padding(
-                      padding: const EdgeInsets.all(16.0),
+                      padding: EdgeInsets.all(10),
                       child: RichText(
                         text: TextSpan(
                           style: DefaultTextStyle.of(context).style,
@@ -91,8 +91,8 @@ class _HomeScreenState extends State<HomeScreen> {
                             ),
                             if (usrProvider.name != null)
                               TextSpan(
-                                text:
-                                    usrProvider.name!, // The '!' is used for null check assertion
+                                text: usrProvider
+                                    .name!, // The '!' is used for null check assertion
                                 style: const TextStyle(
                                   fontWeight: FontWeight.bold,
                                   fontSize: 24,
@@ -106,7 +106,11 @@ class _HomeScreenState extends State<HomeScreen> {
                                   children: [
                                     TextButton(
                                       onPressed: () {
-                                        Navigator.push(context, CupertinoPageRoute(builder: (context) => const LoginPage()));
+                                        Navigator.push(
+                                            context,
+                                            CupertinoPageRoute(
+                                                builder: (context) =>
+                                                    const LoginPage()));
                                       },
                                       style: TextButton.styleFrom(
                                         padding: EdgeInsets
@@ -162,19 +166,38 @@ class _HomeScreenState extends State<HomeScreen> {
           ),
         ),
         // Sliver for recipe list
-        SliverToBoxAdapter(
-          child: Align(
-            alignment: Alignment.centerLeft,
-            child: Padding(
-              padding: const EdgeInsets.all(10),
-              child: Text(
-                cuisines![selectedIdx].title,
-                style:
-                    const TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
-              ),
-            ),
-          ),
-        ),
+        // SliverToBoxAdapter(
+        //   child: Column(
+        //     children: [
+        //       SizedBox(
+        //         height: 20,
+        //       ),
+        //       Container(
+        //           height: 1,
+        //           width: double.infinity,
+        //           color: Theme.of(context).textTheme.bodyText1!.color!,),
+        //       Align(
+        //         alignment: Alignment.centerLeft,
+        //         child: Padding(
+        //           padding: const EdgeInsets.all(10),
+        //           child: Text(
+        //             cuisines![selectedIdx].title,
+        //             style: const TextStyle(
+        //                 fontSize: 24, fontWeight: FontWeight.bold),
+        //           ),
+        //         ),
+        //       ),
+        //       Container(
+        //           height: 1,
+        //           width: double.infinity,
+        //           color: Theme.of(context).textTheme.bodyText1!.color!,),
+        //       SizedBox(
+        //         height: 20,
+        //       ),
+        //     ],
+        //   ),
+        // ),
+
         SliverList(
           delegate: SliverChildBuilderDelegate(
             (context, index) {

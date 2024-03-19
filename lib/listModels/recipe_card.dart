@@ -29,105 +29,91 @@ class _RecipeCardState extends State<RecipeCard> {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      margin: const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start, // Align children to the start of the cross axis
-        children: [
-          Padding(
-            padding: const EdgeInsets.only(bottom: 5),
-            child: ListTile(
-              leading: CircleAvatar(
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Stack(
+          children: [
+            Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: ClipRRect(
+                borderRadius: BorderRadius.circular(10),
+                child: Image.network(
+                  widget.thumbnailUrl,
+                  width: MediaQuery.of(context).size.width,
+                  height: 300,
+                  fit: BoxFit.cover,
+                ),
+              ),
+            ),
+            Positioned(
+              top: 20, // Adjust as needed
+              right: 20, // Adjust as needed
+              child: CircleAvatar(
                 backgroundImage: NetworkImage(widget.avatarUrl),
               ),
-              title: Text(
-                widget.userName,
-                style: const TextStyle(fontSize: 18),
+            ),
+            Positioned(
+              bottom: 5,
+              left: 0,
+              right: 0,
+              child: Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    _buildInfoContainer(Icons.star, widget.rating),
+                    _buildInfoContainer(Icons.schedule, widget.cookTime),
+                  ],
+                ),
               ),
             ),
-          ),
-          Container(
-            width: MediaQuery.of(context).size.width,
-            height: 300,
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(10),
-            ),
-            child: Stack(
-              children: [
-                Positioned.fill(
-                  child: ClipRRect(
-                    borderRadius: BorderRadius.circular(10),
-                    child: Image.network(
-                      widget.thumbnailUrl,
-                      fit: BoxFit.cover,
-                    ),
-                  ),
-                ),
-                Positioned(
-                  bottom: 0,
-                  left: 0,
-                  right: 0,
-                  child: Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        _buildInfoContainer(Icons.star, widget.rating),
-                        _buildInfoContainer(Icons.schedule, widget.cookTime),
-                      ],
-                    ),
-                  ),
-                ),
-              ],
-            ),
-          ),
-          Padding(
-            padding: const EdgeInsets.fromLTRB(8, 8, 8, 0),
-            child: Text(
+          ],
+        ),
+        Padding(
+          padding: const EdgeInsets.fromLTRB(8, 8, 8, 0),
+          child:
+              Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
+            Text(
               widget.title,
               maxLines: 1,
               style: const TextStyle(
                 fontSize: 18,
               ),
             ),
-          ),
-          Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                const Expanded(
-                  child: Text(
-                    'Quick Description',
-                    overflow: TextOverflow.ellipsis,
-                    style: TextStyle(
-                      // Add your styling here
-                    ),
-                  ),
-                ),
-                IconButton(
-                  icon: Icon(
-                    isLiked ? Icons.favorite : Icons.favorite_border,
-                    color: isLiked ? Colors.deepPurple : Theme.of(context).iconTheme.color,
-                  ),
-                  onPressed: () {
-                    setState(() {
-                      isLiked = !isLiked;
-                    });
-                  },
-                ),
-              ],
+            IconButton(
+              icon: Icon(
+                isLiked ? Icons.favorite : Icons.favorite_border,
+                color: isLiked
+                    ? Colors.deepPurple
+                    : Theme.of(context).iconTheme.color,
+              ),
+              onPressed: () {
+                setState(() {
+                  isLiked = !isLiked;
+                });
+              },
+            ),
+          ]),
+        ),
+        
+        Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: Expanded(
+            child: Text(
+              'Quick Description',
+              overflow: TextOverflow.ellipsis,
             ),
           ),
-        ],
-      ),
+        ),
+      ],
     );
   }
 
   Widget _buildInfoContainer(IconData icon, String text) {
     return Container(
       padding: const EdgeInsets.all(5),
-      margin: const EdgeInsets.only(right: 10),
+      margin: const EdgeInsets.only(right: 10, left: 10),
       decoration: BoxDecoration(
         color: Colors.black.withOpacity(0.4),
         borderRadius: BorderRadius.circular(15),

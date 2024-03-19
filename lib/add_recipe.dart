@@ -16,8 +16,39 @@ class _RecipeAddState extends State<RecipeAdd> {
   final _titleController = TextEditingController();
   final _descriptionController = TextEditingController();
   final _ingredientController = TextEditingController();
+  final int _maxWords = 20;
+  int _wordCount = 0;
+  String _descriptionText = '';
   final List<String> _ingredients = [];
   final List<TextEditingController> _stepControllers = [];
+
+  @override
+  void initState() {
+    super.initState();
+    _descriptionController.addListener(_onTextChanged);
+  }
+
+  void _onTextChanged() {
+    final text = _descriptionController.text;
+    final words = text
+        .split(RegExp(r'\s+'))
+        .where((element) => element.isNotEmpty)
+        .toList();
+
+    if (words.length > _maxWords) {
+      // Truncate the words to the max limit and update the text
+      final truncated = words.sublist(0, _maxWords).join(' ');
+      _descriptionController.value = TextEditingValue(
+        text: truncated,
+        selection: TextSelection.collapsed(offset: truncated.length),
+      );
+    }
+
+    setState(() {
+      _descriptionText = _descriptionController.text;
+      _wordCount = words.length > _maxWords ? _maxWords : words.length;
+    });
+  }
 
   void _addRecipe(BuildContext ctx) {
     final usrPr = Provider.of<UserProvider>(ctx, listen: false);
@@ -57,6 +88,7 @@ class _RecipeAddState extends State<RecipeAdd> {
   @override
   void dispose() {
     _titleController.dispose();
+    _descriptionController.removeListener(_onTextChanged);
     _descriptionController.dispose();
     _ingredientController.dispose();
     for (var controller in _stepControllers) {
@@ -105,25 +137,42 @@ class _RecipeAddState extends State<RecipeAdd> {
             ),
 
             Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 8),
-              child: TextField(
-                  controller: _titleController,
-                  decoration: InputDecoration(
-                    hintText: 'Title',
-                    border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(10)),
-                  )),
-            ),
+                padding: const EdgeInsets.fromLTRB(8, 16, 8, 8),
+                child: Container(
+                  height: 60,
+                  decoration: BoxDecoration(
+                      color: Colors.grey[200],
+                      borderRadius: BorderRadius.circular(12)),
+                  child: Padding(
+                    padding: const EdgeInsets.all(16),
+                    child: TextField(
+                        controller: _titleController,
+                        decoration: InputDecoration(
+                          hintText: 'Title',
+                          border: InputBorder.none,
+                        )),
+                  ),
+                )),
             Padding(
-              padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 8),
-              child: TextField(
-                  controller: _descriptionController,
-                  decoration: InputDecoration(
-                    hintText: 'Quick Description',
-                    border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(10)),
-                  )),
-            ),
+                padding: const EdgeInsets.fromLTRB(8, 8, 8, 8),
+                child: Container(
+                  decoration: BoxDecoration(
+                      color: Colors.grey[200],
+                      borderRadius: BorderRadius.circular(12)),
+                  child: Padding(
+                    padding: const EdgeInsets.all(16),
+                    child: TextField(
+                      controller: _descriptionController,
+                      maxLines: null,
+                      decoration: InputDecoration(
+                        border: InputBorder.none,
+                        hintText: 'Quick Description',
+                        suffixText: '$_wordCount/$_maxWords',
+                      ),
+                      keyboardType: TextInputType.multiline,
+                    ),
+                  ),
+                )),
             const Padding(
                 padding: EdgeInsets.symmetric(vertical: 10, horizontal: 8),
                 child: Align(
@@ -137,22 +186,33 @@ class _RecipeAddState extends State<RecipeAdd> {
               child: Row(
                 children: [
                   Expanded(
-                    child: TextField(
-                      controller: _ingredientController,
-                      decoration: InputDecoration(
-                        hintText: 'Ingredient',
-                        border: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(10)),
-                        contentPadding: const EdgeInsets.symmetric(
-                            vertical: 10, horizontal: 8),
+                      child: Padding(
+                    padding: const EdgeInsets.fromLTRB(0, 16, 8, 8),
+                    child: Container(
+                      height: 60,
+                      decoration: BoxDecoration(
+                          color: Colors.grey[200],
+                          borderRadius: BorderRadius.circular(12)),
+                      child: Padding(
+                        padding: const EdgeInsets.all(16),
+                        child: TextField(
+                          controller: _ingredientController,
+                          decoration: InputDecoration(
+                            hintText: 'Ingredient',
+                            border: InputBorder.none,
+                          ),
+                        ),
                       ),
                     ),
-                  ),
+                  )),
                   Padding(
                     padding: const EdgeInsets.only(left: 8.0),
                     child: ElevatedButton(
                       onPressed: _addIngredient,
                       style: ElevatedButton.styleFrom(
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(10),
+                        ),
                         padding: const EdgeInsets.symmetric(
                             vertical: 15, horizontal: 20),
                       ),
@@ -198,6 +258,11 @@ class _RecipeAddState extends State<RecipeAdd> {
                     alignment: Alignment.centerRight,
                     child: ElevatedButton(
                       onPressed: _addStep,
+                      style: ElevatedButton.styleFrom(
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(10),
+                        ),
+                      ),
                       child: const Text('Add Step'),
                     ),
                   ),
@@ -245,6 +310,11 @@ class _RecipeAddState extends State<RecipeAdd> {
           height: 50,
           child: ElevatedButton(
             onPressed: () => _addRecipe(context),
+            style: ElevatedButton.styleFrom(
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(10),
+              ),
+            ),
             child: const Text('Submit'),
           ),
         ),

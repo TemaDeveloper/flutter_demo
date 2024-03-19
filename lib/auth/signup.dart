@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
-import 'package:flutter_application_1/onboding/bording_screen.dart';
-import 'package:flutter_application_1/main.dart';
+import 'package:flutter_application_1/auth/varification.dart';
+
 
 class SignUpPage extends StatefulWidget {
   const SignUpPage({super.key});
@@ -42,7 +42,6 @@ class _SignUpPageState extends State<SignUpPage> {
                   icon: const Icon(
                     Icons.arrow_back_ios_new_rounded,
                     size: 24.0,
-                    color: Colors.black,
                   ),
                   onPressed: () {
                     Navigator.of(context).pop();
@@ -131,6 +130,12 @@ class _SignUpPageState extends State<SignUpPage> {
                       width: double.infinity,
                       height: 50,
                       child: ElevatedButton(
+                        style: ElevatedButton.styleFrom(
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(
+                                  10), 
+                            ),
+                          ),
                         child: const Text(
                           'Signup',
                           style: TextStyle(
@@ -142,7 +147,7 @@ class _SignUpPageState extends State<SignUpPage> {
                           Navigator.push(
                             context,
                             CupertinoPageRoute(
-                              builder: (context) => const HomePage(),
+                              builder: (context) => VerifyEmailScreen(),
                             ),
                           );
                         },

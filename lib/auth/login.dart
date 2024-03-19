@@ -44,7 +44,9 @@ class _LoginState extends State<LoginPage> {
     });
 
     final usrProvider = context.read<UserProvider>();
-    usrProvider.loginEmailPass(emailController.text, passController.text).then((resp) {
+    usrProvider
+        .loginEmailPass(emailController.text, passController.text)
+        .then((resp) {
       setState(() {
         switch (resp) {
           case AuthResponse.sucsess:
@@ -168,11 +170,17 @@ class _LoginState extends State<LoginPage> {
                     alignment: Alignment.bottomCenter,
                     child: Padding(
                       padding: const EdgeInsets.symmetric(horizontal: 20),
-                      child: SizedBox(
-                        width: double.infinity,
+                      child: Container(
                         height: 50,
+                        width: double.infinity,
                         child: ElevatedButton(
                           onPressed: () => tryLoginEmailPass(context),
+                          style: ElevatedButton.styleFrom(
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(
+                                  10), 
+                            ),
+                          ),
                           child: const Text(
                             'Login',
                             style: TextStyle(

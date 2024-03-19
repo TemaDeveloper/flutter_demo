@@ -50,6 +50,11 @@ class ProfileScreen extends StatelessWidget {
                     Navigator.push(context,
                         CupertinoPageRoute(builder: (context) => RecipeAdd()));
                   },
+                  style: ElevatedButton.styleFrom(
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(10),
+                    ),
+                  ),
                   child: const Text(
                     'Add Your Recipe',
                     style: TextStyle(

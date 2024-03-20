@@ -28,7 +28,7 @@ class _VerifyEmailScreenState extends State<VerifyEmailScreen> {
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
               const Text(
-                'Verify\nYour Email',
+                'Verification',
                 style: TextStyle(fontSize: 50, fontWeight: FontWeight.bold),
                 textAlign: TextAlign.center,
               ),
@@ -75,8 +75,13 @@ class _VerifyEmailScreenState extends State<VerifyEmailScreen> {
                   ),
                 ),
               ),
-              SizedBox(
-                height: 20,
+              
+              const Padding(
+                padding: const EdgeInsets.fromLTRB(8, 16, 8, 8),
+                child: Text(
+                  'Didn\'t recive code?',
+                  textAlign: TextAlign.center,
+                ),
               ),
               TextButton(
                 onPressed: () {

@@ -8,6 +8,8 @@ import 'package:flutter_application_1/listModels/spoonacular_recipe.api.dart';
 import 'package:flutter_application_1/listModels/spoonacular_recipe.dart';
 import 'package:flutter_application_1/recipe_detail.dart';
 import 'package:provider/provider.dart';
+import 'package:flutter_application_1/constants/constants.dart';
+import 'dart:math';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -21,21 +23,13 @@ class _HomeScreenState extends State<HomeScreen> {
   List<CuisineCard>? cuisines;
   int selectedIdx = 0;
   bool _isLoading = true;
+  List<String> advices = Constants().advices;
 
   @override
   void initState() {
     super.initState();
     getRecipes('Italian');
-
-    // TOOD: Am I missing something here?
-    // late CuisineCard italianCard,
-    //     americanCard,
-    //     europeanCard,
-    //     japaneseCard,
-    //     chineseCard,
-    //     indianCard,
-    //     frenchCard;
-
+  
     cuisines = [
       const CuisineCard(
           title: 'Italian', image: 'assets/images/img_italian.JPG'),
@@ -47,10 +41,22 @@ class _HomeScreenState extends State<HomeScreen> {
           title: 'Japanese', image: 'assets/images/img_japanese.JPG'),
       const CuisineCard(
           title: 'Chinese', image: 'assets/images/img_chinese.JPG'),
-      const CuisineCard(title: 'Indian', image: 'assets/images/img_indian.JPG'),
-      const CuisineCard(title: 'French', image: 'assets/images/img_french.JPG')
+      const CuisineCard(
+          title: 'Indian', image: 'assets/images/img_indian.JPG'),
+      const CuisineCard(
+          title: 'French', image: 'assets/images/img_french.JPG')
     ];
   }
+
+  String getRandomAdvice() {
+  var random = Random();
+  if (advices.isNotEmpty) {
+    int index = random.nextInt(advices.length);
+    return advices[index];
+  } else {
+    return 'No advice available';
+  }
+}
 
   Future<void> getRecipes(String cuisine) async {
     _listRecipes = await SpoonacularRecipeApi.getRecipeSpoon(cuisine);
@@ -166,37 +172,41 @@ class _HomeScreenState extends State<HomeScreen> {
           ),
         ),
         // Sliver for recipe list
-        // SliverToBoxAdapter(
-        //   child: Column(
-        //     children: [
-        //       SizedBox(
-        //         height: 20,
-        //       ),
-        //       Container(
-        //           height: 1,
-        //           width: double.infinity,
-        //           color: Theme.of(context).textTheme.bodyText1!.color!,),
-        //       Align(
-        //         alignment: Alignment.centerLeft,
-        //         child: Padding(
-        //           padding: const EdgeInsets.all(10),
-        //           child: Text(
-        //             cuisines![selectedIdx].title,
-        //             style: const TextStyle(
-        //                 fontSize: 24, fontWeight: FontWeight.bold),
-        //           ),
-        //         ),
-        //       ),
-        //       Container(
-        //           height: 1,
-        //           width: double.infinity,
-        //           color: Theme.of(context).textTheme.bodyText1!.color!,),
-        //       SizedBox(
-        //         height: 20,
-        //       ),
-        //     ],
-        //   ),
-        // ),
+        SliverToBoxAdapter(
+          child: Column(
+            children: [
+              Padding(
+                padding: const EdgeInsets.symmetric(vertical: 16),
+                child: Container(
+                  color: Colors.deepPurple[200],
+                  width: double.infinity,
+                  child:  Column(
+                    children: [
+                      Padding(
+                        padding: EdgeInsets.all(8.0),
+                        child: Image.asset('assets/images/ic_chef.png', width: 60, height: 60,),
+                      ),
+                      Padding(
+                        padding: EdgeInsets.fromLTRB(8, 0, 8, 8),
+                        child: Text(
+                          getRandomAdvice(),
+                          textAlign: TextAlign.center,
+                        ),
+                      )
+                    ],
+                  ),
+                ),
+              ),
+              const Align(
+                alignment: Alignment.bottomRight,
+                child: Padding(
+                  padding: EdgeInsets.fromLTRB(8, 0, 8, 8),
+                  child: Text('With Love CookeryDays', style: TextStyle(color: Colors.deepPurple),),
+                ),
+              )
+            ],
+          ),
+        ),
 
         SliverList(
           delegate: SliverChildBuilderDelegate(

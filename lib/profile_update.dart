@@ -3,6 +3,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_application_1/auth/backend_proxy.dart';
 import 'package:flutter_application_1/avatar.dart';
+import 'package:flutter_application_1/themes/theme_provider.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:provider/provider.dart';
 
@@ -95,6 +96,12 @@ class _UpdateProfileState extends State<UpdateProfile> {
 
     return Scaffold(
       appBar: AppBar(
+        iconTheme: IconThemeData(
+          color: Provider.of<ThemeProvider>(context, listen: false)
+                                  .themeData
+                                  .colorScheme
+                                  .onBackground, // Set the color of the AppBar icons
+        ),
         title: const Text('Update Profile'),
       ),
       body: SingleChildScrollView(
@@ -105,14 +112,16 @@ class _UpdateProfileState extends State<UpdateProfile> {
             const AvatarWidget(),
             const SizedBox(height: 20),
             TextButton(
-              onPressed: () => _handleImageSelection(context)
-                  .then((file) { 
-                    final usrProvider = Provider.of<UserProvider>(context, listen: false);
-                    usrProvider.setAll(avatar: file);
-                    setState(() => _image = file);
-                  })
-                  .catchError((e) => print("Image selection Error: $e")),
-              child: const Text('Change Profile Avatar'),
+              onPressed: () => _handleImageSelection(context).then((file) {
+                final usrProvider =
+                    Provider.of<UserProvider>(context, listen: false);
+                usrProvider.setAll(avatar: file);
+                setState(() => _image = file);
+              }).catchError((e) => print("Image selection Error: $e")),
+              child: Text('Change Profile Avatar', style: TextStyle(color: Provider.of<ThemeProvider>(context)
+                          .themeData
+                          .colorScheme
+                          .onBackground,)),
             ),
             Column(
               children: [
@@ -123,11 +132,26 @@ class _UpdateProfileState extends State<UpdateProfile> {
             Padding(
               padding: const EdgeInsets.all(10),
               child: SizedBox(
-                width: double.infinity,
                 height: 50,
+                width: double.infinity,
                 child: ElevatedButton(
                   onPressed: () => updateCb(context),
-                  child: const Text('Update Profile'),
+                  style: ElevatedButton.styleFrom(
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(10),
+                    ),
+                  ),
+                  child: Text(
+                    'Update Profile',
+                    style: TextStyle(
+                      fontSize: 16,
+                      color: Provider.of<ThemeProvider>(context, listen: false)
+                          .themeData
+                          .colorScheme
+                          .onPrimary,
+                      fontWeight: FontWeight.normal,
+                    ),
+                  ),
                 ),
               ),
             ),

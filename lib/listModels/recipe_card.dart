@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_application_1/themes/theme_provider.dart';
+import 'package:provider/provider.dart';
 
 class RecipeCard extends StatefulWidget {
   final String recipeId;
@@ -71,33 +73,44 @@ class _RecipeCardState extends State<RecipeCard> {
           ],
         ),
         Padding(
-          padding: const EdgeInsets.fromLTRB(8, 8, 8, 0),
-          child:
-              Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
-            Text(
-              widget.title,
-              maxLines: 1,
-              style: const TextStyle(
-                fontSize: 18,
-              ),
-            ),
-            IconButton(
-              icon: Icon(
-                isLiked ? Icons.favorite : Icons.favorite_border,
-                color: isLiked
-                    ? Colors.deepPurple
-                    : Theme.of(context).iconTheme.color,
-              ),
-              onPressed: () {
-                setState(() {
-                  isLiked = !isLiked;
-                });
-              },
-            ),
-          ]),
+  padding: const EdgeInsets.fromLTRB(8, 8, 8, 0),
+  child: Row(
+    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+    children: [
+      Expanded( // Wrap the Text widget with Expanded
+        child: Text(
+          widget.title,
+          maxLines: 1,
+          overflow: TextOverflow.ellipsis, // Add this to handle text overflow
+          style: const TextStyle(
+            fontSize: 18,
+          ),
         ),
-        
-        Padding(
+      ),
+      IconButton(
+        icon: Icon(
+          isLiked ? Icons.favorite : Icons.favorite_border,
+          color: isLiked
+              ? Provider.of<ThemeProvider>(context, listen: false)
+                          .themeData
+                          .colorScheme
+                          .onPrimary
+              : Provider.of<ThemeProvider>(context)
+                  .themeData
+                  .colorScheme
+                  .onBackground,
+        ),
+        onPressed: () {
+          setState(() {
+            isLiked = !isLiked;
+          });
+        },
+      ),
+    ],
+  ),
+),
+
+        const Padding(
           padding: const EdgeInsets.all(8.0),
           child: Expanded(
             child: Text(

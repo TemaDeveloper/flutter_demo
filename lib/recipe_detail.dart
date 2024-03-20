@@ -1,8 +1,11 @@
 import 'dart:ui';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_application_1/themes/theme_provider.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
+
+import 'package:provider/provider.dart';
 //import 'package:flutter_application_1/listModels/ingredient_card.dart';
 
 class RecipeDetailPage extends StatefulWidget {
@@ -49,8 +52,7 @@ class _RecipeDetailState extends State<RecipeDetailPage> {
       final response = await http.get(url);
       final jsonResponse = json.decode(response.body);
       final ingredientsList = jsonResponse['extendedIngredients'] as List;
-      final stepsList =
-          jsonResponse['analyzedInstructions'][0]['steps'] as List;
+      final stepsList = jsonResponse['analyzedInstructions'][0]['steps'] as List;
 
       setState(() {
         recipeSteps = stepsList
@@ -231,9 +233,13 @@ class _RecipeDetailState extends State<RecipeDetailPage> {
                   onPressed: () {
                     // Save recipe logic
                   },
-                  child: const Text(
+                  child: Text(
                     'Save Recipe',
-                    style: TextStyle(color: Colors.deepPurple),
+                    style: TextStyle(color: Provider.of<ThemeProvider>(context,
+                                    listen: false)
+                                .themeData
+                                .colorScheme
+                                .onPrimary,),
                   ),
                 ),
               ),

@@ -3,6 +3,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter_application_1/auth/backend_proxy.dart';
 import 'package:flutter_application_1/auth/signup.dart';
 import 'package:flutter_application_1/main.dart';
+import 'package:flutter_application_1/themes/theme_provider.dart';
 import 'package:provider/provider.dart';
 
 enum LoginStatus {
@@ -87,7 +88,6 @@ class _LoginState extends State<LoginPage> {
       );
     }
     return Scaffold(
-      backgroundColor: Colors.white,
       appBar: null,
       body: SafeArea(
         child: Column(
@@ -98,8 +98,14 @@ class _LoginState extends State<LoginPage> {
               child: Padding(
                 padding: const EdgeInsets.all(16),
                 child: IconButton(
-                  icon: const Icon(Icons.arrow_back_ios_new_rounded,
-                      size: 24.0, color: Colors.black),
+                  icon: Icon(
+                    Icons.arrow_back_ios_new_rounded,
+                    size: 24.0,
+                    color: Provider.of<ThemeProvider>(context)
+                        .themeData
+                        .colorScheme
+                        .onBackground,
+                  ),
                   onPressed: () {
                     Navigator.pop(context);
                   },
@@ -120,12 +126,22 @@ class _LoginState extends State<LoginPage> {
                     child: Container(
                       height: 60,
                       decoration: BoxDecoration(
-                          color: Colors.grey[200],
+                          color: Provider.of<ThemeProvider>(context)
+                              .themeData
+                              .colorScheme
+                              .onBackground,
                           borderRadius: BorderRadius.circular(12)),
                       child: Padding(
                         padding: const EdgeInsets.all(16),
                         child: TextField(
                           controller: emailController,
+                          style: TextStyle(
+                            color: Provider.of<ThemeProvider>(context,
+                                    listen: false)
+                                .themeData
+                                .colorScheme
+                                .primary,
+                          ),
                           decoration: const InputDecoration(
                             border: InputBorder.none,
                             hintText: 'Email',
@@ -139,13 +155,23 @@ class _LoginState extends State<LoginPage> {
                     child: Container(
                       height: 60,
                       decoration: BoxDecoration(
-                        color: Colors.grey[200],
+                        color: Provider.of<ThemeProvider>(context)
+                            .themeData
+                            .colorScheme
+                            .onBackground,
                         borderRadius: BorderRadius.circular(12),
                       ),
                       child: Padding(
                         padding: const EdgeInsets.all(16),
                         child: TextField(
                           controller: passController,
+                          style: TextStyle(
+                            color: Provider.of<ThemeProvider>(context,
+                                    listen: false)
+                                .themeData
+                                .colorScheme
+                                .primary,
+                          ),
                           decoration: InputDecoration(
                             border: InputBorder.none,
                             hintText: 'Password',
@@ -156,6 +182,11 @@ class _LoginState extends State<LoginPage> {
                                     ? Icons.visibility_rounded
                                     : Icons.visibility_off_rounded,
                                 size: 24,
+                                color: Provider.of<ThemeProvider>(context,
+                                        listen: false)
+                                    .themeData
+                                    .colorScheme
+                                    .primary,
                               ),
                             ),
                           ),
@@ -170,22 +201,25 @@ class _LoginState extends State<LoginPage> {
                     alignment: Alignment.bottomCenter,
                     child: Padding(
                       padding: const EdgeInsets.symmetric(horizontal: 20),
-                      child: Container(
+                      child: SizedBox(
                         height: 50,
                         width: double.infinity,
                         child: ElevatedButton(
                           onPressed: () => tryLoginEmailPass(context),
                           style: ElevatedButton.styleFrom(
                             shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(
-                                  10), 
+                              borderRadius: BorderRadius.circular(10),
                             ),
                           ),
-                          child: const Text(
+                          child: Text(
                             'Login',
                             style: TextStyle(
                               fontSize: 16,
-                              color: Colors.deepPurple,
+                              color: Provider.of<ThemeProvider>(context,
+                                      listen: false)
+                                  .themeData
+                                  .colorScheme
+                                  .onPrimary,
                               fontWeight: FontWeight.normal,
                             ),
                           ),
@@ -280,10 +314,14 @@ class _LoginState extends State<LoginPage> {
                               CupertinoPageRoute(
                                   builder: (context) => const SignUpPage()));
                         },
-                        child: const Text(
+                        child: Text(
                           'Sign up!',
                           style: TextStyle(
-                              color: Colors.deepPurple,
+                              color: Provider.of<ThemeProvider>(context,
+                                      listen: false)
+                                  .themeData
+                                  .colorScheme
+                                  .onPrimary,
                               fontWeight: FontWeight.normal),
                         ),
                       ),
@@ -293,27 +331,6 @@ class _LoginState extends State<LoginPage> {
               ),
             ),
           ],
-        ),
-      ),
-    );
-  }
-}
-
-class SecondRout extends StatelessWidget {
-  final String emailHolder;
-  const SecondRout({super.key, required this.emailHolder});
-  @override
-  Widget build(BuildContext context) {
-    return CupertinoPageScaffold(
-      navigationBar: CupertinoNavigationBar(
-        middle: Text('The Verification Came to you email, $emailHolder !'),
-      ),
-      child: Center(
-        child: CupertinoButton(
-          onPressed: () {
-            Navigator.pop(context);
-          },
-          child: const Text("Go Back!"),
         ),
       ),
     );

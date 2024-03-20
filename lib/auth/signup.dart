@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_application_1/auth/varification.dart';
+import 'package:flutter_application_1/themes/theme_provider.dart';
+import 'package:provider/provider.dart';
 
 
 class SignUpPage extends StatefulWidget {
@@ -28,7 +30,6 @@ class _SignUpPageState extends State<SignUpPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.white,
       appBar: null,
       body: SafeArea(
         child: Column(
@@ -57,70 +58,106 @@ class _SignUpPageState extends State<SignUpPage> {
                 ),
                 const Text('Create a new account to get a lot of recipes'),
                 Padding(
-                  padding: const EdgeInsets.all(20),
-                  child: Container(
-                    height: 60,
-                    decoration: BoxDecoration(
-                      color: Colors.grey[200],
-                      borderRadius: BorderRadius.circular(12),
-                    ),
-                    child: Padding(
-                      padding: const EdgeInsets.all(16),
-                      child: TextField(
-                        controller: myController,
-                        decoration: const InputDecoration(
-                            border: InputBorder.none, hintText: 'Email'),
-                      ),
-                    ),
-                  ),
-                ),
-                Padding(
-                  padding: const EdgeInsets.fromLTRB(20, 0, 20, 20),
-                  child: Container(
-                    height: 60,
-                    decoration: BoxDecoration(
-                      color: Colors.grey[200],
-                      borderRadius: BorderRadius.circular(12),
-                    ),
-                    child: const Padding(
-                      padding: EdgeInsets.all(16),
-                      child: TextField(
-                        decoration: InputDecoration(
-                            border: InputBorder.none, hintText: 'Name'),
-                      ),
-                    ),
-                  ),
-                ),
-                Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 20),
-                  child: Container(
-                    height: 60,
-                    decoration: BoxDecoration(
-                      color: Colors.grey[200],
-                      borderRadius: BorderRadius.circular(12),
-                    ),
-                    child: Padding(
-                      padding: const EdgeInsets.all(16),
-                      child: TextField(
-                        decoration: InputDecoration(
-                          border: InputBorder.none,
-                          hintText: 'Password',
-                          suffixIcon: GestureDetector(
-                            onTap: _changeObscure,
-                            child: Icon(
-                              _obscured
-                                  ? Icons.visibility_rounded
-                                  : Icons.visibility_off_rounded,
-                              size: 24,
-                            ),
+                    padding: const EdgeInsets.all(20),
+                    child: Container(
+                      height: 60,
+                      decoration: BoxDecoration(
+                          color: Provider.of<ThemeProvider>(context)
+                              .themeData
+                              .colorScheme
+                              .onBackground,
+                          borderRadius: BorderRadius.circular(12)),
+                      child: Padding(
+                        padding: const EdgeInsets.all(16),
+                        child: TextField(
+                          style: TextStyle(
+                            color: Provider.of<ThemeProvider>(context,
+                                    listen: false)
+                                .themeData
+                                .colorScheme
+                                .primary,
+                          ),
+                          decoration: const InputDecoration(
+                            border: InputBorder.none,
+                            hintText: 'Email',
                           ),
                         ),
-                        obscureText: _obscured,
-                        keyboardType: TextInputType.visiblePassword,
                       ),
                     ),
                   ),
-                ),
+                Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 20),
+                    child: Container(
+                      height: 60,
+                      decoration: BoxDecoration(
+                          color: Provider.of<ThemeProvider>(context)
+                              .themeData
+                              .colorScheme
+                              .onBackground,
+                          borderRadius: BorderRadius.circular(12)),
+                      child: Padding(
+                        padding: const EdgeInsets.all(16),
+                        child: TextField(
+                          style: TextStyle(
+                            color: Provider.of<ThemeProvider>(context,
+                                    listen: false)
+                                .themeData
+                                .colorScheme
+                                .primary,
+                          ),
+                          decoration: const InputDecoration(
+                            border: InputBorder.none,
+                            hintText: 'Name',
+                          ),
+                        ),
+                      ),
+                    ),
+                  ),
+                Padding(
+                    padding: const EdgeInsets.fromLTRB(20, 20, 20, 0),
+                    child: Container(
+                      height: 60,
+                      decoration: BoxDecoration(
+                        color: Provider.of<ThemeProvider>(context)
+                            .themeData
+                            .colorScheme
+                            .onBackground,
+                        borderRadius: BorderRadius.circular(12),
+                      ),
+                      child: Padding(
+                        padding: const EdgeInsets.all(16),
+                        child: TextField(
+                          style: TextStyle(
+                            color: Provider.of<ThemeProvider>(context,
+                                    listen: false)
+                                .themeData
+                                .colorScheme
+                                .primary,
+                          ),
+                          decoration: InputDecoration(
+                            border: InputBorder.none,
+                            hintText: 'Password',
+                            suffixIcon: GestureDetector(
+                              onTap: _changeObscure,
+                              child: Icon(
+                                _obscured
+                                    ? Icons.visibility_rounded
+                                    : Icons.visibility_off_rounded,
+                                size: 24,
+                                color: Provider.of<ThemeProvider>(context,
+                                        listen: false)
+                                    .themeData
+                                    .colorScheme
+                                    .primary,
+                              ),
+                            ),
+                          ),
+                          obscureText: _obscured,
+                          keyboardType: TextInputType.visiblePassword,
+                        ),
+                      ),
+                    ),
+                  ),
                 const SizedBox(height: 20),
                 Align(
                   alignment: Alignment.bottomCenter,
@@ -136,11 +173,15 @@ class _SignUpPageState extends State<SignUpPage> {
                                   10), 
                             ),
                           ),
-                        child: const Text(
+                        child: Text(
                           'Signup',
                           style: TextStyle(
                               fontSize: 16,
-                              color: Colors.deepPurple,
+                              color: Provider.of<ThemeProvider>(context,
+                                    listen: false)
+                                .themeData
+                                .colorScheme
+                                .onPrimary,
                               fontWeight: FontWeight.normal),
                         ),
                         onPressed: () {
@@ -240,9 +281,13 @@ class _SignUpPageState extends State<SignUpPage> {
                       onPressed: () {
                         Navigator.pop(context);
                       },
-                      child: const Text(
+                      child: Text(
                         'Log in!',
-                        style: TextStyle(color: Colors.deepPurple),
+                        style: TextStyle(color: Provider.of<ThemeProvider>(context,
+                                    listen: false)
+                                .themeData
+                                .colorScheme
+                                .onPrimary,),
                       ),
                     )
                   ],

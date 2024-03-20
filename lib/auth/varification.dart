@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_application_1/themes/theme_provider.dart';
 import 'package:pinput/pinput.dart';
+import 'package:provider/provider.dart';
 
 class VerifyEmailScreen extends StatefulWidget {
   @override
@@ -16,6 +18,11 @@ class _VerifyEmailScreenState extends State<VerifyEmailScreen> {
         leading: IconButton(
           icon: const Icon(Icons.arrow_back_ios_new_rounded),
           onPressed: () => Navigator.of(context).pop(),
+          color:Provider.of<ThemeProvider>(context,
+                                    listen: false)
+                                .themeData
+                                .colorScheme
+                                .onBackground,
         ),
         title: const Text(""),
         backgroundColor: Colors.transparent,
@@ -64,20 +71,23 @@ class _VerifyEmailScreenState extends State<VerifyEmailScreen> {
                         borderRadius: BorderRadius.circular(10),
                       ),
                     ),
-                    child: const Text(
+                    child: Text(
                       'Verify',
                       style: TextStyle(
                         fontSize: 16,
-                        color: Colors.deepPurple,
+                        color:
+                            Provider.of<ThemeProvider>(context, listen: false)
+                                .themeData
+                                .colorScheme
+                                .onPrimary,
                         fontWeight: FontWeight.normal,
                       ),
                     ),
                   ),
                 ),
               ),
-              
               const Padding(
-                padding: const EdgeInsets.fromLTRB(8, 16, 8, 8),
+                padding: EdgeInsets.fromLTRB(8, 16, 8, 8),
                 child: Text(
                   'Didn\'t recive code?',
                   textAlign: TextAlign.center,
@@ -87,7 +97,15 @@ class _VerifyEmailScreenState extends State<VerifyEmailScreen> {
                 onPressed: () {
                   // Logic to resend the code
                 },
-                child: Text('Resend code'),
+                child: Text(
+                  'Resend code',
+                  style: TextStyle(
+                    color: Provider.of<ThemeProvider>(context, listen: false)
+                        .themeData
+                        .colorScheme
+                        .onPrimary,
+                  ),
+                ),
               ),
             ],
           ),

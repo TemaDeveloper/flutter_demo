@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_application_1/auth/backend_proxy.dart';
+import 'package:flutter_application_1/themes/theme_provider.dart';
 import 'package:provider/provider.dart';
 
 class RecipeAdd extends StatefulWidget {
@@ -100,7 +101,15 @@ class _RecipeAddState extends State<RecipeAdd> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text("Addition Recipe")),
+      appBar: AppBar(
+        iconTheme: IconThemeData(
+          color: Provider.of<ThemeProvider>(context, listen: false)
+                                  .themeData
+                                  .colorScheme
+                                  .onBackground, // Set the color of the AppBar icons
+        ),
+        title: const Text("Addition Recipe"),
+      ),
       body: SingleChildScrollView(
         child: Column(
           children: [
@@ -117,11 +126,19 @@ class _RecipeAddState extends State<RecipeAdd> {
                     border: Border.all(color: Colors.grey),
                     borderRadius: BorderRadius.circular(10),
                   ),
-                  child: const Column(
+                  child: Column(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: <Widget>[
-                      Icon(Icons.camera_alt, size: 50),
-                      Text("Pick the Image for the recipe")
+                      Icon(
+                        Icons.camera_alt,
+                        size: 50,
+                        color:
+                            Provider.of<ThemeProvider>(context, listen: false)
+                                .themeData
+                                .colorScheme
+                                .onBackground,
+                      ),
+                      const Text("Pick the Image for the recipe")
                     ],
                   ),
                 ),
@@ -141,13 +158,23 @@ class _RecipeAddState extends State<RecipeAdd> {
                 child: Container(
                   height: 60,
                   decoration: BoxDecoration(
-                      color: Colors.grey[200],
+                      color: Provider.of<ThemeProvider>(context)
+                          .themeData
+                          .colorScheme
+                          .onBackground,
                       borderRadius: BorderRadius.circular(12)),
                   child: Padding(
                     padding: const EdgeInsets.all(16),
                     child: TextField(
                         controller: _titleController,
-                        decoration: InputDecoration(
+                        style: TextStyle(
+                          color:
+                              Provider.of<ThemeProvider>(context, listen: false)
+                                  .themeData
+                                  .colorScheme
+                                  .primary,
+                        ),
+                        decoration: const InputDecoration(
                           hintText: 'Title',
                           border: InputBorder.none,
                         )),
@@ -157,13 +184,23 @@ class _RecipeAddState extends State<RecipeAdd> {
                 padding: const EdgeInsets.fromLTRB(8, 8, 8, 8),
                 child: Container(
                   decoration: BoxDecoration(
-                      color: Colors.grey[200],
+                      color: Provider.of<ThemeProvider>(context)
+                          .themeData
+                          .colorScheme
+                          .onBackground,
                       borderRadius: BorderRadius.circular(12)),
                   child: Padding(
                     padding: const EdgeInsets.all(16),
                     child: TextField(
                       controller: _descriptionController,
                       maxLines: null,
+                      style: TextStyle(
+                        color:
+                            Provider.of<ThemeProvider>(context, listen: false)
+                                .themeData
+                                .colorScheme
+                                .primary,
+                      ),
                       decoration: InputDecoration(
                         border: InputBorder.none,
                         hintText: 'Quick Description',
@@ -191,13 +228,23 @@ class _RecipeAddState extends State<RecipeAdd> {
                     child: Container(
                       height: 60,
                       decoration: BoxDecoration(
-                          color: Colors.grey[200],
+                          color: Provider.of<ThemeProvider>(context)
+                              .themeData
+                              .colorScheme
+                              .onBackground,
                           borderRadius: BorderRadius.circular(12)),
                       child: Padding(
                         padding: const EdgeInsets.all(16),
                         child: TextField(
+                          style: TextStyle(
+                            color: Provider.of<ThemeProvider>(context,
+                                    listen: false)
+                                .themeData
+                                .colorScheme
+                                .primary,
+                          ),
                           controller: _ingredientController,
-                          decoration: InputDecoration(
+                          decoration: const InputDecoration(
                             hintText: 'Ingredient',
                             border: InputBorder.none,
                           ),
@@ -216,7 +263,14 @@ class _RecipeAddState extends State<RecipeAdd> {
                         padding: const EdgeInsets.symmetric(
                             vertical: 15, horizontal: 20),
                       ),
-                      child: const Icon(Icons.add),
+                      child: Icon(
+                        Icons.add,
+                        color:
+                            Provider.of<ThemeProvider>(context, listen: false)
+                                .themeData
+                                .colorScheme
+                                .onPrimary,
+                      ),
                     ),
                   ),
                 ],
@@ -233,6 +287,10 @@ class _RecipeAddState extends State<RecipeAdd> {
                   children: _ingredients
                       .map((ingredient) => Chip(
                             label: Text(ingredient),
+                            deleteIcon: Icon(
+                              Icons.delete,
+                              color: Provider.of<ThemeProvider>(context).themeData.colorScheme.onBackground,
+                            ),
                             onDeleted: () {
                               _deleteIngredient(ingredient);
                             },
@@ -263,7 +321,14 @@ class _RecipeAddState extends State<RecipeAdd> {
                           borderRadius: BorderRadius.circular(10),
                         ),
                       ),
-                      child: const Text('Add Step'),
+                      child: Text('Add Step',
+                          style: TextStyle(
+                            color: Provider.of<ThemeProvider>(context,
+                                    listen: false)
+                                .themeData
+                                .colorScheme
+                                .onPrimary,
+                          )),
                     ),
                   ),
                 ],
@@ -291,11 +356,18 @@ class _RecipeAddState extends State<RecipeAdd> {
                     ),
                     TextField(
                       controller: _stepControllers[i],
+                      
                       decoration: InputDecoration(
+                        hoverColor: Provider.of<ThemeProvider>(context,
+                                    listen: false)
+                                .themeData
+                                .colorScheme
+                                .onPrimary,
                         border: OutlineInputBorder(
+                          
                           borderRadius: BorderRadius.circular(10),
+                          
                         ),
-                        hintText: 'Enter Step ${i + 1} details',
                       ),
                     ),
                   ],
@@ -315,7 +387,13 @@ class _RecipeAddState extends State<RecipeAdd> {
                 borderRadius: BorderRadius.circular(10),
               ),
             ),
-            child: const Text('Submit'),
+            child: Text('Submit',
+                style: TextStyle(
+                  color: Provider.of<ThemeProvider>(context, listen: false)
+                      .themeData
+                      .colorScheme
+                      .onPrimary,
+                )),
           ),
         ),
       ),

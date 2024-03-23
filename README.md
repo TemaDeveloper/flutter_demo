@@ -4,4 +4,3 @@
  * SignUp(I don't believe my self)
  * GoogleAuth
  * Email Verification(and email resetting)
- * Tema's bullshit

@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_application_1/add_recipe.dart';
 import 'package:flutter_application_1/auth/backend_proxy.dart';
 import 'package:flutter_application_1/avatar.dart';
 import 'package:flutter_application_1/listModels/my_card.dart';
@@ -47,11 +48,8 @@ class ProfileScreen extends StatelessWidget {
                 height: 50,
                 child: ElevatedButton(
                   onPressed: () {
-                    // Navigator.push(context,
-                    //     CupertinoPageRoute(builder: (context) => const RecipeAdd()));
-                    pb.send("/api/query-created-recipies").then((value) {
-                      print(value);
-                    });
+                    Navigator.push(context,
+                        CupertinoPageRoute(builder: (context) => const RecipeAdd()));
                   },
                   style: ElevatedButton.styleFrom(
                     shape: RoundedRectangleBorder(

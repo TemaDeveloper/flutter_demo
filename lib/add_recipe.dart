@@ -16,9 +16,11 @@ class _RecipeAddState extends State<RecipeAdd> {
   final _titleController = TextEditingController();
   final _descriptionController = TextEditingController();
   final _ingredientController = TextEditingController();
+
   final int _maxWords = 20;
   int _wordCount = 0;
   String _descriptionText = '';
+
   final List<String> _ingredients = [];
   final List<TextEditingController> _stepControllers = [];
 
@@ -52,9 +54,13 @@ class _RecipeAddState extends State<RecipeAdd> {
 
   void _addRecipe(BuildContext ctx) {
     final usrPr = Provider.of<UserProvider>(ctx, listen: false);
+
+
     usrPr.addRecipie(
       title: _titleController.text,
       description: _descriptionController.text,
+      ingredients: _ingredients.map( (ing) => IngredientInfo(name: ing) ).toList(),
+      steps: _stepControllers.map( (step) => CookingStepInfo(text: step.text) ).toList()
     );
   }
 
@@ -147,7 +153,7 @@ class _RecipeAddState extends State<RecipeAdd> {
                     padding: const EdgeInsets.all(16),
                     child: TextField(
                         controller: _titleController,
-                        decoration: InputDecoration(
+                        decoration: const InputDecoration(
                           hintText: 'Title',
                           border: InputBorder.none,
                         )),
@@ -197,7 +203,7 @@ class _RecipeAddState extends State<RecipeAdd> {
                         padding: const EdgeInsets.all(16),
                         child: TextField(
                           controller: _ingredientController,
-                          decoration: InputDecoration(
+                          decoration: const InputDecoration(
                             hintText: 'Ingredient',
                             border: InputBorder.none,
                           ),

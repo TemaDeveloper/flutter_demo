@@ -112,6 +112,94 @@ func queryCreated(c echo.Context) error {
 	})
 }
 
+type CreateRecipieIngridient struct {
+	Name string `json:"name,omitempty"`
+}
+
+type CreateRecipieStep struct {
+	Text string `json:"text,omitempty"`
+}
+
+type CreateRecipieRequestBody struct {
+	Title       string                    `json:"title,omitempty"`
+	Description string                    `json:"description,omitempty"`
+	Ingridients []CreateRecipieIngridient `json:"ingridients,omitempty"`
+	Steps       []CreateRecipieStep       `json:"steps,omitempty"`
+}
+
+type CreateRecipieResponse struct {
+	Sucsess bool   `json:"sucsess,omitempty"`
+	ErrMsg  string `json:"err_msg,omitempty"`
+}
+
+func createRecipie(c echo.Context) error {
+	logger := app.Logger()
+	auth, sucsess := c.Get(apis.ContextAuthRecordKey).(*models.Record)
+	if !sucsess {
+		return c.JSON(404, queryCreatedResponse{
+			Successful: false,
+			ErrMsg:     "Can't get cast to model, error",
+		})
+	}
+
+	var reqBody CreateRecipieRequestBody
+	err := c.Bind(&reqBody)
+	if err != nil {
+		return c.JSON(402, queryCreatedResponse{
+			Successful: false,
+			ErrMsg:     fmt.Sprintf("Unable to parse request body, error: %s", err.Error()),
+		})
+	}
+
+	recipiesRecord, _ := app.Dao().FindCollectionByNameOrId("recipies")
+	recipie := models.NewRecord(recipiesRecord)
+	recipie.Load(map[string]any{
+		"title":       reqBody.Title,
+		"description": reqBody.Description,
+		"creator":     auth.Id,
+	})
+
+	daoWOHooks := app.Dao().WithoutHooks()
+	daoWOHooks.Save(recipie)
+
+	ingridientsRecord, _ := app.Dao().FindCollectionByNameOrId("ingridients")
+	ingridientsIds := MyMap(reqBody.Ingridients, func(ing *CreateRecipieIngridient) string {
+		ingridient := models.NewRecord(ingridientsRecord)
+		ingridient.Load(map[string]any{
+			"name":    ing.Name,
+			"recipie": recipie.Id,
+		})
+		daoWOHooks.Save(ingridient)
+
+		return ingridient.Id
+	})
+	recipie.Set("ingridients", ingridientsIds)
+
+	cookingStepsRecord, _ := app.Dao().FindCollectionByNameOrId("cookingsteps")
+	cookingStepsIds := MyMap(reqBody.Steps, func(step *CreateRecipieStep) string {
+		s := models.NewRecord(cookingStepsRecord)
+		s.Load(map[string]any{
+			"text":    step.Text,
+			"recipie": recipie.Id,
+		})
+		daoWOHooks.Save(s)
+
+		return s.Id
+	})
+	recipie.Set("steps", cookingStepsIds)
+	daoWOHooks.Save(recipie)
+
+	logger.Info("Triggering create hooks")
+	dao := app.Dao()
+	dao.AfterCreateFunc(dao, recipiesRecord)
+	dao.AfterCreateFunc(dao, ingridientsRecord)
+	dao.AfterCreateFunc(dao, cookingStepsRecord)
+
+	return c.JSON(200, CreateRecipieResponse{
+		Sucsess: true,
+	})
+}
+
 var app *pocketbase.PocketBase
 
 // TODO: better logging
@@ -139,6 +227,22 @@ func main() {
 			},
 		})
 
+		e.Router.AddRoute(echo.Route{
+			Method:  http.MethodPost,
+			Path:    "/api/create-recipie",
+			Handler: createRecipie,
+			Middlewares: []echo.MiddlewareFunc{
+				apis.ActivityLogger(app),
+				apis.RequireRecordAuth("users"),
+			},
+		})
+
+		return nil
+	})
+
+	app.OnModelAfterCreate().Add(func(e *core.ModelEvent) error {
+		// is ok since models.BaseModel is first in the struct models.Collection
+		fmt.Println("Create on tags: ", e.Model.(*models.Collection).Name)
 		return nil
 	})
 

@@ -1,9 +1,9 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_application_1/add_recipe.dart';
 import 'package:flutter_application_1/auth/backend_proxy.dart';
 import 'package:flutter_application_1/avatar.dart';
 import 'package:flutter_application_1/listModels/my_card.dart';
+import 'package:flutter_application_1/main.dart';
 import 'package:flutter_application_1/recipe/provider.dart';
 import 'package:flutter_application_1/recipe_detail.dart';
 import 'package:provider/provider.dart';
@@ -47,8 +47,11 @@ class ProfileScreen extends StatelessWidget {
                 height: 50,
                 child: ElevatedButton(
                   onPressed: () {
-                    Navigator.push(context,
-                        CupertinoPageRoute(builder: (context) => RecipeAdd()));
+                    // Navigator.push(context,
+                    //     CupertinoPageRoute(builder: (context) => const RecipeAdd()));
+                    pb.send("/api/query-created-recipies").then((value) {
+                      print(value);
+                    });
                   },
                   style: ElevatedButton.styleFrom(
                     shape: RoundedRectangleBorder(
@@ -88,18 +91,21 @@ class ProfileScreen extends StatelessWidget {
                         itemBuilder: (context, index) {
                           final r = recipeProvider.recipes[index];
                           return GestureDetector(
-                              onTap: () {
-                                Navigator.push(
-                                    context,
-                                    CupertinoPageRoute(
-                                        builder: (context) => RecipeDetailPage(
-                                            recipeId: r.id,
-                                            imageUrl: r.previewImgUrl,
-                                            title: r.title,
-                                            cookTime: r.cookTime)));
-                              },
-                              child: MyCard(
-                                  title: r.title, image: r.previewImgUrl));
+                            onTap: () {
+                              Navigator.push(
+                                context,
+                                CupertinoPageRoute(
+                                  builder: (context) => RecipeDetailPage(
+                                      recipeId: r.id,
+                                      imageUrl: r.previewImgUrl,
+                                      title: r.title,
+                                      cookTime: r.cookTime),
+                                ),
+                              );
+                            },
+                            child:
+                                MyCard(title: r.title, image: r.previewImgUrl),
+                          );
                         },
                       ),
                     ),

@@ -97,7 +97,8 @@ class _MyHomePageState extends State<HomePage> {
       bottomNavigationBar: BottomNavBar(
         currentIndex: _currentIndex,
         onTap: (i) => setState(() {
-          if ((i == Screens.profile.index || i == Screens.likes.index) && usrProvider.isAnon) {
+          if ((i == Screens.profile.index || i == Screens.likes.index) &&
+              usrProvider.isAnon) {
             final err = ErrorPopup(
               text: "You must be logged in to view your profile",
               duration: Durations.extralong4,

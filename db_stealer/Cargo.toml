@@ -1,0 +1,20 @@
+[package]
+name = "db_stealer"
+version = "0.1.0"
+edition = "2021"
+
+# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+
+[dependencies]
+reqwest = "0.12.2"
+serde = {version = "1.0.197", features=["derive"]}
+serde_json = "1.0.114"
+tokio = {version = "1.36.0", features=["full"]}
+anyhow = "1.0.81"
+thiserror = "1.0.58"
+lazy_static = "1.4.0"
+log = "0.4.21"
+env_logger = "0.11.3"
+futures = "0.3.30"
+dotenv = "0.15.0"
+tail = "0.3.0"

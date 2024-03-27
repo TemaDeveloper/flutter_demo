@@ -2,11 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:catppuccin_flutter/catppuccin_flutter.dart';
 
 class ThemeProvider with ChangeNotifier {
-  ThemeData _themeData;
-  Flavor currentFlavor;
-
   ThemeProvider(this.currentFlavor)
       : _themeData = catppuccinTheme(currentFlavor);
+
+  Flavor currentFlavor;
+
+  ThemeData _themeData;
 
   ThemeData get themeData => _themeData;
 

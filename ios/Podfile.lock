@@ -1,0 +1,40 @@
+PODS:
+  - Flutter (1.0.0)
+  - image_picker_ios (0.0.1):
+    - Flutter
+  - rive_common (0.0.1):
+    - Flutter
+  - smart_auth (0.0.1):
+    - Flutter
+  - url_launcher_ios (0.0.1):
+    - Flutter
+
+DEPENDENCIES:
+  - Flutter (from `Flutter`)
+  - image_picker_ios (from `.symlinks/plugins/image_picker_ios/ios`)
+  - rive_common (from `.symlinks/plugins/rive_common/ios`)
+  - smart_auth (from `.symlinks/plugins/smart_auth/ios`)
+  - url_launcher_ios (from `.symlinks/plugins/url_launcher_ios/ios`)
+
+EXTERNAL SOURCES:
+  Flutter:
+    :path: Flutter
+  image_picker_ios:
+    :path: ".symlinks/plugins/image_picker_ios/ios"
+  rive_common:
+    :path: ".symlinks/plugins/rive_common/ios"
+  smart_auth:
+    :path: ".symlinks/plugins/smart_auth/ios"
+  url_launcher_ios:
+    :path: ".symlinks/plugins/url_launcher_ios/ios"
+
+SPEC CHECKSUMS:
+  Flutter: e0871f40cf51350855a761d2e70bf5af5b9b5de7
+  image_picker_ios: 99dfe1854b4fa34d0364e74a78448a0151025425
+  rive_common: 3a4c254c6e4db7e4b9e05daeb3d1f47ae4f7bf76
+  smart_auth: 4bedbc118723912d0e45a07e8ab34039c19e04f2
+  url_launcher_ios: 6116280ddcfe98ab8820085d8d76ae7449447586
+
+PODFILE CHECKSUM: 819463e6a0290f5a72f145ba7cde16e8b6ef0796
+
+COCOAPODS: 1.15.2

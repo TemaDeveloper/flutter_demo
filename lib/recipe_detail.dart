@@ -1,6 +1,7 @@
 import 'dart:ui';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_application_1/listModels/reusable_widgets.dart';
 import 'package:flutter_application_1/themes/theme_provider.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
@@ -52,7 +53,8 @@ class _RecipeDetailState extends State<RecipeDetailPage> {
       final response = await http.get(url);
       final jsonResponse = json.decode(response.body);
       final ingredientsList = jsonResponse['extendedIngredients'] as List;
-      final stepsList = jsonResponse['analyzedInstructions'][0]['steps'] as List;
+      final stepsList =
+          jsonResponse['analyzedInstructions'][0]['steps'] as List;
 
       setState(() {
         recipeSteps = stepsList
@@ -154,53 +156,52 @@ class _RecipeDetailState extends State<RecipeDetailPage> {
                         child:
                             CircularProgressIndicator()) // Progress bar loading
                     : Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 8),
-                      child: SizedBox(
-                        height: 200, // Adjust height as needed
-                        child: ListView.builder(
-                          scrollDirection: Axis.horizontal,
-                          itemCount: _ingredients!.length,
-                          itemBuilder: (context, index) {
-                            return Center(
-                              child: Column(
-                                mainAxisSize: MainAxisSize.min,
-                                children: [
-                                  Card(
-                                    shape: RoundedRectangleBorder(
-                                      borderRadius: BorderRadius.circular(10),
-                                    ),
-                                    child: ClipRRect(
-                                      borderRadius: BorderRadius.circular(
-                                          10), // Rounded corners
-                                      child: Image.network(
-                                        'https://www.themealdb.com/images/ingredients/${_ingredients![index]}.png',
-                                        
-                                        height: 150,
-                                        errorBuilder: (BuildContext context,
-                                            Object exception,
-                                            StackTrace? stackTrace) {
-                                          return const Icon(Icons
-                                              .error); // Placeholder for error
-                                        },
+                        padding: const EdgeInsets.symmetric(horizontal: 8),
+                        child: SizedBox(
+                          height: 200, // Adjust height as needed
+                          child: ListView.builder(
+                            scrollDirection: Axis.horizontal,
+                            itemCount: _ingredients!.length,
+                            itemBuilder: (context, index) {
+                              return Center(
+                                child: Column(
+                                  mainAxisSize: MainAxisSize.min,
+                                  children: [
+                                    Card(
+                                      shape: RoundedRectangleBorder(
+                                        borderRadius: BorderRadius.circular(10),
+                                      ),
+                                      child: ClipRRect(
+                                        borderRadius: BorderRadius.circular(
+                                            10), // Rounded corners
+                                        child: Image.network(
+                                          'https://www.themealdb.com/images/ingredients/${_ingredients![index]}.png',
+                                          height: 150,
+                                          errorBuilder: (BuildContext context,
+                                              Object exception,
+                                              StackTrace? stackTrace) {
+                                            return const Icon(Icons
+                                                .error); // Placeholder for error
+                                          },
+                                        ),
                                       ),
                                     ),
-                                  ),
-                                  Padding(
-                                    padding: const EdgeInsets.only(top: 8),
-                                    child: Text(
-                                      _ingredients![index],
-                                      style: const TextStyle(
-                                          fontSize: 16,
-                                          fontWeight: FontWeight.normal),
-                                      textAlign: TextAlign.center,
+                                    Padding(
+                                      padding: const EdgeInsets.only(top: 8),
+                                      child: Text(
+                                        _ingredients![index],
+                                        style: const TextStyle(
+                                            fontSize: 16,
+                                            fontWeight: FontWeight.normal),
+                                        textAlign: TextAlign.center,
+                                      ),
                                     ),
-                                  ),
-                                ],
-                              ),
-                            );
-                          },
-                        ),
-                      )),
+                                  ],
+                                ),
+                              );
+                            },
+                          ),
+                        )),
                 const Padding(
                   padding: EdgeInsets.all(8.0),
                   child: Text(
@@ -212,8 +213,8 @@ class _RecipeDetailState extends State<RecipeDetailPage> {
                   padding: const EdgeInsets.all(8.0),
                   child: Text(
                     recipeSteps ?? "Loading Steps",
-                    style:
-                        const TextStyle(fontSize: 16, fontWeight: FontWeight.normal),
+                    style: const TextStyle(
+                        fontSize: 16, fontWeight: FontWeight.normal),
                   ),
                 ),
                 const SizedBox(
@@ -226,23 +227,14 @@ class _RecipeDetailState extends State<RecipeDetailPage> {
             alignment: Alignment.bottomCenter,
             child: Padding(
               padding: const EdgeInsets.all(10.0),
-              child: SizedBox(
-                width: double.infinity,
-                height: 50,
-                child: ElevatedButton(
-                  onPressed: () {
-                    // Save recipe logic
-                  },
-                  child: Text(
-                    'Save Recipe',
-                    style: TextStyle(color: Provider.of<ThemeProvider>(context,
-                                    listen: false)
-                                .themeData
-                                .colorScheme
-                                .onPrimary,),
-                  ),
-                ),
-              ),
+              child: Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: ReusableButton(
+                    buttonText: 'Save Recipe',
+                    navigate: () {
+                      //Logic to Save Recipe
+                    },
+                  )),
             ),
           ),
         ],
@@ -268,8 +260,10 @@ class _RecipeDetailState extends State<RecipeDetailPage> {
             const SizedBox(height: 8),
             Text(
               text,
-              style:
-                  const TextStyle(fontSize: 16, fontWeight: FontWeight.normal, color: Colors.black),
+              style: const TextStyle(
+                  fontSize: 16,
+                  fontWeight: FontWeight.normal,
+                  color: Colors.black),
               textAlign: TextAlign.center,
             ),
           ],

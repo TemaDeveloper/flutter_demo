@@ -5,6 +5,7 @@ import 'package:flutter_application_1/auth/signup.dart';
 import 'package:flutter_application_1/main.dart';
 import 'package:flutter_application_1/themes/theme_provider.dart';
 import 'package:provider/provider.dart';
+import 'package:flutter_application_1/listModels/reusable_widgets.dart';
 
 enum LoginStatus {
   none, // find good name for starting state
@@ -22,22 +23,12 @@ class LoginPage extends StatefulWidget {
 }
 
 class _LoginState extends State<LoginPage> {
-  final textFieldFocusNode = FocusNode();
   final emailController = TextEditingController();
   final passController = TextEditingController();
-  bool _obscured = true;
-  LoginStatus _loginStatus = LoginStatus.none;
+  final textFieldFocusNode = FocusNode();
 
-  void _changeObscure() {
-    setState(() {
-      _obscured = !_obscured;
-      if (textFieldFocusNode.hasPrimaryFocus) {
-        return; // If focus is on text field, dont unfocus
-      }
-      textFieldFocusNode.canRequestFocus =
-          false; // Prevents focus if tap on eye
-    });
-  }
+  LoginStatus _loginStatus = LoginStatus.none;
+  bool _obscured = true;
 
   void tryLoginEmailPass(BuildContext context) {
     setState(() {
@@ -71,10 +62,20 @@ class _LoginState extends State<LoginPage> {
     });
   }
 
+  void _changeObscure() {
+    setState(() {
+      _obscured = !_obscured;
+      if (textFieldFocusNode.hasPrimaryFocus) {
+        return; // If focus is on text field, dont unfocus
+      }
+      textFieldFocusNode.canRequestFocus =
+          false; // Prevents focus if tap on eye
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
-    // flutter does not want us to push the Navigator in the build function
-    //(callbacks do not count, since they are not triggered during build(render) phase)
+   
     if (_loginStatus == LoginStatus.success) {
       WidgetsBinding.instance.addPostFrameCallback(
         (_) {
@@ -123,32 +124,8 @@ class _LoginState extends State<LoginPage> {
                   const Text('Welcome back, we missed you tones'),
                   Padding(
                     padding: const EdgeInsets.all(20),
-                    child: Container(
-                      height: 60,
-                      decoration: BoxDecoration(
-                          color: Provider.of<ThemeProvider>(context)
-                              .themeData
-                              .colorScheme
-                              .onBackground,
-                          borderRadius: BorderRadius.circular(12)),
-                      child: Padding(
-                        padding: const EdgeInsets.all(16),
-                        child: TextField(
-                          controller: emailController,
-                          style: TextStyle(
-                            color: Provider.of<ThemeProvider>(context,
-                                    listen: false)
-                                .themeData
-                                .colorScheme
-                                .primary,
-                          ),
-                          decoration: const InputDecoration(
-                            border: InputBorder.none,
-                            hintText: 'Email',
-                          ),
-                        ),
-                      ),
-                    ),
+                    child: ReusableTextField(
+                        controller: emailController, hint: 'Email'),
                   ),
                   Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 20),
@@ -161,37 +138,39 @@ class _LoginState extends State<LoginPage> {
                             .onBackground,
                         borderRadius: BorderRadius.circular(12),
                       ),
-                      child: Padding(
-                        padding: const EdgeInsets.all(16),
-                        child: TextField(
-                          controller: passController,
-                          style: TextStyle(
-                            color: Provider.of<ThemeProvider>(context,
-                                    listen: false)
-                                .themeData
-                                .colorScheme
-                                .primary,
-                          ),
-                          decoration: InputDecoration(
-                            border: InputBorder.none,
-                            hintText: 'Password',
-                            suffixIcon: GestureDetector(
-                              onTap: _changeObscure,
-                              child: Icon(
-                                _obscured
-                                    ? Icons.visibility_rounded
-                                    : Icons.visibility_off_rounded,
-                                size: 24,
-                                color: Provider.of<ThemeProvider>(context,
-                                        listen: false)
-                                    .themeData
-                                    .colorScheme
-                                    .primary,
+                      child: Center(
+                        child: Padding(
+                          padding: const EdgeInsets.symmetric(horizontal: 16),
+                          child: TextField(
+                            controller: passController,
+                            style: TextStyle(
+                              color: Provider.of<ThemeProvider>(context,
+                                      listen: false)
+                                  .themeData
+                                  .colorScheme
+                                  .primary,
+                            ),
+                            decoration: InputDecoration(
+                              border: InputBorder.none,
+                              hintText: 'Password',
+                              suffixIcon: GestureDetector(
+                                onTap: _changeObscure,
+                                child: Icon(
+                                  _obscured
+                                      ? Icons.visibility_rounded
+                                      : Icons.visibility_off_rounded,
+                                  size: 24,
+                                  color: Provider.of<ThemeProvider>(context,
+                                          listen: false)
+                                      .themeData
+                                      .colorScheme
+                                      .primary,
+                                ),
                               ),
                             ),
+                            obscureText: _obscured,
+                            keyboardType: TextInputType.visiblePassword,
                           ),
-                          obscureText: _obscured,
-                          keyboardType: TextInputType.visiblePassword,
                         ),
                       ),
                     ),
@@ -201,103 +180,33 @@ class _LoginState extends State<LoginPage> {
                     alignment: Alignment.bottomCenter,
                     child: Padding(
                       padding: const EdgeInsets.symmetric(horizontal: 20),
-                      child: SizedBox(
-                        height: 50,
-                        width: double.infinity,
-                        child: ElevatedButton(
-                          onPressed: () => tryLoginEmailPass(context),
-                          style: ElevatedButton.styleFrom(
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(10),
-                            ),
-                          ),
-                          child: Text(
-                            'Login',
-                            style: TextStyle(
-                              fontSize: 16,
-                              color: Provider.of<ThemeProvider>(context,
-                                      listen: false)
-                                  .themeData
-                                  .colorScheme
-                                  .onPrimary,
-                              fontWeight: FontWeight.normal,
-                            ),
-                          ),
-                        ),
+                      child: ReusableButton(
+                        buttonText: 'Login',
+                        navigate: () {
+                          tryLoginEmailPass(context);
+                        }
                       ),
                     ),
                   ),
                   const SizedBox(height: 20),
                   const Text('or login with', style: TextStyle(fontSize: 16.0)),
                   const SizedBox(height: 10),
-                  Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 20),
+                  const Padding(
+                    padding: EdgeInsets.symmetric(horizontal: 20),
                     child: Column(
                       mainAxisAlignment: MainAxisAlignment.center,
                       crossAxisAlignment: CrossAxisAlignment.center,
                       children: <Widget>[
-                        Card(
-                          color: Colors.blue,
-                          shape: RoundedRectangleBorder(
-                            borderRadius:
-                                BorderRadius.circular(20), // if you need this
-                            side: const BorderSide(color: Colors.transparent),
-                          ),
-                          child: Container(
-                            alignment: Alignment.center,
-                            width: double.infinity,
-                            height: 70,
-                            child: const Center(
-                              child: Row(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                children: <Widget>[
-                                  Icon(Icons.facebook_rounded,
-                                      size: 40, color: Colors.white),
-                                  SizedBox(width: 10),
-                                  Text(
-                                    'Facebook',
-                                    style: TextStyle(
-                                        fontSize: 16,
-                                        fontWeight: FontWeight.normal,
-                                        color: Colors.white),
-                                  )
-                                ],
-                              ),
-                            ),
-                          ),
-                        ),
-                        Card(
-                          color: Colors.white,
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(20),
-                            // if you need this
-                            side: const BorderSide(color: Colors.transparent),
-                          ),
-                          child: Container(
-                            alignment: Alignment.center,
-                            width: double.infinity,
-                            height: 70,
-                            child: Padding(
-                              padding:
-                                  const EdgeInsets.symmetric(horizontal: 10),
-                              child: Row(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                children: <Widget>[
-                                  Image.asset('assets/images/img_google.png',
-                                      width: 30, height: 30),
-                                  const SizedBox(width: 10),
-                                  const Text(
-                                    'Google',
-                                    style: TextStyle(
-                                        fontSize: 16,
-                                        fontWeight: FontWeight.normal,
-                                        color: Colors.black),
-                                  ),
-                                ],
-                              ),
-                            ),
-                          ),
-                        )
+                        ReusableCard(
+                            cardTitle: 'Facebook',
+                            assetPath: 'assets/images/img_facebook.png',
+                            cardColor: Colors.blue,
+                            textColor: Colors.white,),
+                        ReusableCard(
+                            cardTitle: 'Google',
+                            assetPath: 'assets/images/img_google.png',
+                            cardColor: Colors.white,
+                            textColor: Colors.black,),
                       ],
                     ),
                   ),
@@ -336,3 +245,4 @@ class _LoginState extends State<LoginPage> {
     );
   }
 }
+

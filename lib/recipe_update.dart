@@ -4,58 +4,36 @@ import 'package:flutter_application_1/listModels/reusable_widgets.dart';
 import 'package:flutter_application_1/themes/theme_provider.dart';
 import 'package:provider/provider.dart';
 
-class RecipeAdd extends StatefulWidget {
-  const RecipeAdd({super.key});
-  // RecipeAdd({super.key}) {
-  //   throw UnimplementedError("Well, just fetching for now");
-  // }
+class RecipeUpdate extends StatefulWidget {
+  final String recipeId; // Assuming there's a unique identifier for recipes
+
+  const RecipeUpdate({super.key, required this.recipeId});
 
   @override
-  State<RecipeAdd> createState() => _RecipeAddState();
+  State<RecipeUpdate> createState() => _RecipeUpdateState();
 }
 
-class _RecipeAddState extends State<RecipeAdd> {
+class _RecipeUpdateState extends State<RecipeUpdate> {
   final _titleController = TextEditingController();
   final _descriptionController = TextEditingController();
   final _ingredientController = TextEditingController();
-  final int _maxWords = 20;
-  int _wordCount = 0;
   final List<String> _ingredients = [];
   final List<TextEditingController> _stepControllers = [];
+  final int _maxWords = 20;
+  int _wordCount = 0;
+  String _descriptionText = '';
 
   @override
   void initState() {
     super.initState();
+    _loadRecipeData();
     _descriptionController.addListener(_onTextChanged);
   }
 
-  void _onTextChanged() {
-    final text = _descriptionController.text;
-    final words = text
-        .split(RegExp(r'\s+'))
-        .where((element) => element.isNotEmpty)
-        .toList();
-
-    if (words.length > _maxWords) {
-      // Truncate the words to the max limit and update the text
-      final truncated = words.sublist(0, _maxWords).join(' ');
-      _descriptionController.value = TextEditingValue(
-        text: truncated,
-        selection: TextSelection.collapsed(offset: truncated.length),
-      );
-    }
-
-    setState(() {
-      _wordCount = words.length > _maxWords ? _maxWords : words.length;
-    });
-  }
-
-  void _addRecipe(BuildContext ctx) {
-    final usrPr = Provider.of<UserProvider>(ctx, listen: false);
-    usrPr.addRecipie(
-      title: _titleController.text,
-      description: _descriptionController.text,
-    );
+  void _loadRecipeData() {
+    // Load the recipe data for the given recipeId
+    // This can include setting the text for _titleController, _descriptionController, etc.
+    // and initializing the _ingredients and _stepControllers lists
   }
 
   void _addIngredient() {
@@ -85,16 +63,31 @@ class _RecipeAddState extends State<RecipeAdd> {
     });
   }
 
-  @override
-  void dispose() {
-    _titleController.dispose();
-    _descriptionController.removeListener(_onTextChanged);
-    _descriptionController.dispose();
-    _ingredientController.dispose();
-    for (var controller in _stepControllers) {
-      controller.dispose();
+  void _onTextChanged() {
+    final text = _descriptionController.text;
+    final words = text
+        .split(RegExp(r'\s+'))
+        .where((element) => element.isNotEmpty)
+        .toList();
+
+    if (words.length > _maxWords) {
+      final truncated = words.sublist(0, _maxWords).join(' ');
+      _descriptionController.value = TextEditingValue(
+        text: truncated,
+        selection: TextSelection.collapsed(offset: truncated.length),
+      );
     }
-    super.dispose();
+
+  
+    setState(() {
+      _descriptionText = _descriptionController.text;
+      _wordCount = words.length > _maxWords ? _maxWords : words.length;
+    });
+  }
+
+  void _updateRecipe(BuildContext ctx) {
+    final userProvider = Provider.of<UserProvider>(ctx, listen: false);
+    // Update the recipe in the backend, potentially using usrPr.updateRecipe(...)
   }
 
   @override
@@ -107,7 +100,7 @@ class _RecipeAddState extends State<RecipeAdd> {
               .colorScheme
               .onBackground, // Set the color of the AppBar icons
         ),
-        title: const Text("Addition Recipe"),
+        title: const Text("Update Recipe"),
       ),
       body: SingleChildScrollView(
         child: Column(
@@ -384,12 +377,24 @@ class _RecipeAddState extends State<RecipeAdd> {
       bottomNavigationBar: Padding(
         padding: const EdgeInsets.all(8.0),
         child: ReusableButton(
-          buttonText: 'Submit',
+          buttonText: 'Update Recipe',
           navigate: () {
-            _addRecipe(context);
+            _updateRecipe(context);
           },
         )
       ),
     );
+  }
+
+  @override
+  void dispose() {
+    _titleController.dispose();
+    _descriptionController.removeListener(_onTextChanged);
+    _descriptionController.dispose();
+    _ingredientController.dispose();
+    for (var controller in _stepControllers) {
+      controller.dispose();
+    }
+    super.dispose();
   }
 }

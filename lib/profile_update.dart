@@ -3,6 +3,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_application_1/auth/backend_proxy.dart';
 import 'package:flutter_application_1/avatar.dart';
+import 'package:flutter_application_1/listModels/reusable_widgets.dart';
 import 'package:flutter_application_1/themes/theme_provider.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:provider/provider.dart';
@@ -98,9 +99,9 @@ class _UpdateProfileState extends State<UpdateProfile> {
       appBar: AppBar(
         iconTheme: IconThemeData(
           color: Provider.of<ThemeProvider>(context, listen: false)
-                                  .themeData
-                                  .colorScheme
-                                  .onBackground, // Set the color of the AppBar icons
+              .themeData
+              .colorScheme
+              .onBackground, // Set the color of the AppBar icons
         ),
         title: const Text('Update Profile'),
       ),
@@ -118,70 +119,39 @@ class _UpdateProfileState extends State<UpdateProfile> {
                 usrProvider.setAll(avatar: file);
                 setState(() => _image = file);
               }).catchError((e) => print("Image selection Error: $e")),
-              child: Text('Change Profile Avatar', style: TextStyle(color: Provider.of<ThemeProvider>(context)
-                          .themeData
-                          .colorScheme
-                          .onBackground,)),
+              child: Text('Change Profile Avatar',
+                  style: TextStyle(
+                    color: Provider.of<ThemeProvider>(context)
+                        .themeData
+                        .colorScheme
+                        .onBackground,
+                  )),
             ),
             Column(
               children: [
-                _buildTextField(context, 'Email', _emailController),
-                _buildTextField(context, 'Name', _nameController),
-              ],
-            ),
-            Padding(
-              padding: const EdgeInsets.all(10),
-              child: SizedBox(
-                height: 50,
-                width: double.infinity,
-                child: ElevatedButton(
-                  onPressed: () => updateCb(context),
-                  style: ElevatedButton.styleFrom(
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(10),
-                    ),
-                  ),
-                  child: Text(
-                    'Update Profile',
-                    style: TextStyle(
-                      fontSize: 16,
-                      color: Provider.of<ThemeProvider>(context, listen: false)
-                          .themeData
-                          .colorScheme
-                          .onPrimary,
-                      fontWeight: FontWeight.normal,
-                    ),
-                  ),
+                Padding(
+                  padding: const EdgeInsets.all(16),
+                  child: ReusableTextField(
+                      controller: _emailController, hint: 'Email'),
                 ),
-              ),
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 16),
+                  child: ReusableTextField(
+                      controller: _nameController, hint: 'Name'),
+                ),
+              ],
             ),
             const SizedBox(height: 20),
           ],
         ),
       ),
-    );
-  }
-
-  Widget _buildTextField(
-      BuildContext context, String label, TextEditingController controller) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
-      child: Container(
-        height: 60,
-        decoration: BoxDecoration(
-            color: Colors.grey[200], borderRadius: BorderRadius.circular(12)),
-        child: Padding(
-          padding: const EdgeInsets.all(16),
-          child: TextField(
-            controller: controller,
-            decoration: InputDecoration(
-              border: InputBorder.none,
-              hintText: label,
-              hintStyle: const TextStyle(color: Colors.black),
-            ),
-            style: const TextStyle(color: Colors.black),
-          ),
-        ),
+      bottomNavigationBar: Padding(
+        padding: const EdgeInsets.all(10),
+        child: ReusableButton(
+            buttonText: 'Update Profile',
+            navigate: () {
+              updateCb(context);
+            }),
       ),
     );
   }

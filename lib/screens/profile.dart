@@ -5,11 +5,11 @@ import 'package:flutter_application_1/auth/backend_proxy.dart';
 import 'package:flutter_application_1/auth/login.dart';
 import 'package:flutter_application_1/avatar.dart';
 import 'package:flutter_application_1/listModels/my_card.dart';
+import 'package:flutter_application_1/listModels/reusable_widgets.dart';
 import 'package:flutter_application_1/recipe/provider.dart';
-import 'package:flutter_application_1/recipe_detail.dart';
+import 'package:flutter_application_1/recipe_update.dart';
 import 'package:flutter_application_1/themes/theme_provider.dart';
 import 'package:provider/provider.dart';
-import 'dart:math';
 
 class ProfileScreen extends StatelessWidget {
   const ProfileScreen({super.key});
@@ -44,40 +44,21 @@ class ProfileScreen extends StatelessWidget {
             //Button Edit
             Padding(
               padding: const EdgeInsets.fromLTRB(10, 0, 10, 10),
-              child: SizedBox(
-                width: double.infinity,
-                height: 50,
-                child: ElevatedButton(
-                  onPressed: usrProvider.isAnon
-                      ? () {
-                          Navigator.push(
-                              context,
-                              CupertinoPageRoute(
-                                  builder: (context) => const LoginPage()));
-                        }
-                      : () {
-                          Navigator.push(
-                              context,
-                              CupertinoPageRoute(
-                                  builder: (context) => const RecipeAdd()));
-                        },
-                  style: ElevatedButton.styleFrom(
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(10),
-                    ),
-                  ),
-                  child: Text(
-                    usrProvider.isAnon ? 'Login' : 'Add Your Recipe',
-                    style: TextStyle(
-                        fontSize: 16,
-                        fontWeight: FontWeight.normal,
-                        color: Provider.of<ThemeProvider>(context,
-                                    listen: false)
-                                .themeData
-                                .colorScheme
-                                .onPrimary,),
-                  ),
-                ),
+              child: ReusableButton(
+                buttonText: usrProvider.isAnon ? 'Login' : 'Add Your Recipe',
+                navigate: usrProvider.isAnon
+                    ? () {
+                        Navigator.push(
+                            context,
+                            CupertinoPageRoute(
+                                builder: (context) => const LoginPage()));
+                      }
+                    : () {
+                        Navigator.push(
+                            context,
+                            CupertinoPageRoute(
+                                builder: (context) => const RecipeAdd()));
+                      },
               ),
             ),
 
@@ -86,13 +67,6 @@ class ProfileScreen extends StatelessWidget {
                     ? const CircularProgressIndicator()
                     : Column(
                         children: [
-                          const Padding(
-                            padding: EdgeInsets.fromLTRB(10, 0, 10, 10),
-                            child: Text(
-                              'My Recipes',
-                              style: TextStyle(fontSize: 24),
-                            ),
-                          ),
                           Padding(
                             padding: const EdgeInsets.only(bottom: 10),
                             child: SizedBox(
@@ -107,15 +81,13 @@ class ProfileScreen extends StatelessWidget {
                                   return GestureDetector(
                                       onTap: () {
                                         Navigator.push(
-                                            context,
-                                            CupertinoPageRoute(
-                                                builder: (context) =>
-                                                    RecipeDetailPage(
-                                                        recipeId: r.id,
-                                                        imageUrl:
-                                                            r.previewImgUrl,
-                                                        title: r.title,
-                                                        cookTime: r.cookTime)));
+                                          context,
+                                          CupertinoPageRoute(
+                                            builder: (context) => RecipeUpdate(
+                                              recipeId: r.id,
+                                            ),
+                                          ),
+                                        );
                                       },
                                       child: MyCard(
                                           title: r.title,
@@ -127,9 +99,10 @@ class ProfileScreen extends StatelessWidget {
                         ],
                       ))
                 : const Text(
-                  'Login or Create a new Account to post your recipes and observing other\'s ones', 
-                  style: TextStyle(fontSize: 16), textAlign: TextAlign.center,
-                ),
+                    'Login or Create a new Account to post your recipes and observing other\'s ones',
+                    style: TextStyle(fontSize: 16),
+                    textAlign: TextAlign.center,
+                  ),
           ],
         ),
       ),

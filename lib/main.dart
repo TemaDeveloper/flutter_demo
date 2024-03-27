@@ -49,9 +49,10 @@ class MyApp extends StatelessWidget {
 }
 
 class HomePage extends StatefulWidget {
+  const HomePage({super.key});
+
   static const title = 'CookeryDays';
 
-  const HomePage({super.key});
   @override
   State<HomePage> createState() => _MyHomePageState();
 }
@@ -65,6 +66,80 @@ enum Screens {
 
 class _MyHomePageState extends State<HomePage> {
   var _currentIndex = 0;
+
+  void _showSettingsDialog() {
+    final themeProvider = Provider.of<ThemeProvider>(context, listen: false);
+    showModalBottomSheet(
+      context: context,
+      builder: (BuildContext context) {
+        final usrProvider = Provider.of<UserProvider>(context);
+        return SafeArea(
+          child: Padding(
+            padding: const EdgeInsets.all(20),
+            child: Wrap(
+              children: <Widget>[
+                usrProvider.isAnon
+                    ? ListTile(
+                        leading: const Icon(
+                          Icons.person_add,
+                        ), // TODO: Tema find suitable icon
+                        title: const Text('Login or Create Account'),
+                        onTap: () {
+                          Navigator.push(
+                            context,
+                            CupertinoPageRoute(
+                              builder: (context) => const LoginPage(),
+                            ),
+                          );
+                        },
+                      )
+                    : ListTile(
+                        leading: const Icon(Icons.update),
+                        title: const Text('Update Profile'),
+                        onTap: () {
+                          Navigator.push(
+                            context,
+                            CupertinoPageRoute(
+                              builder: (context) => const UpdateProfile(),
+                            ),
+                          );
+                        },
+                      ),
+                SwitchListTile(
+                  title: const Text('Dark Theme'),
+                  secondary: Icon(
+                      themeProvider.currentFlavor == catppuccin.latte
+                          ? Icons.wb_sunny
+                          : Icons.nights_stay),
+                  value: themeProvider.currentFlavor == catppuccin.mocha,
+                  onChanged: (bool value) {
+                    // If value is true, set to dark theme, otherwise set to light theme
+                    themeProvider
+                        .setFlavor(value ? catppuccin.mocha : catppuccin.latte);
+                  },
+                ),
+                usrProvider.isAnon
+                    ? const SizedBox.shrink()
+                    : ListTile(
+                        leading: const Icon(Icons.exit_to_app),
+                        title: const Text('Log Out'),
+                        onTap: () {
+                          usrProvider.logout();
+                          Navigator.push(
+                            context,
+                            CupertinoPageRoute(
+                              builder: (context) => const OnbodingScreen(),
+                            ),
+                          );
+                        },
+                      ),
+              ],
+            ),
+          ),
+        );
+      },
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -140,80 +215,6 @@ class _MyHomePageState extends State<HomePage> {
               selectedColor: Colors.teal),
         ],
       ),
-    );
-  }
-
-  void _showSettingsDialog() {
-    final themeProvider = Provider.of<ThemeProvider>(context, listen: false);
-    showModalBottomSheet(
-      context: context,
-      builder: (BuildContext context) {
-        final usrProvider = Provider.of<UserProvider>(context);
-        return SafeArea(
-          child: Padding(
-            padding: const EdgeInsets.all(20),
-            child: Wrap(
-              children: <Widget>[
-                usrProvider.isAnon
-                    ? ListTile(
-                        leading: const Icon(
-                          Icons.person_add,
-                        ), // TODO: Tema find suitable icon
-                        title: const Text('Login or Create Account'),
-                        onTap: () {
-                          Navigator.push(
-                            context,
-                            CupertinoPageRoute(
-                              builder: (context) => const LoginPage(),
-                            ),
-                          );
-                        },
-                      )
-                    : ListTile(
-                        leading: const Icon(Icons.update),
-                        title: const Text('Update Profile'),
-                        onTap: () {
-                          Navigator.push(
-                            context,
-                            CupertinoPageRoute(
-                              builder: (context) => const UpdateProfile(),
-                            ),
-                          );
-                        },
-                      ),
-                SwitchListTile(
-                  title: const Text('Dark Theme'),
-                  secondary: Icon(
-                      themeProvider.currentFlavor == catppuccin.latte
-                          ? Icons.wb_sunny
-                          : Icons.nights_stay),
-                  value: themeProvider.currentFlavor == catppuccin.mocha,
-                  onChanged: (bool value) {
-                    // If value is true, set to dark theme, otherwise set to light theme
-                    themeProvider
-                        .setFlavor(value ? catppuccin.mocha : catppuccin.latte);
-                  },
-                ),
-                usrProvider.isAnon
-                    ? const SizedBox.shrink()
-                    : ListTile(
-                        leading: const Icon(Icons.exit_to_app),
-                        title: const Text('Log Out'),
-                        onTap: () {
-                          usrProvider.logout();
-                          Navigator.push(
-                            context,
-                            CupertinoPageRoute(
-                              builder: (context) => const OnbodingScreen(),
-                            ),
-                          );
-                        },
-                      ),
-              ],
-            ),
-          ),
-        );
-      },
     );
   }
 }

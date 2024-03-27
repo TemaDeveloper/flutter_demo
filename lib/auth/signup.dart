@@ -3,7 +3,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter_application_1/auth/varification.dart';
 import 'package:flutter_application_1/themes/theme_provider.dart';
 import 'package:provider/provider.dart';
-
+import 'package:flutter_application_1/listModels/reusable_widgets.dart';
 
 class SignUpPage extends StatefulWidget {
   const SignUpPage({super.key});
@@ -14,6 +14,9 @@ class SignUpPage extends StatefulWidget {
 class _SignUpPageState extends State<SignUpPage> {
   final textFieldFocusNode = FocusNode();
   final myController = TextEditingController();
+  final emailController = TextEditingController();
+  final passController = TextEditingController();
+  final nameController = TextEditingController();
   bool _obscured = true;
 
   void _changeObscure() {
@@ -58,74 +61,29 @@ class _SignUpPageState extends State<SignUpPage> {
                 ),
                 const Text('Create a new account to get a lot of recipes'),
                 Padding(
-                    padding: const EdgeInsets.all(20),
-                    child: Container(
-                      height: 60,
-                      decoration: BoxDecoration(
-                          color: Provider.of<ThemeProvider>(context)
-                              .themeData
-                              .colorScheme
-                              .onBackground,
-                          borderRadius: BorderRadius.circular(12)),
-                      child: Padding(
-                        padding: const EdgeInsets.all(16),
-                        child: TextField(
-                          style: TextStyle(
-                            color: Provider.of<ThemeProvider>(context,
-                                    listen: false)
-                                .themeData
-                                .colorScheme
-                                .primary,
-                          ),
-                          decoration: const InputDecoration(
-                            border: InputBorder.none,
-                            hintText: 'Email',
-                          ),
-                        ),
-                      ),
-                    ),
-                  ),
+                  padding: const EdgeInsets.all(20),
+                  child: ReusableTextField(
+                      controller: emailController, hint: 'Email'),
+                ),
                 Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 20),
-                    child: Container(
-                      height: 60,
-                      decoration: BoxDecoration(
-                          color: Provider.of<ThemeProvider>(context)
-                              .themeData
-                              .colorScheme
-                              .onBackground,
-                          borderRadius: BorderRadius.circular(12)),
-                      child: Padding(
-                        padding: const EdgeInsets.all(16),
-                        child: TextField(
-                          style: TextStyle(
-                            color: Provider.of<ThemeProvider>(context,
-                                    listen: false)
-                                .themeData
-                                .colorScheme
-                                .primary,
-                          ),
-                          decoration: const InputDecoration(
-                            border: InputBorder.none,
-                            hintText: 'Name',
-                          ),
-                        ),
-                      ),
-                    ),
-                  ),
+                  padding: const EdgeInsets.symmetric(horizontal: 20),
+                  child: ReusableTextField(
+                      controller: nameController, hint: 'Name'),
+                ),
                 Padding(
-                    padding: const EdgeInsets.fromLTRB(20, 20, 20, 0),
-                    child: Container(
-                      height: 60,
-                      decoration: BoxDecoration(
-                        color: Provider.of<ThemeProvider>(context)
-                            .themeData
-                            .colorScheme
-                            .onBackground,
-                        borderRadius: BorderRadius.circular(12),
-                      ),
+                  padding: const EdgeInsets.fromLTRB(20, 20, 20, 0),
+                  child: Container(
+                    height: 60,
+                    decoration: BoxDecoration(
+                      color: Provider.of<ThemeProvider>(context)
+                          .themeData
+                          .colorScheme
+                          .onBackground,
+                      borderRadius: BorderRadius.circular(12),
+                    ),
+                    child: Center(
                       child: Padding(
-                        padding: const EdgeInsets.all(16),
+                        padding: const EdgeInsets.symmetric(horizontal: 16),
                         child: TextField(
                           style: TextStyle(
                             color: Provider.of<ThemeProvider>(context,
@@ -158,33 +116,15 @@ class _SignUpPageState extends State<SignUpPage> {
                       ),
                     ),
                   ),
+                ),
                 const SizedBox(height: 20),
                 Align(
                   alignment: Alignment.bottomCenter,
                   child: Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 20),
-                    child: SizedBox(
-                      width: double.infinity,
-                      height: 50,
-                      child: ElevatedButton(
-                        style: ElevatedButton.styleFrom(
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(
-                                  10), 
-                            ),
-                          ),
-                        child: Text(
-                          'Signup',
-                          style: TextStyle(
-                              fontSize: 16,
-                              color: Provider.of<ThemeProvider>(context,
-                                    listen: false)
-                                .themeData
-                                .colorScheme
-                                .onPrimary,
-                              fontWeight: FontWeight.normal),
-                        ),
-                        onPressed: () {
+                      padding: const EdgeInsets.symmetric(horizontal: 20),
+                      child: ReusableButton(
+                        buttonText: 'Sign Up',
+                        navigate: () {
                           Navigator.push(
                             context,
                             CupertinoPageRoute(
@@ -192,9 +132,7 @@ class _SignUpPageState extends State<SignUpPage> {
                             ),
                           );
                         },
-                      ),
-                    ),
-                  ),
+                      )),
                 ),
                 const SizedBox(height: 20),
                 const Text(
@@ -202,72 +140,22 @@ class _SignUpPageState extends State<SignUpPage> {
                   style: TextStyle(fontSize: 16.0),
                 ),
                 const SizedBox(height: 10),
-                Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 20),
+                const Padding(
+                  padding: EdgeInsets.symmetric(horizontal: 20),
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.center,
                     crossAxisAlignment: CrossAxisAlignment.center,
                     children: <Widget>[
-                      Card(
-                        color: Colors.blue,
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(20),
-                          side: const BorderSide(
-                              color: Colors.transparent), // if you need this
-                        ),
-                        child: const SizedBox(
-                          width: double.infinity,
-                          height: 70,
-                          child: Padding(
-                            padding: EdgeInsets.symmetric(horizontal: 10),
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: <Widget>[
-                                Icon(Icons.facebook_rounded,
-                                    size: 50, color: Colors.white),
-                                SizedBox(width: 10),
-                                Text(
-                                  'Facebook',
-                                  style: TextStyle(
-                                      fontSize: 16,
-                                      fontWeight: FontWeight.normal,
-                                      color: Colors.white),
-                                )
-                              ],
-                            ),
-                          ),
-                        ),
+                      ReusableCard(
+                        cardTitle: "Facebook",
+                        assetPath: 'assets/images/img_facebook.png',
+                        cardColor: Colors.blue,
+                        textColor: Colors.white,
                       ),
-                      Card(
-                        color: Colors.white,
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(20),
-                          // if you need this
-                          side: const BorderSide(color: Colors.transparent),
-                        ),
-                        child: SizedBox(
-                          width: double.infinity,
-                          height: 70,
-                          child: Padding(
-                            padding: const EdgeInsets.symmetric(horizontal: 10),
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: <Widget>[
-                                Image.asset('assets/images/img_google.png',
-                                    width: 30, height: 30),
-                                const SizedBox(width: 10),
-                                const Text(
-                                  'Google',
-                                  style: TextStyle(
-                                      fontSize: 16,
-                                      fontWeight: FontWeight.normal,
-                                      color: Colors.black),
-                                )
-                              ],
-                            ),
-                          ),
-                        ),
-                      )
+                      ReusableCard(
+                          cardTitle: "Google",
+                          assetPath: 'assets/images/img_google.png',
+                          cardColor: Colors.white)
                     ],
                   ),
                 ),
@@ -283,11 +171,13 @@ class _SignUpPageState extends State<SignUpPage> {
                       },
                       child: Text(
                         'Log in!',
-                        style: TextStyle(color: Provider.of<ThemeProvider>(context,
-                                    listen: false)
-                                .themeData
-                                .colorScheme
-                                .onPrimary,),
+                        style: TextStyle(
+                          color:
+                              Provider.of<ThemeProvider>(context, listen: false)
+                                  .themeData
+                                  .colorScheme
+                                  .onPrimary,
+                        ),
                       ),
                     )
                   ],

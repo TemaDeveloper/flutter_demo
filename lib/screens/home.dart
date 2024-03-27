@@ -20,11 +20,12 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
-  List<SpoonacularRecipe>? _listRecipes;
+  List<String> advices = constants.advices;
   List<CuisineCard>? cuisines;
   int selectedIdx = 0;
+
   bool _isLoading = true;
-  List<String> advices = constants.advices;
+  List<SpoonacularRecipe>? _listRecipes;
 
   @override
   void initState() {
@@ -180,33 +181,39 @@ class _HomeScreenState extends State<HomeScreen> {
             children: [
               Padding(
                 padding: const EdgeInsets.symmetric(vertical: 16),
-                child: Container(
-                  color: Colors.deepPurple[200],
-                  width: double.infinity,
-                  child: Column(
-                    children: [
-                      Padding(
-                        padding: const EdgeInsets.all(8.0),
-                        child: Image.asset(
-                          'assets/images/ic_chef.png',
-                          width: 60,
-                          height: 60,
+                child: Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 16),
+                  child: Container(
+                    width: double.infinity,
+                    decoration: BoxDecoration(
+                      color: Colors.deepPurple[200],
+                      borderRadius: BorderRadius.circular(20),
+                    ),
+                    child: Column(
+                      children: [
+                        Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: Image.asset(
+                            'assets/images/ic_chef.png',
+                            width: 60,
+                            height: 60,
+                          ),
                         ),
-                      ),
-                      Padding(
-                        padding: EdgeInsets.fromLTRB(8, 0, 8, 8),
-                        child: Text(
-                          getRandomAdvice(),
-                          textAlign: TextAlign.center,
-                          style: const TextStyle(color: Colors.black),
-                        ),
-                      )
-                    ],
+                        Padding(
+                          padding: EdgeInsets.fromLTRB(8, 0, 8, 8),
+                          child: Text(
+                            getRandomAdvice(),
+                            textAlign: TextAlign.center,
+                            style: const TextStyle(color: Colors.black),
+                          ),
+                        )
+                      ],
+                    ),
                   ),
                 ),
               ),
               Align(
-                alignment: Alignment.bottomRight,
+                alignment: Alignment.center,
                 child: Padding(
                   padding: const EdgeInsets.fromLTRB(8, 0, 8, 8),
                   child: Text(
@@ -216,6 +223,7 @@ class _HomeScreenState extends State<HomeScreen> {
                           .themeData
                           .colorScheme
                           .onPrimary,
+                      
                     ),
                   ),
                 ),

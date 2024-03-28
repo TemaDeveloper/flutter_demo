@@ -97,8 +97,8 @@ class _RecipeCardState extends State<RecipeCard> {
           ]),
         ),
         
-        Padding(
-          padding: const EdgeInsets.all(8.0),
+        const Padding(
+          padding: EdgeInsets.all(8.0),
           child: Expanded(
             child: Text(
               'Quick Description',

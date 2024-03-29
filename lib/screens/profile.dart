@@ -2,11 +2,12 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_application_1/add_recipe.dart';
 import 'package:flutter_application_1/auth/backend_proxy.dart';
+import 'package:flutter_application_1/auth/login.dart';
 import 'package:flutter_application_1/avatar.dart';
 import 'package:flutter_application_1/listModels/my_card.dart';
-import 'package:flutter_application_1/main.dart';
+import 'package:flutter_application_1/listModels/reusable_widgets.dart';
 import 'package:flutter_application_1/recipe/provider.dart';
-import 'package:flutter_application_1/recipe_detail.dart';
+import 'package:flutter_application_1/recipe_update.dart';
 import 'package:provider/provider.dart';
 
 class ProfileScreen extends StatelessWidget {
@@ -25,7 +26,6 @@ class ProfileScreen extends StatelessWidget {
           children: [
             //Profile Image
             const AvatarWidget(),
-
             //User Name
             Padding(
               padding: const EdgeInsets.all(10),
@@ -43,70 +43,64 @@ class ProfileScreen extends StatelessWidget {
             //Button Edit
             Padding(
               padding: const EdgeInsets.fromLTRB(10, 0, 10, 10),
-              child: SizedBox(
-                width: double.infinity,
-                height: 50,
-                child: ElevatedButton(
-                  onPressed: () {
-                    Navigator.push(context,
-                        CupertinoPageRoute(builder: (context) => const RecipeAdd()));
-                  },
-                  style: ElevatedButton.styleFrom(
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(10),
-                    ),
-                  ),
-                  child: const Text(
-                    'Add Your Recipe',
-                    style: TextStyle(
-                        fontSize: 16,
-                        fontWeight: FontWeight.normal,
-                        color: Colors.deepPurple),
-                  ),
-                ),
+              child: ReusableButton(
+                buttonText: usrProvider.isAnon ? 'Login' : 'Add Your Recipe',
+                navigate: usrProvider.isAnon
+                    ? () {
+                        Navigator.push(
+                            context,
+                            CupertinoPageRoute(
+                                builder: (context) => const LoginPage()));
+                      }
+                    : () {
+                        Navigator.push(
+                            context,
+                            CupertinoPageRoute(
+                                builder: (context) => const RecipeAdd()));
+                      },
               ),
             ),
 
-            //Title 'My Cards'
-            const Padding(
-              padding: EdgeInsets.fromLTRB(10, 0, 10, 10),
-              child: Text(
-                'My Recipes',
-                style: TextStyle(fontSize: 24),
-              ),
-            ),
-
-            recipeProvider.isLoading
-                ? const CircularProgressIndicator()
-                : Padding(
-                    padding: const EdgeInsets.only(bottom: 10),
-                    child: SizedBox(
-                      height: 300,
-                      child: ListView.builder(
-                        scrollDirection: Axis.horizontal,
-                        itemCount: recipeProvider.recipes.length,
-                        // TODO: check if we created it
-                        itemBuilder: (context, index) {
-                          final r = recipeProvider.recipes[index];
-                          return GestureDetector(
-                            onTap: () {
-                              Navigator.push(
-                                context,
-                                CupertinoPageRoute(
-                                  builder: (context) => RecipeDetailPage(
-                                      recipeId: r.id,
-                                      imageUrl: r.previewImgUrl,
-                                      title: r.title,
-                                      cookTime: r.cookTime),
-                                ),
-                              );
-                            },
-                            child:
-                                MyCard(title: r.title, image: r.previewImgUrl),
-                          );
-                        },
-                      ),
-                    ),
+            !usrProvider.isAnon
+                ? (recipeProvider.isLoading
+                    ? const CircularProgressIndicator()
+                    : Column(
+                        children: [
+                          Padding(
+                            padding: const EdgeInsets.only(bottom: 10),
+                            child: SizedBox(
+                              height: 300,
+                              child: ListView.builder(
+                                scrollDirection: Axis.horizontal,
+                                //Filter recipes by UID when user logged in
+                                itemCount: recipeProvider.recipes.length,
+                                // TODO: check if we created it
+                                itemBuilder: (context, index) {
+                                  final r = recipeProvider.recipes[index];
+                                  return GestureDetector(
+                                      onTap: () {
+                                        Navigator.push(
+                                          context,
+                                          CupertinoPageRoute(
+                                            builder: (context) => RecipeUpdate(
+                                              recipeId: r.id,
+                                            ),
+                                          ),
+                                        );
+                                      },
+                                      child: MyCard(
+                                          title: r.title,
+                                          image: r.previewImgUrl));
+                                },
+                              ),
+                            ),
+                          ),
+                        ],
+                      ))
+                : const Text(
+                    'Login or Create a new Account to post your recipes and observing other\'s ones',
+                    style: TextStyle(fontSize: 16),
+                    textAlign: TextAlign.center,
                   ),
           ],
         ),

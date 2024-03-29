@@ -6,10 +6,10 @@ import 'package:flutter_application_1/listModels/cuisine_card.dart';
 import 'package:flutter_application_1/listModels/recipe_card.dart';
 import 'package:flutter_application_1/listModels/spoonacular_recipe.api.dart';
 import 'package:flutter_application_1/listModels/spoonacular_recipe.dart';
-import 'package:flutter_application_1/main.dart';
 import 'package:flutter_application_1/recipe_detail.dart';
+import 'package:flutter_application_1/themes/theme_provider.dart';
 import 'package:provider/provider.dart';
-import 'package:flutter_application_1/constants/constants.dart';
+import 'package:flutter_application_1/constants/constants.dart' as constants;
 import 'dart:math';
 
 class HomeScreen extends StatefulWidget {
@@ -20,11 +20,12 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
-  List<SpoonacularRecipe>? _listRecipes;
+  List<String> advices = constants.advices;
   List<CuisineCard>? cuisines;
   int selectedIdx = 0;
+
   bool _isLoading = true;
-  List<String> advices = Constants().advices;
+  List<SpoonacularRecipe>? _listRecipes;
 
   @override
   void initState() {
@@ -82,7 +83,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 if (index == 0) {
                   return Center(
                     child: Padding(
-                      padding: EdgeInsets.all(10),
+                      padding: const EdgeInsets.all(10),
                       child: RichText(
                         text: TextSpan(
                           style: DefaultTextStyle.of(context).style,
@@ -98,11 +99,15 @@ class _HomeScreenState extends State<HomeScreen> {
                               TextSpan(
                                 text: usrProvider
                                     .name!, // The '!' is used for null check assertion
-                                style: const TextStyle(
+                                style: TextStyle(
                                   fontWeight: FontWeight.bold,
                                   fontSize: 24,
                                   fontFamily: 'Poppins',
-                                  color: Colors.deepPurple,
+                                  color: Provider.of<ThemeProvider>(context,
+                                          listen: false)
+                                      .themeData
+                                      .colorScheme
+                                      .onPrimary,
                                 ),
                               )
                             else
@@ -176,37 +181,50 @@ class _HomeScreenState extends State<HomeScreen> {
             children: [
               Padding(
                 padding: const EdgeInsets.symmetric(vertical: 16),
-                child: Container(
-                  color: Colors.deepPurple[200],
-                  width: double.infinity,
-                  child: Column(
-                    children: [
-                      Padding(
-                        padding: EdgeInsets.all(8.0),
-                        child: Image.asset(
-                          'assets/images/ic_chef.png',
-                          width: 60,
-                          height: 60,
+                child: Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 16),
+                  child: Container(
+                    width: double.infinity,
+                    decoration: BoxDecoration(
+                      color: Colors.deepPurple[200],
+                      borderRadius: BorderRadius.circular(20),
+                    ),
+                    child: Column(
+                      children: [
+                        Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: Image.asset(
+                            'assets/images/ic_chef.png',
+                            width: 60,
+                            height: 60,
+                          ),
                         ),
-                      ),
-                      Padding(
-                        padding: EdgeInsets.fromLTRB(8, 0, 8, 8),
-                        child: Text(
-                          getRandomAdvice(),
-                          textAlign: TextAlign.center,
-                        ),
-                      )
-                    ],
+                        Padding(
+                          padding: const EdgeInsets.fromLTRB(8, 0, 8, 8),
+                          child: Text(
+                            getRandomAdvice(),
+                            textAlign: TextAlign.center,
+                            style: const TextStyle(color: Colors.black),
+                          ),
+                        )
+                      ],
+                    ),
                   ),
                 ),
               ),
-              const Align(
-                alignment: Alignment.bottomRight,
+              Align(
+                alignment: Alignment.center,
                 child: Padding(
-                  padding: EdgeInsets.fromLTRB(8, 0, 8, 8),
+                  padding: const EdgeInsets.fromLTRB(8, 0, 8, 8),
                   child: Text(
                     'With Love CookeryDays',
-                    style: TextStyle(color: Colors.deepPurple),
+                    style: TextStyle(
+                      color: Provider.of<ThemeProvider>(context, listen: false)
+                          .themeData
+                          .colorScheme
+                          .onPrimary,
+                      
+                    ),
                   ),
                 ),
               )

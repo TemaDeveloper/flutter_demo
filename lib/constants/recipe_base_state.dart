@@ -1,5 +1,10 @@
+import 'dart:io';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_application_1/themes/theme_provider.dart';
+import 'package:image_picker/image_picker.dart';
+import 'package:provider/provider.dart';
 
 abstract class RecipeBaseState<T extends StatefulWidget> extends State<T> {
   final titleController = TextEditingController();
@@ -9,6 +14,24 @@ abstract class RecipeBaseState<T extends StatefulWidget> extends State<T> {
   final List<TextEditingController> stepControllers = [];
   final maxWords = 20;
   int wordCount = 0;
+  XFile? imageFile;
+
+  void setImageFile(XFile? file) {
+    setState(() {
+      imageFile = file;
+    });
+  }
+
+  Future<XFile?> pickImage({required ImageSource source}) async {
+    final ImagePicker imagePicker = ImagePicker();
+    try {
+      final XFile? selectedImage = await imagePicker.pickImage(source: source);
+      return selectedImage;
+    } catch (e) {
+      print('Error occurred while picking the image: $e');
+      return null;
+    }
+  }
 
   @override
   void initState() {
@@ -70,9 +93,41 @@ abstract class RecipeBaseState<T extends StatefulWidget> extends State<T> {
     stepControllers.forEach((controller) => controller.dispose());
     super.dispose();
   }
+
+  Widget buildImagePickerContainer() {
+    return Container(
+      width: double.infinity,
+      height: 200,
+      decoration: BoxDecoration(
+        border: Border.all(color: Colors.grey),
+        borderRadius: BorderRadius.circular(10),
+      ),
+      child: GestureDetector(
+        onTap: () async {
+          final XFile? pickedFile =
+              await pickImage(source: ImageSource.gallery);
+          setImageFile(pickedFile);
+        },
+        child: imageFile != null
+            ? Image.file(
+                File(imageFile!.path),
+                fit: BoxFit.fill,
+              )
+            : Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: <Widget>[
+                  Icon(
+                    Icons.camera_alt,
+                    size: 50,
+                    color: Provider.of<ThemeProvider>(context, listen: false)
+                        .themeData
+                        .colorScheme
+                        .onBackground,
+                  ),
+                  const Text("Pick the Image for the recipe")
+                ],
+              ),
+      ),
+    );
+  }
 }
-
-
-
-
-

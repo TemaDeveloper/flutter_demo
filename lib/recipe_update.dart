@@ -15,8 +15,6 @@ class RecipeUpdate extends StatefulWidget {
 }
 
 class _RecipeUpdateState extends RecipeBaseState<RecipeUpdate> {
-
-
   void _updateRecipe(BuildContext ctx) {
     //final userProvider = Provider.of<UserProvider>(ctx, listen: false);
     // Update the recipe in the backend, potentially using usrPr.updateRecipe(...)
@@ -39,34 +37,7 @@ class _RecipeUpdateState extends RecipeBaseState<RecipeUpdate> {
           children: [
             Padding(
               padding: const EdgeInsets.fromLTRB(8.0, 20, 8, 10),
-              child: GestureDetector(
-                onTap: () {
-                  // Implement image picking functionality
-                },
-                child: Container(
-                  width: double.infinity,
-                  height: 200,
-                  decoration: BoxDecoration(
-                    border: Border.all(color: Colors.grey),
-                    borderRadius: BorderRadius.circular(10),
-                  ),
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: <Widget>[
-                      Icon(
-                        Icons.camera_alt,
-                        size: 50,
-                        color:
-                            Provider.of<ThemeProvider>(context, listen: false)
-                                .themeData
-                                .colorScheme
-                                .onBackground,
-                      ),
-                      const Text("Pick the Image for the recipe")
-                    ],
-                  ),
-                ),
-              ),
+              child: buildImagePickerContainer(),
             ),
             const Align(
               alignment: Alignment.centerLeft,
@@ -307,14 +278,13 @@ class _RecipeUpdateState extends RecipeBaseState<RecipeUpdate> {
         ),
       ),
       bottomNavigationBar: Padding(
-        padding: const EdgeInsets.all(8.0),
-        child: ReusableButton(
-          buttonText: 'Update Recipe',
-          navigate: () {
-            _updateRecipe(context);
-          },
-        )
-      ),
+          padding: const EdgeInsets.all(8.0),
+          child: ReusableButton(
+            buttonText: 'Update Recipe',
+            navigate: () {
+              _updateRecipe(context);
+            },
+          )),
     );
   }
 }

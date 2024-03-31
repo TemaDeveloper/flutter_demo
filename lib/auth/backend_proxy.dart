@@ -63,12 +63,11 @@ class UserProvider extends ChangeNotifier {
     required List<IngredientInfo> ingredients,
     required List<CookingStepInfo> steps,
   }) async {
-<<<<<<< HEAD
     pb.collection('recipies').create(body: {
       title: title,
       description: description,
     }).catchError((e) => print("UserProvider.addRecipie error: $e"));
-=======
+
     if (kDebugMode) {
       print("Creating Recipie:");
       print("\tTitle: $title");
@@ -93,7 +92,7 @@ class UserProvider extends ChangeNotifier {
       "ingridients": ingredients.map((ing) => {"name": ing.name}).toList(),
       "steps": steps.map((s) => {"text": s.text}).toList(),
     }).then((value) => print(value));
->>>>>>> 4ac02c34ab0435da75f51d760c55441274d80ecf
+
     return true;
   }
 
@@ -197,7 +196,6 @@ class UserProvider extends ChangeNotifier {
     return true;
   }
 
-
   void logout() {
     if (_isAnon || !pb.authStore.isValid) {
       return;
@@ -225,7 +223,6 @@ class UserProvider extends ChangeNotifier {
       if (response != null) {
         _isAnon = false;
         notifyListeners();
-        
       } else {
         return AuthResponse.incorrectPassOrEmail;
       }

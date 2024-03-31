@@ -4,11 +4,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_application_1/listModels/reusable_widgets.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
-<<<<<<< HEAD
-import 'package:provider/provider.dart';
-
-=======
->>>>>>> 4ac02c34ab0435da75f51d760c55441274d80ecf
 
 class RecipeDetailPage extends StatefulWidget {
   final String recipeId;

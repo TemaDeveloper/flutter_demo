@@ -12,7 +12,6 @@ class NavBarItem {
   final EdgeInsets itemPadding;
   final Duration duration;
   final Curve curve;
-
   final double selectedColorOpacity;
 
   final VoidCallback onTap;
@@ -29,18 +28,18 @@ class NavBarItem {
     required this.duration,
     required this.curve,
     required this.selectedColorOpacity,
-    required this.onTap
+    required this.onTap,
   });
 
   Widget call(BuildContext context, bool isSelected) {
     final theme = Theme.of(context);
-    final selectedColor   = this.selectedColor   ?? theme.primaryColor;
+    final selectedColor = this.selectedColor ?? theme.primaryColor;
     final unselectedColor = this.unselectedColor ?? theme.unselectedWidgetColor;
+    final screenHeight = MediaQuery.of(context).size.height;
+    final height = screenHeight * 0.035;
 
     return TweenAnimationBuilder<double>(
-      tween: Tween(
-        end: isSelected ? 1.0 : 0.0,
-      ),
+      tween: Tween(end: isSelected ? 1.0 : 0.0),
       curve: curve,
       duration: duration,
       builder: (context, t, _) {
@@ -51,10 +50,6 @@ class NavBarItem {
           child: InkWell(
             onTap: onTap,
             customBorder: itemShape,
-            focusColor: selectedColor.withOpacity(0.1),
-            highlightColor: selectedColor.withOpacity(0.1),
-            splashColor: selectedColor.withOpacity(0.1),
-            hoverColor: selectedColor.withOpacity(0.1),
             child: Padding(
               padding: itemPadding -
                   (Directionality.of(context) == TextDirection.ltr
@@ -70,10 +65,8 @@ class NavBarItem {
                     child: isSelected ? activeIcon : icon,
                   ),
                   ClipRect(
-                    clipBehavior: Clip.antiAlias,
                     child: SizedBox(
-                      /// TODO: specify in bar height and maybe as percentage
-                      height: 20,
+                      height: height, // Use height parameter
                       child: Align(
                         alignment: const Alignment(-0.2, 0.0),
                         widthFactor: t,

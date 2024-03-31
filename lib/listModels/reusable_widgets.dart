@@ -1,3 +1,6 @@
+import 'dart:io';
+
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter_application_1/themes/theme_provider.dart';
@@ -45,16 +48,14 @@ class ReusableTextField extends StatelessWidget {
 }
 
 class ReusableButton extends StatelessWidget {
-
   const ReusableButton({
     super.key,
-    required this.buttonText, 
+    required this.buttonText,
     required this.navigate,
   });
 
   final Function navigate;
   final String buttonText;
-
 
   @override
   Widget build(BuildContext context) {
@@ -86,53 +87,45 @@ class ReusableButton extends StatelessWidget {
 }
 
 class ReusableCard extends StatelessWidget {
-  const ReusableCard(
-      {super.key,
-      required this.cardTitle,
-      required this.assetPath,
-      required this.cardColor,
-      this.textColor = Colors.black});
+  const ReusableCard({
+    super.key,
+    required this.assetPath,
+    required this.cardColor,
+  });
 
   final String assetPath;
   final Color cardColor;
-  final String cardTitle;
-  final Color textColor;
 
   @override
   Widget build(BuildContext context) {
-    return Card(
-      color: cardColor,
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(20),
-        side: const BorderSide(color: Colors.transparent),
+    return Ink(
+      width: 48,
+      height: 48,
+      decoration: ShapeDecoration(
+        shape: const CircleBorder(),
+        color: cardColor,
       ),
-      child: Container(
-        alignment: Alignment.center,
-        width: double.infinity,
-        height: 70,
-        child: Center(
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: <Widget>[
-              ColorFiltered(
-                colorFilter: ColorFilter.mode(
-                  textColor,
-                  BlendMode.srcIn,
-                ),
-                child: Image.asset(assetPath, width: 30, height: 30),
-              ),
-              const SizedBox(width: 10),
-              Text(
-                cardTitle,
-                style: TextStyle(
-                    fontSize: 16,
-                    fontWeight: FontWeight.normal,
-                    color: textColor),
-              )
-            ],
-          ),
-        ),
+      child: InkWell(
+        borderRadius: BorderRadius.circular(24),
+        onTap: () {
+          //Do smth
+        },
+        child: Image.asset(assetPath),
       ),
     );
+  }
+}
+
+Widget getPlatformSpecificLoading() {
+  if (Platform.isIOS) {
+    return Container(
+      width: 50,
+      height: 50,
+      decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(12), color: Colors.white),
+      child: const CupertinoActivityIndicator(),
+    );
+  } else {
+    return const CircularProgressIndicator();
   }
 }

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_application_1/auth/backend_proxy.dart';
+//import 'package:flutter_application_1/auth/backend_proxy.dart';
 import 'package:flutter_application_1/listModels/reusable_widgets.dart';
+import 'package:flutter_application_1/constants/recipe_base_state.dart';
 import 'package:flutter_application_1/themes/theme_provider.dart';
 import 'package:provider/provider.dart';
 
@@ -13,80 +14,11 @@ class RecipeUpdate extends StatefulWidget {
   State<RecipeUpdate> createState() => _RecipeUpdateState();
 }
 
-class _RecipeUpdateState extends State<RecipeUpdate> {
-  final _titleController = TextEditingController();
-  final _descriptionController = TextEditingController();
-  final _ingredientController = TextEditingController();
-  final List<String> _ingredients = [];
-  final List<TextEditingController> _stepControllers = [];
-  final int _maxWords = 20;
-  int _wordCount = 0;
-  String _descriptionText = '';
+class _RecipeUpdateState extends RecipeBaseState<RecipeUpdate> {
 
-  @override
-  void initState() {
-    super.initState();
-    _loadRecipeData();
-    _descriptionController.addListener(_onTextChanged);
-  }
-
-  void _loadRecipeData() {
-    // Load the recipe data for the given recipeId
-    // This can include setting the text for _titleController, _descriptionController, etc.
-    // and initializing the _ingredients and _stepControllers lists
-  }
-
-  void _addIngredient() {
-    if (_ingredientController.text.isNotEmpty) {
-      setState(() {
-        _ingredients.add(_ingredientController.text);
-        _ingredientController.clear();
-      });
-    }
-  }
-
-  void _deleteIngredient(String ingredient) {
-    setState(() {
-      _ingredients.remove(ingredient);
-    });
-  }
-
-  void _addStep() {
-    setState(() {
-      _stepControllers.add(TextEditingController());
-    });
-  }
-
-  void _removeStep(int index) {
-    setState(() {
-      _stepControllers.removeAt(index);
-    });
-  }
-
-  void _onTextChanged() {
-    final text = _descriptionController.text;
-    final words = text
-        .split(RegExp(r'\s+'))
-        .where((element) => element.isNotEmpty)
-        .toList();
-
-    if (words.length > _maxWords) {
-      final truncated = words.sublist(0, _maxWords).join(' ');
-      _descriptionController.value = TextEditingValue(
-        text: truncated,
-        selection: TextSelection.collapsed(offset: truncated.length),
-      );
-    }
-
-  
-    setState(() {
-      _descriptionText = _descriptionController.text;
-      _wordCount = words.length > _maxWords ? _maxWords : words.length;
-    });
-  }
 
   void _updateRecipe(BuildContext ctx) {
-    final userProvider = Provider.of<UserProvider>(ctx, listen: false);
+    //final userProvider = Provider.of<UserProvider>(ctx, listen: false);
     // Update the recipe in the backend, potentially using usrPr.updateRecipe(...)
   }
 
@@ -159,7 +91,7 @@ class _RecipeUpdateState extends State<RecipeUpdate> {
                   padding: const EdgeInsets.symmetric(horizontal: 16),
                   child: Center(
                     child: TextField(
-                        controller: _titleController,
+                        controller: titleController,
                         style: TextStyle(
                           color:
                               Provider.of<ThemeProvider>(context, listen: false)
@@ -187,7 +119,7 @@ class _RecipeUpdateState extends State<RecipeUpdate> {
                   child: Padding(
                     padding: const EdgeInsets.all(16),
                     child: TextField(
-                      controller: _descriptionController,
+                      controller: descriptionController,
                       maxLines: null,
                       style: TextStyle(
                         color:
@@ -199,7 +131,7 @@ class _RecipeUpdateState extends State<RecipeUpdate> {
                       decoration: InputDecoration(
                         border: InputBorder.none,
                         hintText: 'Quick Description',
-                        suffixText: '$_wordCount/$_maxWords',
+                        suffixText: '$wordCount/$maxWords',
                       ),
                       keyboardType: TextInputType.multiline,
                     ),
@@ -239,7 +171,7 @@ class _RecipeUpdateState extends State<RecipeUpdate> {
                                     .colorScheme
                                     .primary,
                               ),
-                              controller: _ingredientController,
+                              controller: ingredientController,
                               decoration: const InputDecoration(
                                 hintText: 'Ingredient',
                                 border: InputBorder.none,
@@ -253,7 +185,7 @@ class _RecipeUpdateState extends State<RecipeUpdate> {
                   Padding(
                     padding: const EdgeInsets.only(left: 8.0),
                     child: ElevatedButton(
-                      onPressed: _addIngredient,
+                      onPressed: addIngredient,
                       style: ElevatedButton.styleFrom(
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(10),
@@ -282,7 +214,7 @@ class _RecipeUpdateState extends State<RecipeUpdate> {
                   alignment: WrapAlignment.start,
                   spacing: 8.0,
                   runSpacing: 8.0,
-                  children: _ingredients
+                  children: ingredients
                       .map((ingredient) => Chip(
                             label: Text(ingredient),
                             deleteIcon: Icon(
@@ -293,7 +225,7 @@ class _RecipeUpdateState extends State<RecipeUpdate> {
                                   .onBackground,
                             ),
                             onDeleted: () {
-                              _deleteIngredient(ingredient);
+                              deleteIngredient(ingredient);
                             },
                           ))
                       .toList(),
@@ -316,7 +248,7 @@ class _RecipeUpdateState extends State<RecipeUpdate> {
                   Align(
                     alignment: Alignment.centerRight,
                     child: ElevatedButton(
-                      onPressed: _addStep,
+                      onPressed: addStep,
                       style: ElevatedButton.styleFrom(
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(10),
@@ -337,7 +269,7 @@ class _RecipeUpdateState extends State<RecipeUpdate> {
             ),
 
             // Steps List
-            for (int i = 0; i < _stepControllers.length; i++)
+            for (int i = 0; i < stepControllers.length; i++)
               Padding(
                 padding: const EdgeInsets.fromLTRB(8, 0, 8, 10),
                 child: Column(
@@ -351,12 +283,12 @@ class _RecipeUpdateState extends State<RecipeUpdate> {
                                 const TextStyle(fontWeight: FontWeight.bold)),
                         IconButton(
                           icon: const Icon(Icons.clear),
-                          onPressed: () => _removeStep(i),
+                          onPressed: () => removeStep(i),
                         ),
                       ],
                     ),
                     TextField(
-                      controller: _stepControllers[i],
+                      controller: stepControllers[i],
                       decoration: InputDecoration(
                         hoverColor:
                             Provider.of<ThemeProvider>(context, listen: false)
@@ -384,17 +316,5 @@ class _RecipeUpdateState extends State<RecipeUpdate> {
         )
       ),
     );
-  }
-
-  @override
-  void dispose() {
-    _titleController.dispose();
-    _descriptionController.removeListener(_onTextChanged);
-    _descriptionController.dispose();
-    _ingredientController.dispose();
-    for (var controller in _stepControllers) {
-      controller.dispose();
-    }
-    super.dispose();
   }
 }

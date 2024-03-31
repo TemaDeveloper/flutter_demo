@@ -14,18 +14,26 @@ import 'auth/backend_proxy.dart';
 import 'package:flutter_application_1/themes/theme_provider.dart';
 import 'package:catppuccin_flutter/catppuccin_flutter.dart';
 import 'recipe/provider.dart';
+import 'package:flutter/services.dart';
 
 const String backendBaseUrl = kDebugMode ? 'http://127.0.0.1:8090' : 'TODO';
 late PocketBase pb;
 
 void main() {
   pb = PocketBase(backendBaseUrl);
-  runApp(
-    ChangeNotifierProvider(
-      create: (context) => ThemeProvider(catppuccin.mocha),
-      child: const MyApp(),
-    ),
-  );
+  WidgetsFlutterBinding
+      .ensureInitialized(); // Ensure the plugin services are initialized
+  SystemChrome.setPreferredOrientations([
+    DeviceOrientation.portraitUp,
+    DeviceOrientation.portraitDown,
+  ]).then((_) {
+    runApp(
+      ChangeNotifierProvider(
+        create: (context) => ThemeProvider(catppuccin.mocha),
+        child: const MyApp(),
+      ),
+    );
+  });
 }
 
 class MyApp extends StatelessWidget {
@@ -152,68 +160,71 @@ class _MyHomePageState extends State<HomePage> {
       const ProfileScreen(),
     ];
 
-    return Scaffold(
-      appBar: AppBar(
-        title: const Text(HomePage.title),
-        automaticallyImplyLeading: false,
-        actions: <Widget>[
-          IconButton(
-            icon: Icon(Icons.settings,
-                color: Provider.of<ThemeProvider>(context, listen: false)
+    return WillPopScope(
+      onWillPop: () async => false,
+      child: Scaffold(
+        appBar: AppBar(
+          title: const Text(HomePage.title),
+          automaticallyImplyLeading: false,
+          actions: <Widget>[
+            IconButton(
+              icon: Icon(Icons.settings,
+                  color: Provider.of<ThemeProvider>(context, listen: false)
+                      .themeData
+                      .colorScheme
+                      .onBackground),
+              onPressed: () {
+                _showSettingsDialog();
+              },
+            ),
+          ],
+        ),
+        body: _currentIndex < bodies.length
+            ? bodies[_currentIndex]
+            : const Center(child: Text('Page not found')),
+        bottomNavigationBar: BottomNavBar(
+          currentIndex: _currentIndex,
+          onTap: (i) => setState(() {
+            _currentIndex = i;
+          }),
+          items: [
+            BottomNavBarItem(
+                icon: const Icon(Icons.home),
+                title: const Text("Home"),
+                unselectedColor: Provider.of<ThemeProvider>(context)
                     .themeData
                     .colorScheme
-                    .onBackground),
-            onPressed: () {
-              _showSettingsDialog();
-            },
-          ),
-        ],
-      ),
-      body: _currentIndex < bodies.length
-          ? bodies[_currentIndex]
-          : const Center(child: Text('Page not found')),
-      bottomNavigationBar: BottomNavBar(
-        currentIndex: _currentIndex,
-        onTap: (i) => setState(() {
-          _currentIndex = i;
-        }),
-        items: [
-          BottomNavBarItem(
-              icon: const Icon(Icons.home),
-              title: const Text("Home"),
-              unselectedColor: Provider.of<ThemeProvider>(context)
-                  .themeData
-                  .colorScheme
-                  .onBackground,
-              selectedColor: Provider.of<ThemeProvider>(context)
-                  .themeData
-                  .colorScheme
-                  .onPrimary),
-          BottomNavBarItem(
-              icon: const Icon(Icons.favorite_border),
-              title: const Text("Likes"),
-              unselectedColor: Provider.of<ThemeProvider>(context)
-                  .themeData
-                  .colorScheme
-                  .onBackground,
-              selectedColor: Colors.pink),
-          BottomNavBarItem(
-              icon: const Icon(Icons.search),
-              title: const Text("Search"),
-              unselectedColor: Provider.of<ThemeProvider>(context)
-                  .themeData
-                  .colorScheme
-                  .onBackground,
-              selectedColor: Colors.orange),
-          BottomNavBarItem(
-              icon: const Icon(Icons.person),
-              title: const Text("Profile"),
-              unselectedColor: Provider.of<ThemeProvider>(context)
-                  .themeData
-                  .colorScheme
-                  .onBackground,
-              selectedColor: Colors.teal),
-        ],
+                    .onBackground,
+                selectedColor: Provider.of<ThemeProvider>(context)
+                    .themeData
+                    .colorScheme
+                    .onPrimary),
+            BottomNavBarItem(
+                icon: const Icon(Icons.favorite_border),
+                title: const Text("Likes"),
+                unselectedColor: Provider.of<ThemeProvider>(context)
+                    .themeData
+                    .colorScheme
+                    .onBackground,
+                selectedColor: Colors.pink),
+            BottomNavBarItem(
+                icon: const Icon(Icons.search),
+                title: const Text("Search"),
+                unselectedColor: Provider.of<ThemeProvider>(context)
+                    .themeData
+                    .colorScheme
+                    .onBackground,
+                selectedColor: Colors.orange),
+            BottomNavBarItem(
+                icon: const Icon(Icons.person),
+                title: const Text("Profile"),
+                unselectedColor: Provider.of<ThemeProvider>(context)
+                    .themeData
+                    .colorScheme
+                    .onBackground,
+                selectedColor: Colors.teal),
+          ],
+        ),
       ),
     );
   }

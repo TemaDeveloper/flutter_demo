@@ -4,6 +4,7 @@ import 'package:flutter_application_1/auth/backend_proxy.dart';
 import 'package:flutter_application_1/auth/login.dart';
 import 'package:flutter_application_1/listModels/cuisine_card.dart';
 import 'package:flutter_application_1/listModels/recipe_card.dart';
+import 'package:flutter_application_1/listModels/reusable_widgets.dart';
 import 'package:flutter_application_1/listModels/spoonacular_recipe.api.dart';
 import 'package:flutter_application_1/listModels/spoonacular_recipe.dart';
 import 'package:flutter_application_1/recipe_detail.dart';
@@ -21,7 +22,7 @@ class HomeScreen extends StatefulWidget {
 
 class _HomeScreenState extends State<HomeScreen> {
   List<String> advices = constants.advices;
-  List<CuisineCard>? cuisines;
+  List<CuisineCard>? cuisines = constants.cuisines;
   int selectedIdx = 0;
 
   bool _isLoading = true;
@@ -32,20 +33,6 @@ class _HomeScreenState extends State<HomeScreen> {
     super.initState();
     getRecipes('Italian');
 
-    cuisines = [
-      const CuisineCard(
-          title: 'Italian', image: 'assets/images/img_italian.JPG'),
-      const CuisineCard(
-          title: 'American', image: 'assets/images/img_american.JPG'),
-      const CuisineCard(
-          title: 'European', image: 'assets/images/img_european.JPG'),
-      const CuisineCard(
-          title: 'Japanese', image: 'assets/images/img_japanese.JPG'),
-      const CuisineCard(
-          title: 'Chinese', image: 'assets/images/img_chinese.JPG'),
-      const CuisineCard(title: 'Indian', image: 'assets/images/img_indian.JPG'),
-      const CuisineCard(title: 'French', image: 'assets/images/img_french.JPG')
-    ];
   }
 
   String getRandomAdvice() {
@@ -83,7 +70,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 if (index == 0) {
                   return Center(
                     child: Padding(
-                      padding: EdgeInsets.all(10),
+                      padding: const EdgeInsets.all(10),
                       child: RichText(
                         text: TextSpan(
                           style: DefaultTextStyle.of(context).style,
@@ -200,7 +187,7 @@ class _HomeScreenState extends State<HomeScreen> {
                           ),
                         ),
                         Padding(
-                          padding: EdgeInsets.fromLTRB(8, 0, 8, 8),
+                          padding: const EdgeInsets.fromLTRB(8, 0, 8, 8),
                           child: Text(
                             getRandomAdvice(),
                             textAlign: TextAlign.center,
@@ -215,7 +202,7 @@ class _HomeScreenState extends State<HomeScreen> {
               Align(
                 alignment: Alignment.center,
                 child: Padding(
-                  padding: const EdgeInsets.fromLTRB(8, 0, 8, 8),
+                  padding: const EdgeInsets.fromLTRB(8, 0, 8, 16),
                   child: Text(
                     'With Love CookeryDays',
                     style: TextStyle(
@@ -223,7 +210,6 @@ class _HomeScreenState extends State<HomeScreen> {
                           .themeData
                           .colorScheme
                           .onPrimary,
-                      
                     ),
                   ),
                 ),
@@ -236,7 +222,7 @@ class _HomeScreenState extends State<HomeScreen> {
           delegate: SliverChildBuilderDelegate(
             (context, index) {
               return _isLoading
-                  ? const Center(child: CircularProgressIndicator())
+                  ? Center(child: getPlatformSpecificLoading())
                   : GestureDetector(
                       onTap: () {
                         Navigator.push(

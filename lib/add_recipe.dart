@@ -1,100 +1,24 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_application_1/auth/backend_proxy.dart';
 import 'package:flutter_application_1/listModels/reusable_widgets.dart';
+import 'package:flutter_application_1/constants/recipe_base_state.dart';
 import 'package:flutter_application_1/themes/theme_provider.dart';
 import 'package:provider/provider.dart';
 
 class RecipeAdd extends StatefulWidget {
   const RecipeAdd({super.key});
-  // RecipeAdd({super.key}) {
-  //   throw UnimplementedError("Well, just fetching for now");
-  // }
 
   @override
   State<RecipeAdd> createState() => _RecipeAddState();
 }
 
-class _RecipeAddState extends State<RecipeAdd> {
-  final _titleController = TextEditingController();
-  final _descriptionController = TextEditingController();
-  final _ingredientController = TextEditingController();
-  final int _maxWords = 20;
-  int _wordCount = 0;
-  final List<String> _ingredients = [];
-  final List<TextEditingController> _stepControllers = [];
-
-  @override
-  void initState() {
-    super.initState();
-    _descriptionController.addListener(_onTextChanged);
-  }
-
-  void _onTextChanged() {
-    final text = _descriptionController.text;
-    final words = text
-        .split(RegExp(r'\s+'))
-        .where((element) => element.isNotEmpty)
-        .toList();
-
-    if (words.length > _maxWords) {
-      // Truncate the words to the max limit and update the text
-      final truncated = words.sublist(0, _maxWords).join(' ');
-      _descriptionController.value = TextEditingValue(
-        text: truncated,
-        selection: TextSelection.collapsed(offset: truncated.length),
-      );
-    }
-
-    setState(() {
-      _wordCount = words.length > _maxWords ? _maxWords : words.length;
-    });
-  }
-
-  void _addRecipe(BuildContext ctx) {
+class _RecipeAddState extends RecipeBaseState<RecipeAdd> {
+  void addRecipe(BuildContext ctx) {
     final usrPr = Provider.of<UserProvider>(ctx, listen: false);
     usrPr.addRecipie(
-      title: _titleController.text,
-      description: _descriptionController.text,
+      title: titleController.text,
+      description: descriptionController.text,
     );
-  }
-
-  void _addIngredient() {
-    if (_ingredientController.text.isNotEmpty) {
-      setState(() {
-        _ingredients.add(_ingredientController.text);
-        _ingredientController.clear();
-      });
-    }
-  }
-
-  void _deleteIngredient(String ingredient) {
-    setState(() {
-      _ingredients.remove(ingredient);
-    });
-  }
-
-  void _addStep() {
-    setState(() {
-      _stepControllers.add(TextEditingController());
-    });
-  }
-
-  void _removeStep(int index) {
-    setState(() {
-      _stepControllers.removeAt(index);
-    });
-  }
-
-  @override
-  void dispose() {
-    _titleController.dispose();
-    _descriptionController.removeListener(_onTextChanged);
-    _descriptionController.dispose();
-    _ingredientController.dispose();
-    for (var controller in _stepControllers) {
-      controller.dispose();
-    }
-    super.dispose();
   }
 
   @override
@@ -166,7 +90,7 @@ class _RecipeAddState extends State<RecipeAdd> {
                   padding: const EdgeInsets.symmetric(horizontal: 16),
                   child: Center(
                     child: TextField(
-                        controller: _titleController,
+                        controller: titleController,
                         style: TextStyle(
                           color:
                               Provider.of<ThemeProvider>(context, listen: false)
@@ -194,7 +118,7 @@ class _RecipeAddState extends State<RecipeAdd> {
                   child: Padding(
                     padding: const EdgeInsets.all(16),
                     child: TextField(
-                      controller: _descriptionController,
+                      controller: descriptionController,
                       maxLines: null,
                       style: TextStyle(
                         color:
@@ -206,7 +130,7 @@ class _RecipeAddState extends State<RecipeAdd> {
                       decoration: InputDecoration(
                         border: InputBorder.none,
                         hintText: 'Quick Description',
-                        suffixText: '$_wordCount/$_maxWords',
+                        suffixText: '$wordCount/$maxWords',
                       ),
                       keyboardType: TextInputType.multiline,
                     ),
@@ -246,7 +170,7 @@ class _RecipeAddState extends State<RecipeAdd> {
                                     .colorScheme
                                     .primary,
                               ),
-                              controller: _ingredientController,
+                              controller: ingredientController,
                               decoration: const InputDecoration(
                                 hintText: 'Ingredient',
                                 border: InputBorder.none,
@@ -260,7 +184,7 @@ class _RecipeAddState extends State<RecipeAdd> {
                   Padding(
                     padding: const EdgeInsets.only(left: 8.0),
                     child: ElevatedButton(
-                      onPressed: _addIngredient,
+                      onPressed: addIngredient,
                       style: ElevatedButton.styleFrom(
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(10),
@@ -289,7 +213,7 @@ class _RecipeAddState extends State<RecipeAdd> {
                   alignment: WrapAlignment.start,
                   spacing: 8.0,
                   runSpacing: 8.0,
-                  children: _ingredients
+                  children: ingredients
                       .map((ingredient) => Chip(
                             label: Text(ingredient),
                             deleteIcon: Icon(
@@ -300,7 +224,7 @@ class _RecipeAddState extends State<RecipeAdd> {
                                   .onBackground,
                             ),
                             onDeleted: () {
-                              _deleteIngredient(ingredient);
+                              deleteIngredient(ingredient);
                             },
                           ))
                       .toList(),
@@ -323,7 +247,7 @@ class _RecipeAddState extends State<RecipeAdd> {
                   Align(
                     alignment: Alignment.centerRight,
                     child: ElevatedButton(
-                      onPressed: _addStep,
+                      onPressed: addStep,
                       style: ElevatedButton.styleFrom(
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(10),
@@ -344,7 +268,7 @@ class _RecipeAddState extends State<RecipeAdd> {
             ),
 
             // Steps List
-            for (int i = 0; i < _stepControllers.length; i++)
+            for (int i = 0; i < stepControllers.length; i++)
               Padding(
                 padding: const EdgeInsets.fromLTRB(8, 0, 8, 10),
                 child: Column(
@@ -358,12 +282,12 @@ class _RecipeAddState extends State<RecipeAdd> {
                                 const TextStyle(fontWeight: FontWeight.bold)),
                         IconButton(
                           icon: const Icon(Icons.clear),
-                          onPressed: () => _removeStep(i),
+                          onPressed: () => removeStep(i),
                         ),
                       ],
                     ),
                     TextField(
-                      controller: _stepControllers[i],
+                      controller: stepControllers[i],
                       decoration: InputDecoration(
                         hoverColor:
                             Provider.of<ThemeProvider>(context, listen: false)
@@ -386,7 +310,7 @@ class _RecipeAddState extends State<RecipeAdd> {
         child: ReusableButton(
           buttonText: 'Submit',
           navigate: () {
-            _addRecipe(context);
+            addRecipe(context);
           },
         )
       ),

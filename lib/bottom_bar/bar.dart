@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 
 import 'item.dart';
 
-
 // TODO: find a way to make constructor const
 class BottomNavBar extends StatelessWidget {
   BottomNavBar({

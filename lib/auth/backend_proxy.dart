@@ -8,9 +8,8 @@ enum AuthResponse {
   incorrectPassOrEmail,
   needsVerification,
   otherError,
-  sucsess,
+  success,
 }
-
 
 String avatarNameToUrl(String id, String name) =>
     "$backendBaseUrl/api/files/_pb_users_auth_/$id/$name";
@@ -27,7 +26,6 @@ class CookingStepCreateInfo {
 }
 
 class UserProvider extends ChangeNotifier {
-
   /*-----------------------------------------------------------------------*/
   /*--------------------------------LIKES----------------------------------*/
   /*-----------------------------------------------------------------------*/
@@ -68,14 +66,15 @@ class UserProvider extends ChangeNotifier {
     pb.collection('recipies').create(body: {
       title: title,
       description: description,
-    }).catchError( (e) => print("UserProvider.addRecipie error: $e") );
+    }).catchError((e) => print("UserProvider.addRecipie error: $e"));
     return true;
   }
 
   /*-----------------------------------------------------------------------*/
   /*-----------------------------PROPERTIES--------------------------------*/
   /*-----------------------------------------------------------------------*/
-  String? get id => pb.authStore.isValid || _isAnon ? pb.authStore.model.id : null;
+  String? get id =>
+      pb.authStore.isValid || _isAnon ? pb.authStore.model.id : null;
 
   /// false means logged in
   bool _isAnon = true;
@@ -171,6 +170,7 @@ class UserProvider extends ChangeNotifier {
     return true;
   }
 
+
   void logout() {
     if (_isAnon || !pb.authStore.isValid) {
       return;
@@ -183,17 +183,28 @@ class UserProvider extends ChangeNotifier {
       String loginEmailOrUserName, String password) async {
     if (!_isAnon && pb.authStore.isValid) {
       final isVerified = pb.authStore.model.getDataValue("verified") as bool;
-      return isVerified ? AuthResponse.sucsess : AuthResponse.needsVerification;
+      return isVerified ? AuthResponse.success : AuthResponse.needsVerification;
     }
 
     if (loginEmailOrUserName == '' || password == '') {
       return AuthResponse.incorrectPassOrEmail;
     }
 
-    await pb.collection('users').authWithPassword(
-          loginEmailOrUserName,
-          password,
-        );
+    try {
+      var response = await pb.collection('users').authWithPassword(
+            loginEmailOrUserName,
+            password,
+          );
+      if (response != null) {
+        _isAnon = false;
+        notifyListeners();
+        
+      } else {
+        return AuthResponse.incorrectPassOrEmail;
+      }
+    } catch (e) {
+      print("An error occurred during login: $e");
+    }
 
     // TODO: more sophisticated checking of errors
     // maybe we need to clear store
@@ -208,7 +219,7 @@ class UserProvider extends ChangeNotifier {
       return AuthResponse.needsVerification;
     }
 
-    return AuthResponse.sucsess;
+    return AuthResponse.success;
   }
 
   Future<void> loginAnon() async {

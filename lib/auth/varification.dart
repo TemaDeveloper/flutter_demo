@@ -4,11 +4,12 @@ import 'package:pinput/pinput.dart';
 import 'package:provider/provider.dart';
 
 class VerifyEmailScreen extends StatefulWidget {
+  const VerifyEmailScreen({super.key});
   @override
-  _VerifyEmailScreenState createState() => _VerifyEmailScreenState();
+  VerifyEmailScreenState createState() => VerifyEmailScreenState();
 }
 
-class _VerifyEmailScreenState extends State<VerifyEmailScreen> {
+class VerifyEmailScreenState extends State<VerifyEmailScreen> {
   final pinController = TextEditingController();
 
   @override
@@ -40,7 +41,7 @@ class _VerifyEmailScreenState extends State<VerifyEmailScreen> {
                 textAlign: TextAlign.center,
               ),
               const Padding(
-                padding: const EdgeInsets.all(16.0),
+                padding: EdgeInsets.all(16.0),
                 child: Text(
                   'The verification code was sent to your email address that you have put in when you have registered',
                   textAlign: TextAlign.center,
@@ -61,7 +62,7 @@ class _VerifyEmailScreenState extends State<VerifyEmailScreen> {
               ),
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 20),
-                child: Container(
+                child: SizedBox(
                   height: 50,
                   width: double.infinity,
                   child: ElevatedButton(

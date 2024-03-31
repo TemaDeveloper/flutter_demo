@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_application_1/themes/theme_provider.dart';
 import 'package:provider/provider.dart';
 import 'auth/backend_proxy.dart';
 

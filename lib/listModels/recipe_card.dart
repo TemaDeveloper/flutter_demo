@@ -55,9 +55,9 @@ class _RecipeCardState extends State<RecipeCard> {
         Stack(
           children: [
             Padding(
-              padding: const EdgeInsets.all(8.0),
+              padding: const EdgeInsets.symmetric(horizontal: 16),
               child: ClipRRect(
-                borderRadius: BorderRadius.circular(10),
+                borderRadius: BorderRadius.circular(12),
                 child: Image.network(
                   widget.thumbnailUrl,
                   width: MediaQuery.of(context).size.width,
@@ -127,7 +127,7 @@ class _RecipeCardState extends State<RecipeCard> {
           ),
         ),
         const Padding(
-          padding: const EdgeInsets.all(8.0),
+          padding: EdgeInsets.fromLTRB(8, 0, 8, 16),
           child: Expanded(
             child: Text(
               'Quick Description',

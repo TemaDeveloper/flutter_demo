@@ -43,6 +43,21 @@ dependencies:
   provider: ^6.1.2
   pinput: ^4.0.0
   catppuccin_flutter: ^1.0.0
+  flutter_native_splash: ^2.2.4
+  flutter_launcher_icons: ^0.13.1
+
+flutter_launcher_icons:
+  android: true
+  ios: true
+  image_path: 'assets/images/logo.png'
+  remove_alpha_ios: true
+
+flutter_native_splash: 
+  android: true 
+  ios: true 
+  web: false
+  background_image: 'assets/images/img_splash_screen_background.png'
+  image: 'assets/images/ic_chef.png'
 
 dev_dependencies:
   flutter_test:

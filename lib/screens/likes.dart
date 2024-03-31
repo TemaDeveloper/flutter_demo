@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_application_1/auth/backend_proxy.dart';
 import 'package:flutter_application_1/auth/login.dart';
+import 'package:flutter_application_1/listModels/reusable_widgets.dart';
 
 import 'package:flutter_application_1/recipe/provider.dart';
 import 'package:flutter_application_1/themes/theme_provider.dart';
@@ -36,7 +37,7 @@ class _LikeScreenState extends State<LikeScreen> {
             .toList();
 
     if (recipeProvider.isLoading) {
-      return const CircularProgressIndicator();
+      return getPlatformSpecificLoading();
     }
 
     return !userProvider.isAnon
@@ -154,7 +155,7 @@ class _LikeScreenState extends State<LikeScreen> {
             child: (Container(
               width: double.infinity,
               height: 200,
-              margin: EdgeInsets.all(16),
+              margin: const EdgeInsets.all(16),
               decoration: BoxDecoration(
                 border: Border.all(color: Colors.grey),
                 borderRadius: BorderRadius.circular(10),

@@ -12,12 +12,62 @@ class RecipeAdd extends StatefulWidget {
   State<RecipeAdd> createState() => _RecipeAddState();
 }
 
+<<<<<<< HEAD
 class _RecipeAddState extends RecipeBaseState<RecipeAdd> {
   void addRecipe(BuildContext ctx) {
+=======
+class _RecipeAddState extends State<RecipeAdd> {
+  final _titleController = TextEditingController();
+  final _descriptionController = TextEditingController();
+  final _ingredientController = TextEditingController();
+
+  final int _maxWords = 20;
+  int _wordCount = 0;
+  final List<String> _ingredients = [];
+  final List<TextEditingController> _stepControllers = [];
+
+  @override
+  void initState() {
+    super.initState();
+    _descriptionController.addListener(_onTextChanged);
+  }
+
+  void _onTextChanged() {
+    final text = _descriptionController.text;
+    final words = text
+        .split(RegExp(r'\s+'))
+        .where((element) => element.isNotEmpty)
+        .toList();
+
+    if (words.length > _maxWords) {
+      // Truncate the words to the max limit and update the text
+      final truncated = words.sublist(0, _maxWords).join(' ');
+      _descriptionController.value = TextEditingValue(
+        text: truncated,
+        selection: TextSelection.collapsed(offset: truncated.length),
+      );
+    }
+
+    setState(() {
+      _wordCount = words.length > _maxWords ? _maxWords : words.length;
+    });
+  }
+
+  void _addRecipe(BuildContext ctx) {
+>>>>>>> 4ac02c34ab0435da75f51d760c55441274d80ecf
     final usrPr = Provider.of<UserProvider>(ctx, listen: false);
+
+
     usrPr.addRecipie(
+<<<<<<< HEAD
       title: titleController.text,
       description: descriptionController.text,
+=======
+      title: _titleController.text,
+      description: _descriptionController.text,
+      ingredients: _ingredients.map( (ing) => IngredientInfo(name: ing) ).toList(),
+      steps: _stepControllers.map( (step) => CookingStepInfo(text: step.text) ).toList()
+>>>>>>> 4ac02c34ab0435da75f51d760c55441274d80ecf
     );
   }
 
@@ -260,7 +310,7 @@ class _RecipeAddState extends RecipeBaseState<RecipeAdd> {
                                 .themeData
                                 .colorScheme
                                 .onPrimary,
-                          )),
+                          ),),
                     ),
                   ),
                 ],

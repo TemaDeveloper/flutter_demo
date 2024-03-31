@@ -127,7 +127,11 @@ class _RecipeCardState extends State<RecipeCard> {
           ),
         ),
         const Padding(
+<<<<<<< HEAD
           padding: EdgeInsets.fromLTRB(8, 0, 8, 16),
+=======
+          padding: EdgeInsets.all(8.0),
+>>>>>>> 4ac02c34ab0435da75f51d760c55441274d80ecf
           child: Expanded(
             child: Text(
               'Quick Description',

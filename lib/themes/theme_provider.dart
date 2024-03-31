@@ -42,7 +42,7 @@ class ThemeProvider with ChangeNotifier {
         secondary: flavor.mantle,
         surface: flavor.surface0,
       ),
-      textTheme: TextTheme().apply(
+      textTheme: const TextTheme().apply(
         bodyColor: flavor.text,
         displayColor: primaryColor,
       ),

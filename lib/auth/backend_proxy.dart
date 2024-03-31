@@ -14,15 +14,15 @@ enum AuthResponse {
 String avatarNameToUrl(String id, String name) =>
     "$backendBaseUrl/api/files/_pb_users_auth_/$id/$name";
 
-class IngredientCreateInfo {
+class IngredientInfo {
   final String name;
   final XFile? img;
-  const IngredientCreateInfo({required this.name, this.img});
+  const IngredientInfo({required this.name, this.img});
 }
 
-class CookingStepCreateInfo {
+class CookingStepInfo {
   final String text;
-  const CookingStepCreateInfo({required this.text});
+  const CookingStepInfo({required this.text});
 }
 
 class UserProvider extends ChangeNotifier {
@@ -59,14 +59,41 @@ class UserProvider extends ChangeNotifier {
   Future<bool> addRecipie({
     required String title,
     required String description,
-    // XFile? previewImg,
-    // required List<IngredientCreateInfo> ingredients,
-    // required List<CookingStepCreateInfo> steps,
+    XFile? previewImg,
+    required List<IngredientInfo> ingredients,
+    required List<CookingStepInfo> steps,
   }) async {
+<<<<<<< HEAD
     pb.collection('recipies').create(body: {
       title: title,
       description: description,
     }).catchError((e) => print("UserProvider.addRecipie error: $e"));
+=======
+    if (kDebugMode) {
+      print("Creating Recipie:");
+      print("\tTitle: $title");
+      print("\tDescription: $description");
+      print("\tIngridients:");
+      for (var ing in ingredients) {
+        print("\t\t$ing");
+      }
+      print("\tSteps:");
+      for (var step in steps) {
+        print("\t\t$step");
+      }
+    }
+
+    if (isAnon) {
+      return false;
+    }
+
+    pb.send("/api/create-recipie", method: "POST", body: {
+      "title": title,
+      "description": description,
+      "ingridients": ingredients.map((ing) => {"name": ing.name}).toList(),
+      "steps": steps.map((s) => {"text": s.text}).toList(),
+    }).then((value) => print(value));
+>>>>>>> 4ac02c34ab0435da75f51d760c55441274d80ecf
     return true;
   }
 

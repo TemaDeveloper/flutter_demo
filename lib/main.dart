@@ -131,6 +131,8 @@ class _MyHomePageState extends State<HomePage> {
                         leading: const Icon(Icons.exit_to_app),
                         title: const Text('Log Out'),
                         onTap: () {
+                          usrProvider.setEmail('');
+                          usrProvider.setPassword('');
                           usrProvider.setLoggedInStatus(false);
                           usrProvider.logout();
                           Navigator.push(

@@ -46,7 +46,6 @@ class _LoginState extends State<LoginPage> {
             context, CupertinoPageRoute(builder: (_) => const HomePage()));
         _userProvider.setLoggedInStatus(true);
 
-        _checkLoginStatus();
       } else {
         setState(() => _loginStatus = LoginStatus.error);
         _handleLoginError(loginResult);
@@ -60,10 +59,6 @@ class _LoginState extends State<LoginPage> {
     }
   }
 
-  Future<void> _checkLoginStatus() async {
-    bool isLoggedIn = await _userProvider.getLoggedInStatus();
-    print('Is Logged In: $isLoggedIn');
-  }
 
   void _handleLoginError(AuthResponse response) {
     String errorMessage = 'Something went wrong, try again later';

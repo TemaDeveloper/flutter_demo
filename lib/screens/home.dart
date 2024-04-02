@@ -85,7 +85,7 @@ class _HomeScreenState extends State<HomeScreen> {
                             if (usrProvider.name != null)
                               TextSpan(
                                 text: usrProvider
-                                    .name!, // The '!' is used for null check assertion
+                                    .name!, 
                                 style: TextStyle(
                                   fontWeight: FontWeight.bold,
                                   fontSize: 24,

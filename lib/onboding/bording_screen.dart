@@ -19,16 +19,35 @@ class OnbodingScreen extends StatefulWidget {
 
 class _OnbodingScreenState extends State<OnbodingScreen> {
   late RiveAnimationController _btnAnimationController;
+  final UserProvider _userProvider = UserProvider();
 
   bool isShowSignInDialog = false;
 
   @override
   void initState() {
+    super.initState();
     _btnAnimationController = OneShotAnimation(
       "active",
       autoplay: false,
     );
-    super.initState();
+    _checkLoginStatus();
+  }
+
+  Future<void> _checkLoginStatus() async {
+    bool isLoggedIn = await _userProvider.getLoggedInStatus();
+    String email = await _userProvider.getEmail();
+    String password = await _userProvider.getPassword();
+    print('Is Logged In: $isLoggedIn');
+    if (isLoggedIn) {
+      final loginResult =
+          await context.read<UserProvider>().loginEmailPass(email, password);
+      print('login with $email and $password');
+      if (loginResult == AuthResponse.success) {
+        Navigator.of(context).pushReplacement(
+          MaterialPageRoute(builder: (context) => const HomePage()),
+        );
+      }
+    }
   }
 
   @override
@@ -117,7 +136,9 @@ class _OnbodingScreenState extends State<OnbodingScreen> {
                         ),
                         TextButton(
                           onPressed: () {
-                            final usrProvider = Provider.of<UserProvider>(context, listen: false);
+                            final usrProvider = Provider.of<UserProvider>(
+                                context,
+                                listen: false);
                             usrProvider.loginAnon();
                             Navigator.push(
                                 context,
@@ -148,4 +169,3 @@ class _OnbodingScreenState extends State<OnbodingScreen> {
     );
   }
 }
-

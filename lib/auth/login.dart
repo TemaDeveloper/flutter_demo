@@ -27,6 +27,7 @@ class _LoginState extends State<LoginPage> {
   final emailController = TextEditingController();
   final passController = TextEditingController();
   final textFieldFocusNode = FocusNode();
+  final UserProvider _userProvider = UserProvider();
 
   LoginStatus _loginStatus = LoginStatus.none;
   bool _obscured = true;
@@ -38,8 +39,14 @@ class _LoginState extends State<LoginPage> {
           .read<UserProvider>()
           .loginEmailPass(emailController.text, passController.text);
       if (loginResult == AuthResponse.success) {
+        _userProvider.setEmail(emailController.text);
+        _userProvider.setPassword(passController.text);
+
         Navigator.pushReplacement(
             context, CupertinoPageRoute(builder: (_) => const HomePage()));
+        _userProvider.setLoggedInStatus(true);
+
+        _checkLoginStatus();
       } else {
         setState(() => _loginStatus = LoginStatus.error);
         _handleLoginError(loginResult);
@@ -51,6 +58,11 @@ class _LoginState extends State<LoginPage> {
               duration: const Duration(seconds: 4))
           .show(context);
     }
+  }
+
+  Future<void> _checkLoginStatus() async {
+    bool isLoggedIn = await _userProvider.getLoggedInStatus();
+    print('Is Logged In: $isLoggedIn');
   }
 
   void _handleLoginError(AuthResponse response) {

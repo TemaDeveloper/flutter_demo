@@ -16,24 +16,23 @@ import 'package:catppuccin_flutter/catppuccin_flutter.dart';
 import 'recipe/provider.dart';
 import 'package:flutter/services.dart';
 
+
 const String backendBaseUrl = kDebugMode ? 'http://127.0.0.1:8090' : 'TODO';
 late PocketBase pb;
 
 void main() {
   pb = PocketBase(backendBaseUrl);
-  WidgetsFlutterBinding
-      .ensureInitialized(); // Ensure the plugin services are initialized
+  WidgetsFlutterBinding.ensureInitialized();  // Ensure the plugin services are initialized
   SystemChrome.setPreferredOrientations([
     DeviceOrientation.portraitUp,
     DeviceOrientation.portraitDown,
   ]).then((_) {
-    runApp(
-      ChangeNotifierProvider(
-        create: (context) => ThemeProvider(catppuccin.mocha),
-        child: const MyApp(),
-      ),
-    );
-  });
+  runApp(
+    ChangeNotifierProvider(
+      create: (context) => ThemeProvider(catppuccin.mocha),
+      child: const MyApp(),
+    ),
+  );});
 }
 
 class MyApp extends StatelessWidget {
@@ -132,6 +131,7 @@ class _MyHomePageState extends State<HomePage> {
                         leading: const Icon(Icons.exit_to_app),
                         title: const Text('Log Out'),
                         onTap: () {
+                          usrProvider.setLoggedInStatus(false);
                           usrProvider.logout();
                           Navigator.push(
                             context,
@@ -161,7 +161,7 @@ class _MyHomePageState extends State<HomePage> {
     ];
 
     return WillPopScope(
-      onWillPop: () async => false,
+    onWillPop: () async => false,
       child: Scaffold(
         appBar: AppBar(
           title: const Text(HomePage.title),

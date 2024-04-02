@@ -1,8 +1,11 @@
 import 'dart:io';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter_application_1/main.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:http/http.dart' as http;
+import 'package:shared_preferences/shared_preferences.dart';
 
 enum AuthResponse {
   incorrectPassOrEmail,
@@ -254,4 +257,37 @@ class UserProvider extends ChangeNotifier {
     _isAnon = true;
     notifyListeners();
   }
+
+  // Function to set the login status in SharedPreferences
+  Future<void> setLoggedInStatus(bool isLoggedIn) async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    await prefs.setBool('isLoggedIn', isLoggedIn);
+  }
+
+  // Function to get the login status from SharedPreferences
+  Future<bool> getLoggedInStatus() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    return prefs.getBool('isLoggedIn') ?? false;
+  }
+
+  Future<void> setEmail(String enteredEmail) async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    await prefs.setString('email', enteredEmail);
+  }
+
+  Future<String> getEmail() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    return prefs.getString('email') ?? '';
+  }
+
+  Future<void> setPassword(String enteredPassword) async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    await prefs.setString('password', enteredPassword);
+  }
+
+  Future<String> getPassword() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    return prefs.getString('password') ?? '';
+  }
+
 }

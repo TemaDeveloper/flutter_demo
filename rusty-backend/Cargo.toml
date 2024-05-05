@@ -3,14 +3,23 @@ name = "rusty-backend"
 version = "0.1.0"
 edition = "2021"
 
-# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
 [dependencies]
+anyhow = "1.0.82"
 axum = "0.7.5"
+<<<<<<< HEAD
 diesel = { version = "2.1.6", features = ["postgres"] }
 dotenv = "0.15.0"
+=======
+dotenv = "0.15.0"
+sea-orm = { version = "0.12.15", features = ["runtime-tokio-rustls", "sqlx-postgres", "macros"] }
+>>>>>>> 53f07c426fa73c241efa3f831b4fe917345684a3
 serde = { version = "1.0.200", features = ["derive"] }
 serde_json = "1.0.116"
 sqlx = { version = "0.7.4", features = ["postgres", "runtime-tokio-native-tls"] }
 tokio = { version = "1.37.0", features = ["full"] }
+<<<<<<< HEAD
+=======
+tracing = "0.1.40"
+>>>>>>> 53f07c426fa73c241efa3f831b4fe917345684a3
 tracing-subscriber = "0.3.18"

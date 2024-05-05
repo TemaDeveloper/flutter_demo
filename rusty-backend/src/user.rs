@@ -1,9 +1,9 @@
 use anyhow::Context;
 use axum::{extract::Path, http::StatusCode, response::IntoResponse, Extension, Json};
-use sea_orm::{ActiveModelTrait, DatabaseConnection, EntityTrait, Set};
+use sea_orm::{ActiveModelTrait, DatabaseConnection, DbErr, EntityTrait, Set};
 use serde::{Deserialize, Serialize};
 
-use crate::entity::users;
+use crate::entity::users::{self, ActiveModel};
 
 #[derive(Debug, Serialize, Deserialize)]
 pub struct CreatePayload {
@@ -62,36 +62,30 @@ pub async fn get(
     }
 }
 
-// pub async fn update(
-//     Extension(db_conn):Extension<DatabaseConnection>,
-//     Json(payload): Json<UpdatePayload>,
-// ) -> impl IntoResponse {
-//
-//     let mut user = match users::entity::users::find_by_id(user_id).one(&db_conn).await {
-//         Ok(Some(user))=>user,
-//         Ok(None) => return (StatusCode::NOT_FOUND, Json("User not found")),
-//         Err(_) => return (StatusCode::INTERNAL_SERVER_ERROR, Json("Database Error")),
-//
-//     };
-//
-//     if let Some(name) = payload.name {
-//         user.name = Set(name);
-//     }
-//
-//     if let Some(last_name) = payload.last_name {
-//         user.last_name = Set(last_name);
-//     }
-//
-//     if let Some(email) = payload.email {
-//         user.email = Set(email);
-//     }
-//
-//     if let Some(password) = payload.password {
-//         user.password = Set(password);
-//     }
-//
-//     match user.update(&db_conn).await{
-//         Ok(update_user) => (StatusCode::OK, Json(update_user)),
-//         Err(_) => (StatusCode::INTERNAL_SERVER_ERROR, Json("Failed to update User")),
-//     }
-// }
+pub async fn update(
+    Extension(db_conn):Extension<DatabaseConnection>,
+    Path(user_id): Path<i32>,
+    Json(payload): Json<UpdatePayload>,
+) -> Result<users::Model, DbErr> {
+
+    let mut user: ActiveModel = users::Entity::find_by_id(user_id)
+        .one(&db_conn)
+        .await?
+        .ok_or(DbErr::Custom("Cannot find user updates".to_owned()))?
+        .into();
+
+    if let Some(name) = payload.name {
+        user.name = Set(name);
+    }
+    if let Some(last_name) = payload.last_name {
+        user.last_name = Set(last_name);
+    }
+    if let Some(email) = payload.email {
+        user.email = Set(email);
+    }
+    
+    let updated_user = user.update(&db_conn).await?;
+    Ok(updated_user)
+
+    
+}

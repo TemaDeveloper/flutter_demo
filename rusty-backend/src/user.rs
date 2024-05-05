@@ -3,7 +3,7 @@ use axum::{extract::Path, http::StatusCode, response::IntoResponse, Extension, J
 use sea_orm::{ActiveModelTrait, DatabaseConnection, EntityTrait, Set};
 use serde::{Deserialize, Serialize};
 
-use crate::entity::{self, users};
+use crate::entity::users;
 
 #[derive(Debug, Serialize, Deserialize)]
 pub struct CreatePayload {
@@ -49,16 +49,16 @@ pub async fn create(
 pub async fn get(
     Extension(db_conn): Extension<DatabaseConnection>,
     Path(user_id): Path<i32>,
-) -> impl IntoResponse {
-    let user = entity::users::Entity::find_by_id(user_id)
+) -> (StatusCode, Json<Result<users::Model, String>>){
+    let user = users::Entity::find_by_id(user_id)
         .one(&db_conn)
         .await
         .context("Fetching user from data base")
         .unwrap();
 
     match user {
-        Some(user) => (StatusCode::OK, Json(Some(user))),
-        None => (StatusCode::NOT_FOUND, Json(None)),
+        Some(user) => (StatusCode::OK, Json(Ok(user))),
+        None => (StatusCode::NOT_FOUND, Json(Err("Could not find user".to_string()))),
     }
 }
 

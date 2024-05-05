@@ -45,3 +45,5 @@ app.*.map.json
 db_stealer/target
 db_stealer/.env
 db_stealer/recipes.csv
+rusty-backend/migration/target
+rusty-backend/target
